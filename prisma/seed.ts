@@ -40,6 +40,15 @@ async function seed() {
     },
   });
 
+  const now = new Date()
+  await prisma.reservation.create({
+    data: {
+      start: now,
+      end: now,
+      userId: user.id,
+    },
+  });
+
   console.log(`Database has been seeded. 🌱`);
 }
 
