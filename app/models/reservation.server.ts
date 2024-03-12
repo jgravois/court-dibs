@@ -2,6 +2,18 @@ import type { User, Reservation } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
+export function getReservation({
+  id,
+  userId,
+}: Pick<Reservation, "id"> & {
+  userId: User["id"];
+}) {
+  return prisma.reservation.findFirst({
+    select: { id: true, start: true, end: true },
+    where: { id, userId },
+  });
+}
+
 export function getReservations() {
   return prisma.reservation.findMany({
     select: { id: true, start: true, end: true },
