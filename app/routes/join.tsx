@@ -9,7 +9,7 @@ import { useEffect, useRef } from "react";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
-import { safeRedirect, validateEmail } from "~/utils";
+import { safeRedirect, validateCoordinates, validateEmail } from "~/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const userId = await getUserId(request);
@@ -50,6 +50,20 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       {
         errors: {
           email: "A user already exists with this email",
+          password: null,
+        },
+      },
+      { status: 400 },
+    );
+  }
+
+  const coordinates: [number, number] = [-115.68, 33.4825];
+
+  if (!validateCoordinates(coordinates)) {
+    return json(
+      {
+        errors: {
+          email: "signup is only available to HOA residents",
           password: null,
         },
       },

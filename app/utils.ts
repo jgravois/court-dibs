@@ -1,4 +1,6 @@
 import { useMatches } from "@remix-run/react";
+import { contains } from "@terraformer/spatial";
+import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
 import type { User } from "~/models/user.server";
@@ -74,3 +76,23 @@ export function useUser(): User {
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
+
+const HOA_BOUNDARY = {
+  "coordinates": [
+    [
+      [-117.68496384123713, 33.48204151023167],
+      [-117.68388255720208, 33.48203351752436],
+      [-117.68372236346755, 33.48176629510631],
+      [-117.68265440523655, 33.481751449392135],
+      [-117.68149744912218, 33.48175144451878],
+      [-117.67842443970255, 33.48174668927008],
+      [-117.67732407755909, 33.48353464046207],
+      [-117.68435950172221, 33.48353464046207],
+      [-117.68496384123713, 33.48204151023167]
+    ]
+  ],
+  "type": "Polygon"
+}
+
+export const validateCoordinates = (coordinates: [number, number]) =>
+  contains(HOA_BOUNDARY as GeoJSON, { type: 'Point', coordinates });

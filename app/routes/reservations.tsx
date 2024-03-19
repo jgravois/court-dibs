@@ -7,14 +7,17 @@ import { getReservations } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type Rez = { id: string; start: string; end: string };
+interface Rez {
+  id: string;
+  start: string; // date doing in, string coming out 🤷
+  end: string;
+}
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
   userId;
   const reservations = await getReservations();
-  return json({ reservations });
+  return json({ reservations, day: params.day });
 };
 
 const DayList = ({ reservations }: { reservations: Rez[] }) => {
@@ -30,7 +33,7 @@ const DayList = ({ reservations }: { reservations: Rez[] }) => {
             }
             to={rez.id}
           >
-            📝 {rez.start.valueOf()}
+            {new Date(rez.start).toLocaleTimeString()}
           </NavLink>
         </li>
       ))}
@@ -39,19 +42,27 @@ const DayList = ({ reservations }: { reservations: Rez[] }) => {
 };
 
 export default function ReservationsPage() {
-  const data: { reservations: Rez[] } = useLoaderData<typeof loader>();
+  const data: { reservations: Rez[]; foo?: string } =
+    useLoaderData<typeof loader>();
+
   const user = useUser();
+
+  const tomorrow = addDays(startOfToday(), 1);
+  const theNextDay = addDays(startOfToday(), 2);
 
   const todays = data.reservations.filter((r) => isToday(r.start));
   const tomorrows = data.reservations.filter((r) =>
-    isEqual(startOfDay(r.start), startOfDay(addDays(startOfToday(), 1))),
+    isEqual(startOfDay(r.start), startOfDay(tomorrow)),
+  );
+  const theNextDays = data.reservations.filter((r) =>
+    isEqual(startOfDay(r.start), startOfDay(theNextDay)),
   );
 
   return (
     <div className="flex h-full min-h-screen flex-col">
       <header className="flex items-center justify-between bg-slate-800 p-4 text-white">
         <h1 className="text-3xl font-bold">
-          <Link to=".">Reservations</Link>
+          <Link to=".">Court dibs</Link>
         </h1>
         <p>{user.email}</p>
         <Form action="/logout" method="post">
@@ -65,27 +76,42 @@ export default function ReservationsPage() {
       </header>
 
       <main className="flex h-full bg-white">
-        <div className="h-full w-2/4 border-r bg-gray-50">
-          <h1>Today</h1>
+        <div className="h-full w-2/3 border-r bg-gray-50">
+          <h1 className="text-2xl font-bold">
+            Today&nbsp;
+            <Link
+              to={`new?day=${startOfToday().toISOString().slice(0, 10)}`}
+              className="text-blue-500"
+            >
+              +
+            </Link>
+          </h1>
 
-          <Link to="new" className="block p-4 text-xl text-blue-500">
-            + New Reservation
-          </Link>
           <DayList reservations={todays} />
 
-          <h1>Tomorrow</h1>
-
-          <Link to="new" className="block p-4 text-xl text-blue-500">
-            + New Reservation
-          </Link>
+          <h1 className="text-2xl font-bold">
+            Tomorrow ({tomorrow.toDateString()})&nbsp;
+            <Link
+              to={`new?day=${tomorrow.toISOString().slice(0, 10)}`}
+              className="text-blue-500"
+            >
+              +
+            </Link>
+          </h1>
 
           <DayList reservations={tomorrows} />
 
-          <h2>Out further</h2>
+          <h1 className="text-2xl font-bold">
+            {theNextDay.toDateString()}&nbsp;
+            <Link
+              to={`new?day=${theNextDay.toISOString().slice(0, 10)}`}
+              className="text-blue-500"
+            >
+              +
+            </Link>
+          </h1>
 
-          <Link to="new" className="block p-4 text-xl text-blue-500">
-            + New Reservation
-          </Link>
+          <DayList reservations={theNextDays} />
         </div>
         <Outlet />
       </main>

@@ -1,36 +1,71 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useSearchParams } from "@remix-run/react";
+import { addHours, startOfToday } from "date-fns";
 import { useEffect, useRef } from "react";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
 
+const StartTime = ({
+  st,
+  onClick,
+}: {
+  st: string;
+  onClick: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+}) => (
+  <button
+    className="rounded bg-green-500 px-4 py-2 text-white"
+    onClick={onClick}
+  >
+    {st}
+  </button>
+);
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
-
   const formData = await request.formData();
 
-  const start = formData.get("start");
+  const startTime = formData.get("startTime");
+  const startDate = formData.get("startDate");
 
-  if (typeof start !== "string" || start.length === 0) {
+  if (typeof startTime !== "string" || startTime === "") {
     return json({ errors: { start: "start is required" } }, { status: 400 });
   }
 
-  await createReservation({ start: new Date(), end: new Date(), userId });
+  if (typeof startTime !== "string" || startTime.length < 1) {
+    return json(
+      { errors: { start: "start date is required" } },
+      { status: 400 },
+    );
+  }
+
+  const start = new Date(`${startDate}T${startTime}:00`);
+  await createReservation({ start, end: addHours(start, 1), userId });
 
   return redirect("/reservations");
 };
 
 export default function NewReservationPage() {
+  const [params] = useSearchParams();
   const actionData = useActionData<typeof action>();
-  const startRef = useRef<HTMLInputElement>(null);
+  const startTimeRef = useRef<HTMLInputElement>(null);
+  const startDateRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (actionData?.errors?.start) {
-      startRef.current?.focus();
+      startTimeRef.current?.focus();
     }
   }, [actionData]);
+
+  const startTimes = ["09:00", "10:00", "11:00"];
+
+  const onChange = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    evt.preventDefault();
+    if (startTimeRef.current?.value) {
+      startTimeRef.current.value = evt.currentTarget.innerText;
+    }
+  };
 
   return (
     <Form
@@ -39,22 +74,31 @@ export default function NewReservationPage() {
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        width: "100%",
+        width: "33%",
       }}
     >
       <div>
         <label className="flex w-full flex-col gap-1">
           <span>Start Time: </span>
-          <input
-            ref={startRef}
-            name="start"
-            className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
-            aria-invalid={actionData?.errors?.start ? true : undefined}
-            aria-errormessage={
-              actionData?.errors?.start ? "start-error" : undefined
-            }
-            type="time"
-          />
+          {startTimes.map((st) => (
+            <StartTime key={st} st={st} onClick={onChange} />
+          ))}
+          <div style={{ display: "none" }}>
+            <input
+              name="startTime"
+              ref={startTimeRef}
+              type="text"
+              defaultValue=""
+            />
+            <input
+              name="startDate"
+              ref={startDateRef}
+              type="text"
+              defaultValue={
+                params.get("day") ?? startOfToday().toISOString().slice(0, 10)
+              }
+            />
+          </div>
         </label>
         {actionData?.errors?.start ? (
           <div className="pt-1 text-red-700" id="title-error">
