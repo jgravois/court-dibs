@@ -8,15 +8,21 @@ export function getReservation({
 }: Pick<Reservation, "id"> & {
   userId: User["id"];
 }) {
+  userId
   return prisma.reservation.findFirst({
-    select: { id: true, start: true, end: true },
-    where: { id, userId },
+    select: { id: true, start: true, end: true, user: true },
+    where: { id },
   });
 }
 
+// since we allow anonymous requests, we dont return PII
 export function getReservations() {
   return prisma.reservation.findMany({
-    select: { id: true, start: true, end: true },
+    select: {
+      id: true,
+      start: true,
+      end: true,
+    },
   });
 }
 
