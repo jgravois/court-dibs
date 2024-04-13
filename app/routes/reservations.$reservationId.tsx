@@ -46,7 +46,7 @@ export default function ReservationDetailsPage() {
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">{format(start, "iiii, MMMM do")}</h3>
+      <h3 className="text-2xl font-bold">{format(start, "iiii, MMMM dd")}</h3>
       <p className="py-6">
         {user.email}
         <br />

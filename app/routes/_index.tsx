@@ -7,7 +7,7 @@ import { useOptionalUser } from "~/utils";
 
 import { ReservationList, Rez } from "./ReservationList";
 
-export const meta: MetaFunction = () => [{ title: "Remix Notes" }];
+export const meta: MetaFunction = () => [{ title: "Court dibs" }];
 
 export const loader = async () => {
   const reservations = await getReservations();
@@ -38,14 +38,13 @@ export default function Index() {
                 </span>
               </h1>
               <p className="mx-auto mt-6 max-w-lg text-center text-xl text-white sm:max-w-3xl">
-                Call dibs on the Mariners Village pickleball court.
+                Call dibs on one of our sports ball courts
               </p>
               <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
                 {user ? (
-                  <>
+                  <div className="flex items-center">
                     <span className="max-w-lg text-lg text-white sm:max-w-3xl">
-                      Logged in as:&nbsp;
-                      <a href={`mailto:${user.email}`}>{user.email}</a>
+                      Logged in as: {user.email}
                       &nbsp;
                     </span>
                     <Form action="/logout" method="post">
@@ -56,7 +55,7 @@ export default function Index() {
                         Logout
                       </button>
                     </Form>
-                  </>
+                  </div>
                 ) : (
                   <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
                     <Link

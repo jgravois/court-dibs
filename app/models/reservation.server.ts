@@ -10,7 +10,7 @@ export function getReservation({
 }) {
   userId
   return prisma.reservation.findFirst({
-    select: { id: true, start: true, end: true, user: true },
+    select: { id: true, start: true, end: true, court: true, user: true },
     where: { id },
   });
 }
@@ -22,6 +22,7 @@ export function getReservations() {
       id: true,
       start: true,
       end: true,
+      court: true,
     },
   });
 }
@@ -29,14 +30,16 @@ export function getReservations() {
 export function createReservation({
   start,
   end,
+  court,
   userId,
-}: Pick<Reservation, "start" | "end"> & {
+}: Pick<Reservation, "start" | "end" | "court"> & {
   userId: User["id"];
 }) {
   return prisma.reservation.create({
     data: {
       start,
       end,
+      court,
       user: {
         connect: {
           id: userId,

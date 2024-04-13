@@ -11,12 +11,16 @@ import {
 } from "date-fns";
 import React from "react";
 
+const courtEmoji = (court: string) =>
+  court === "pb" ? `🏓` : court === "bball" ? `🏀` : `🎾`;
+
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
 export interface Rez {
   id: string;
   start: string;
   end: string;
+  court: string;
 }
 
 const dateToHeader = (date: Date) => {
@@ -26,7 +30,7 @@ const dateToHeader = (date: Date) => {
     ? "Tomorrow - "
     : "";
 
-  return prefix + format(date, "iiii, MMMM do");
+  return prefix + format(date, "iiii, MMMM dd");
 };
 
 const DayList = ({
@@ -51,12 +55,14 @@ const DayList = ({
                 }
                 to={"/reservations/" + rez.id}
               >
+                {courtEmoji(rez.court)}&nbsp;
                 {format(rez.start, "h:mm bbb")}
                 &nbsp;-&nbsp;
                 {format(rez.end, "h:mm bbb")}
               </NavLink>
             ) : (
               <p className="p-2">
+                {courtEmoji(rez.court)}&nbsp;
                 {format(rez.start, "h:mm bbb")}
                 &nbsp;-&nbsp;
                 {format(rez.end, "h:mm bbb")}
