@@ -1,16 +1,25 @@
 import type { User } from "@prisma/client";
-import type { MetaFunction } from "@remix-run/node";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, Link, json, useLoaderData } from "@remix-run/react";
 
 import { getReservations } from "~/models/reservation.server";
+import { getSession } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
 import { ReservationList, Rez } from "./ReservationList";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
 
-export const loader = async () => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const reservations = await getReservations();
+
+  // next step is to verify that the token in the cookie is still valid
+  // with stytch when the application loads with stored credentials
+  const session = await getSession(request);
+  const token = session.get("stytch_session");
+  // confirmation that we can stash an arbitrary value and retrieve it.
+  console.log("survey says: ", token);
+
   return json({ reservations });
 };
 
@@ -57,18 +66,12 @@ export default function Index() {
                     </Form>
                   </div>
                 ) : (
-                  <div className="space-y-4 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5 sm:space-y-0">
+                  <div className="mx-auto max-w-sm sm:flex sm:max-w-none sm:justify-center">
                     <Link
-                      to="/join"
+                      to="/start"
                       className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-sm hover:bg-yellow-50 sm:px-8"
                     >
-                      Sign up
-                    </Link>
-                    <Link
-                      to="/login"
-                      className="flex items-center justify-center rounded-md bg-yellow-500 px-4 py-3 font-medium text-white hover:bg-yellow-600"
-                    >
-                      Log In
+                      Sign up or login
                     </Link>
                   </div>
                 )}

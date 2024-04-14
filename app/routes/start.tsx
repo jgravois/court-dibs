@@ -1,33 +1,23 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  MetaFunction,
-} from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import invariant from "tiny-invariant";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { createUserSession, getUserId } from "~/session.server";
-import { safeRedirect, validateCoordinates, validateEmail } from "~/utils";
+import { validateCoordinates, validateEmail } from "~/utils";
 
 const HALF = "AIzaSyBI_vhCo";
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const userId = await getUserId(request);
-  if (userId) return redirect("/");
-  return json({});
-};
-
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  invariant(process.env.STYTCH_PROJECT_ID, "STYTCH_PROJECT_ID must be set");
+  invariant(process.env.STYTCH_SECRET, "STYTCH_SECRET must be set");
+
   const formData = await request.formData();
   const email = formData.get("email");
   const rawCoordinates = formData.get("coordinates");
-
-  const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateEmail(email)) {
     return json(
@@ -36,7 +26,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  // for existing users, we call stytch (TODO: redirect to generic landing page instead of signing them in
+  // for existing users, we call stytch
+  // (TODO: redirect to generic landing page instead of signing them in
   // if new user and no coordinates, error that they are required
   // if new user and coordinates, verify first
   // if valid, call stytch, create user in DB and redirect to same generic landing page
@@ -81,7 +72,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Basic ${btoa(
-          "project-test-60a17c75-c445-4da4-bd37-c73f4c3a87c6:secret-test-mX3z0jtnqEJLILSdtxJx56W-EQoICz78LTs=",
+          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
         )}`,
       },
 
@@ -94,20 +85,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const res = await raw.json();
 
-  let userId: string;
-  if (existingUser) {
-    userId = existingUser.id;
-  } else {
-    const user = await createUser(email, res.user_id);
-    userId = user.id;
+  if (res.user_id && !existingUser) {
+    await createUser(email, res.user_id);
   }
 
-  return createUserSession({
-    redirectTo,
-    remember: false,
-    request,
-    userId,
-  });
+  return redirect("/magic");
 };
 
 export const meta: MetaFunction = () => [{ title: "Sign up or login" }];

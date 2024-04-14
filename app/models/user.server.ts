@@ -13,6 +13,10 @@ export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
 
+export async function getUserByStytchId(stytchId: User["stytchId"]) {
+  return prisma.user.findUnique({ where: { stytchId } });
+}
+
 export async function createUser(email: User["email"], stytchId: string) {
   return prisma.user.create({
     data: {
