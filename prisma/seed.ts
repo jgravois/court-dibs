@@ -1,51 +1,36 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
+import { addHours, addMinutes, startOfTomorrow } from "date-fns";
 
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "rachel@remix.run";
+  const email = "jagravois" + "@g" + "mail.com";
 
   // cleanup the existing database
-  await prisma.user.delete({ where: { email } }).catch(() => {
-    // no worries if it doesn't exist yet
+  // no worries if records dont exist yet
+  await prisma.user.deleteMany().catch(() => {
+    // no worries if records dont exist yet
   });
 
-  const hashedPassword = await bcrypt.hash("racheliscool", 10);
+  await prisma.note.deleteMany()
+  await prisma.reservation.deleteMany()
+  await prisma.password.deleteMany()
 
   const user = await prisma.user.create({
     data: {
       email,
-      password: {
-        create: {
-          hash: hashedPassword,
-        },
-      },
+      stytchId: 'user-test-56e85954-ddf4-49eb-be5e-3901b0267f62'
+
     },
   });
 
-  await prisma.note.create({
-    data: {
-      title: "My first note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
-
-  await prisma.note.create({
-    data: {
-      title: "My second note",
-      body: "Hello, world!",
-      userId: user.id,
-    },
-  });
-
-  const now = new Date();
+  const tomorrow = addHours(startOfTomorrow(), 10);
   await prisma.reservation.create({
     data: {
-      start: now,
-      end: now,
+      start: tomorrow,
+      end: addMinutes(tomorrow, 30),
       userId: user.id,
+      court: 'pb' // 'pb' | 'bball' | '10s'
     },
   });
 

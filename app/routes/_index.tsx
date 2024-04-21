@@ -18,7 +18,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getSession(request);
   const token = session.get("stytch_session");
   // confirmation that we can stash an arbitrary value and retrieve it.
-  console.log("survey says: ", token);
+  token;
 
   return json({ reservations });
 };
