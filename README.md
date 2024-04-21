@@ -1,35 +1,24 @@
-# setup
-
-```
-npm i
-npm run setup
-npm run dev
-
-open http://localhost:3000
-```
-
-## development
-
-- Initial setup:
+## setup
 
   ```sh
   npm install
   npm run setup
-  ```
+```
 
-- Start dev server:
+## development
 
   ```sh
   npm run dev
+  open http://localhost:3000
   ```
 
-This starts your app in development mode, rebuilding assets on file changes.
+This starts the app in development mode, rebuilding assets on file changes.
 
 ### background
 
-This is a simple app for making court reservations. A login is required to create and manage reservations, but you can view existing ones anonymously.
+This is a simple app for making court reservations. A login is required to manage them, but not to view existing ones.
 
-passwords are not stored by the app. for both new and existing users, login links are sent to an existing email address.
+passwords are not stored by the app. login links are sent via email.
 
 ### Connecting to your database
 
