@@ -23,6 +23,7 @@ export function getReservations() {
       start: true,
       end: true,
       court: true,
+      openPlay: true
     },
   });
 }
@@ -31,8 +32,9 @@ export function createReservation({
   start,
   end,
   court,
+  openPlay,
   userId,
-}: Pick<Reservation, "start" | "end" | "court"> & {
+}: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
   userId: User["id"];
 }) {
   return prisma.reservation.create({
@@ -40,6 +42,7 @@ export function createReservation({
       start,
       end,
       court,
+      openPlay,
       user: {
         connect: {
           id: userId,

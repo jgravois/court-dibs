@@ -11,10 +11,8 @@ async function seed() {
   await prisma.user.deleteMany().catch(() => {
     // no worries if records dont exist yet
   });
-
-  await prisma.note.deleteMany()
   await prisma.reservation.deleteMany()
-  await prisma.password.deleteMany()
+
 
   const user = await prisma.user.create({
     data: {

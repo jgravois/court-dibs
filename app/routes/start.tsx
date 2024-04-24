@@ -17,7 +17,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const formData = await request.formData();
   const email = formData.get("email");
-  const rawCoordinates = formData.get("coordinates");
+  const rawCoordinates = formData.get("coordinates") as string;
 
   if (!validateEmail(email)) {
     return json(

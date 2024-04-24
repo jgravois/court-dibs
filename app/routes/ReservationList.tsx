@@ -21,6 +21,7 @@ export interface Rez {
   start: string;
   end: string;
   court: string;
+  openPlay: boolean;
 }
 
 const dateToHeader = (date: Date) => {
@@ -59,6 +60,8 @@ const DayList = ({
                 {format(rez.start, "h:mm bbb")}
                 &nbsp;-&nbsp;
                 {format(rez.end, "h:mm bbb")}
+                &nbsp;
+                {rez.openPlay ? "🌍" : ""}
               </NavLink>
             ) : (
               <p className="p-2">

@@ -15,6 +15,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const startDate = formData.get("startDate");
   const duration = formData.get("duration");
   const court = formData.get("court");
+  const openPlay = formData.get("openPlay");
 
   if (typeof startTime !== "string" || startTime === "") {
     return json({ errors: { start: "start is required" } }, { status: 400 });
@@ -45,6 +46,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     end: addMinutes(start, Number(duration)),
     court,
     userId,
+    openPlay: !!openPlay,
   });
 
   return redirect("/");
