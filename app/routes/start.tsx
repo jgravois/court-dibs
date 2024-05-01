@@ -84,7 +84,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 
   const res = await raw.json();
-  debugger;
+
   if (res.user_id && !existingUser) {
     await createUser(email, res.user_id);
   }
