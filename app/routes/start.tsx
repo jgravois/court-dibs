@@ -84,7 +84,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   );
 
   const res = await raw.json();
-
+  debugger;
   if (res.user_id && !existingUser) {
     await createUser(email, res.user_id);
   }
@@ -202,7 +202,7 @@ export default function Start() {
             type="text"
             name="coordinates"
             ref={coordinatesRef}
-            style={{ display: "none" }}
+            style={{ display: "block" }}
           />
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
