@@ -1,0 +1,337 @@
+:root {
+  /* general colors */
+  --light: #ffffff;
+  --mid-light: #eaeaea;
+  --dark: #272c37;
+  --light-pickleball: #b5f1ff;
+  --base-pickleball: #14cdf9;
+  --dark-pickleball: #34abc8;
+  --light-tennis: #a3ec91;
+  --base-tennis: #6ed654;
+  --dark-tennis: #53af3c;
+  --light-basketball: #ffc49a;
+  --base-basketball: #ff9e58;
+  --dark-basketball: #d77128;
+  /* text colors */
+  --dim-text: #aaa5ab;
+  /* shadows and overlays */
+  --overlay: inset 0 0 0 1000px rgba(18, 23, 35, 0.7);
+  --neutral-shadow: 0 0 4px rgba(18, 23, 35, 0.25);
+  --pickleball-shadow: 0 0 4px rgba(52, 171, 200, 1);
+  --tennis-shadow: 0 0 4px rgba(83, 175, 60, 1);
+  --basketball-shadow: 0 0 4px rgba(215, 113, 40, 1);
+  /* fonts */
+  --font-family: "Roboto";
+  --font-family-header: "Roboto";
+  --body-font-size: 18px;
+  --small-font-size: 16px;
+  /* layout */
+  --wrapper-width: 1400px;
+}
+
+/* resets */
+* {
+  box-sizing: border-box;
+}
+[hidden] {
+  display: none !important;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* global */
+
+body {
+  color: var(--dark);
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  background-color: var(--light);
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* header */
+
+.header {
+  background-image: url("https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/basketball-sunset.jpg?v=1714828327902");
+  background-repeat: no-repeat;
+  background-position: 50% 70%;
+  background-clip: border-box;
+  background-origin: padding-box;
+  -moz-background-size: cover;
+  background-size: cover;
+  box-shadow: var(--overlay);
+  color: var(--light);
+  height: 35vh;
+  position: relative;
+}
+
+.header_content {
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 20px;
+  width: 100%;
+}
+
+.h1 {
+  font-size: 45px;
+  font-weight: 900;
+  text-shadow: 1px 1px 4px var(--dark);
+}
+
+.h2 {
+  color: var(--dim-text);
+  font-size: var(--body-font-size);
+  font-weight: normal;
+}
+
+.header_left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header_illustration {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.header_icon {
+  border-radius: 10px;
+  box-shadow: var(--neutral-dark-shadow);
+  height: 60px;
+  width: 60px;
+}
+
+.header_icon.header_icon___pickleball {
+  background-color: var(--base-pickleball);
+}
+
+.header_icon.header_icon___tennis {
+  background-color: var(--base-tennis);
+}
+
+.header_icon.header_icon___basketball {
+  background-color: var(--base-basketball);
+}
+
+.header_icon img {
+  filter: invert(98%) sepia(78%) saturate(95%) hue-rotate(196deg)
+    brightness(118%) contrast(100%);
+  margin: 16px;
+}
+
+.header_right {
+  font-size: var(--small-font-size);
+  text-align: right;
+}
+
+.header_user {
+  color: var(--dim-text);
+  font-weight: normal;
+}
+
+.header_link {
+  color: var(--light);
+  text-decoration: none;
+}
+
+/* nav */
+
+.nav {
+  border-bottom: 2px solid var(--mid-light);
+  font-size: var(--small-font-size);
+  margin: 0 auto;
+  text-transform: uppercase;
+  width: 100%;
+}
+
+.nav_content {
+  display: flex;
+  font-weight: 500;
+  gap: 10px;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 20px;
+}
+
+.nav_link {
+  color: var(--dim-text);
+  position: relative;
+}
+
+.nav_link.nav_link___selected,
+.nav_link:hover,
+.nav_link:focus {
+  color: var(--dark);
+}
+
+.nav_hr {
+  border-bottom: 2px solid var(--dark);
+  position: absolute;
+  margin-top: 20px;
+  width: 100%;
+}
+
+/* main */
+
+.main {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 100%;
+  justify-content: stretch;
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 20px;
+}
+
+/* schedule */
+
+.schedule_icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.schedule_icon img {
+  height: 20px;
+}
+
+.schedule_header {
+  align-items: center;
+  display: flex;
+  font-size: 20px;
+  gap: 10px;
+}
+
+.schedule_content {
+  border-radius: 10px;
+  box-shadow: var(--neutral-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.schedule_content.schedule_content___pickleball {
+  background-color: var(--base-pickleball);
+}
+
+.schedule_content.schedule_content___tennis {
+  background-color: var(--base-tennis);
+}
+
+.schedule_content.schedule_content___basketball {
+  background-color: var(--base-basketball);
+}
+
+.schedule_row {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 100%;
+}
+
+.schedule_button {
+  background-color: var(--light);
+  border: 0;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: var(--body-font-size);
+  padding: 10px 10px 10px 20px;
+  text-align: left;
+}
+
+.schedule_button:hover {
+  transform: scale(1.05);
+}
+
+.schedule_type {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.schedule_content___pickleball .schedule_button.schedule_button___private,
+.schedule_content___pickleball .schedule_button.schedule_button___open,
+.schedule_content___tennis .schedule_button.schedule_button___private,
+.schedule_content___tennis .schedule_button.schedule_button___open,
+.schedule_content___basketball .schedule_button.schedule_button___private,
+.schedule_content___basketball .schedule_button.schedule_button___open {
+  align-items: center;
+  box-shadow: unset;
+  display: flex;
+  cursor: default;
+  justify-content: space-between;
+}
+
+.schedule_content___pickleball .schedule_button.schedule_button___private {
+  background-color: var(--light-pickleball);
+  color: var(--dark-pickleball);
+}
+
+.schedule_content___pickleball .schedule_button.schedule_button___open {
+  background-color: var(--dark-pickleball);
+  color: var(--light-pickleball);
+}
+
+.schedule_content___tennis .schedule_button.schedule_button___private {
+  background-color: var(--light-tennis);
+  color: var(--dark-tennis);
+}
+
+.schedule_content___tennis .schedule_button.schedule_button___open {
+  background-color: var(--dark-tennis);
+  color: var(--light-tennis);
+}
+
+.schedule_content___basketball .schedule_button.schedule_button___private {
+  background-color: var(--light-basketball);
+  color: var(--dark-basketball);
+}
+
+.schedule_content___basketball .schedule_button.schedule_button___open {
+  background-color: var(--dark-basketball);
+  color: var(--light-basketball);
+}
+
+.schedule_content___pickleball .schedule_button.schedule_button___private:hover,
+.schedule_content___pickleball .schedule_button.schedule_button___private:focus,
+.schedule_content___pickleball .schedule_button.schedule_button___open:hover,
+.schedule_content___pickleball .schedule_button.schedule_button___open:focus,
+.schedule_content___tennis .schedule_button.schedule_button___private:hover,
+.schedule_content___tennis .schedule_button.schedule_button___private:focus,
+.schedule_content___tennis .schedule_button.schedule_button___open:hover,
+.schedule_content___tennis .schedule_button.schedule_button___open:focus,
+.schedule_content___basketball .schedule_button.schedule_button___private:hover,
+.schedule_content___basketball .schedule_button.schedule_button___private:focus,
+.schedule_content___basketball .schedule_button.schedule_button___open:hover,
+.schedule_content___basketball .schedule_button.schedule_button___open:focus {
+  transform: none;
+}
+
+.schedule_content___pickleball .schedule_button {
+  box-shadow: var(--pickleball-shadow);
+}
+
+.schedule_content___tennis .schedule_button {
+  box-shadow: var(--tennis-shadow);
+}
+
+.schedule_content___basketball .schedule_button {
+  box-shadow: var(--basketball-shadow);
+}

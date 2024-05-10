@@ -13,22 +13,36 @@ export default function ReservationsPage() {
   const user = useUser();
 
   return (
-    <div className="flex h-full min-h-screen flex-col">
-      <header className="flex items-center justify-between bg-slate-800 p-4 text-white">
-        <h1 className="text-3xl font-bold">
-          <Link to="/">Court dibs</Link>
-        </h1>
-        <p>{user.email}</p>
-        <Form action="/logout" method="post">
-          <button
-            type="submit"
-            className="rounded bg-slate-600 px-4 py-2 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
-          >
-            Logout
-          </button>
-        </Form>
+    <>
+      <header className="header">
+        <div className="header_content">
+          <div className="header_left">
+            <Link to="/" className="h1">
+              Court dibs
+            </Link>
+            <h2 className="h2">Call dibs on one of our sportsball courts</h2>
+            <div className="header_illustration">
+              <div className="header_icon header_icon___pickleball">
+                <img src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/pickleball-solid.svg?v=1714837585684" />
+              </div>
+              <div className="header_icon header_icon___tennis">
+                <img src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/tennis-ball-solid.svg?v=1714837585529" />
+              </div>
+              <div className="header_icon header_icon___basketball">
+                <img src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/basketball-solid.svg?v=1714837585367" />
+              </div>
+            </div>
+          </div>
+          <div className="header_right">
+            <p className="header_user">{user.email}</p>
+            <Form action="/logout" method="post">
+              <button type="submit" className="header_link">
+                Sign out
+              </button>
+            </Form>
+          </div>
+        </div>
       </header>
-
       <main className="flex h-full bg-white">
         <div className="h-full w-1/3 border-r bg-gray-50"></div>
         <div className="h-full w-1/3">
@@ -36,6 +50,6 @@ export default function ReservationsPage() {
         </div>
         <div className="h-full w-1/3 border-r bg-gray-50"></div>
       </main>
-    </div>
+    </>
   );
 }
