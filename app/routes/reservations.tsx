@@ -43,13 +43,9 @@ export default function ReservationsPage() {
           </div>
         </div>
       </header>
-      <main className="flex h-full bg-white">
-        <div className="h-full w-1/3 border-r bg-gray-50"></div>
-        <div className="h-full w-1/3">
-          <Outlet />
-        </div>
-        <div className="h-full w-1/3 border-r bg-gray-50"></div>
-      </main>
+      <div className="wrapper">
+        <Outlet />
+      </div>
     </>
   );
 }

@@ -26,7 +26,7 @@
   --body-font-size: 18px;
   --small-font-size: 16px;
   /* layout */
-  --wrapper-width: 1400px;
+  --wrapper-width: 1200px;
 }
 
 /* resets */
@@ -148,6 +148,17 @@ body {
   text-decoration: none;
 }
 
+.header_link___button {
+  background-color: rgba(255, 255, 255, 0.137);
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+
+.header_link___button:hover,
+.header_link___button:focus {
+  background-color: rgba(255, 255, 255, 0.323);
+}
+
 /* nav */
 
 .nav {
@@ -201,6 +212,12 @@ body {
 
 /* schedule */
 
+.schedule {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .schedule_icon {
   display: flex;
   flex-direction: column;
@@ -215,6 +232,7 @@ body {
   align-items: center;
   display: flex;
   font-size: 20px;
+  font-weight: 700;
   gap: 10px;
 }
 

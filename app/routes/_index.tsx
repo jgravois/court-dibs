@@ -59,14 +59,19 @@ export default function Index() {
                 </Form>
               </>
             ) : (
-              <Link to="/start" className="header_link">
-                Sign up or login
+              <Link to="/start" className="header_link header_link___button">
+                Sign up or sign in
               </Link>
             )}
           </div>
         </div>
       </header>
-      <ReservationList reservations={data.reservations as Rez[]} user={user} />
+      <div className="wrapper">
+        <ReservationList
+          reservations={data.reservations as Rez[]}
+          user={user}
+        />
+      </div>
     </>
   );
 }
