@@ -441,3 +441,15 @@ body {
 .signUp_input:focus {
   border-color: var(--base-pickleball);
 }
+
+/* magic link message */
+
+.magicLink {
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 40px 20px;
+}
+
+.magicLink_message {
+  max-width: 500px;
+}
