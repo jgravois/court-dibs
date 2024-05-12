@@ -53,8 +53,11 @@ export default function Index() {
               <>
                 <p className="header_user">{user.email}</p>
                 <Form action="/logout" method="post">
-                  <button type="submit" className="header_link">
-                    Logout
+                  <button
+                    type="submit"
+                    className="header_link header_link___button"
+                  >
+                    Sign out
                   </button>
                 </Form>
               </>

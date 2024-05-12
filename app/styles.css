@@ -137,7 +137,10 @@ body {
 }
 
 .header_right {
+  display: flex;
+  flex-direction: column;
   font-size: var(--small-font-size);
+  gap: 10px;
   text-align: right;
 }
 
@@ -154,7 +157,7 @@ body {
 .header_link___button {
   background-color: rgba(255, 255, 255, 0.137);
   border-radius: 10px;
-  padding: 10px 15px;
+  padding: 8px 15px;
   white-space: nowrap;
 }
 
@@ -185,7 +188,6 @@ body {
 
   .header_link___button {
     font-size: var(--small-font-size);
-    padding: 8px 10px;
   }
 }
 

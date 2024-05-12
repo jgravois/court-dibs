@@ -36,7 +36,10 @@ export default function ReservationsPage() {
           <div className="header_right">
             <p className="header_user">{user.email}</p>
             <Form action="/logout" method="post">
-              <button type="submit" className="header_link">
+              <button
+                type="submit"
+                className="header_link header_link___button"
+              >
                 Sign out
               </button>
             </Form>
