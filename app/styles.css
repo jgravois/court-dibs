@@ -3,6 +3,7 @@
   --light: #ffffff;
   --mid-light: #eaeaea;
   --dark: #272c37;
+  --mid: #6e6a6f;
   --light-pickleball: #b5f1ff;
   --base-pickleball: #14cdf9;
   --dark-pickleball: #34abc8;
@@ -72,6 +73,7 @@ body {
   box-shadow: var(--overlay);
   color: var(--light);
   height: 35vh;
+  min-height: 250px;
   position: relative;
 }
 
@@ -238,6 +240,20 @@ body {
   padding: 20px;
 }
 
+@media screen and (max-width: 700px) {
+  .main {
+    gap: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
 /* schedule */
 
 .schedule {
@@ -380,4 +396,48 @@ body {
 
 .schedule_content___basketball .schedule_button {
   box-shadow: var(--basketball-shadow);
+}
+
+/* sign up */
+
+.signUp {
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 40px 20px;
+}
+
+.signUp_form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 500px;
+}
+
+.signUp_label {
+  font-size: var(--small-font-size);
+  font-weight: bold;
+}
+
+.signUp_button {
+  background-color: var(--dark);
+  border-radius: 10px;
+  color: var(--light);
+  padding: 10px 15px;
+}
+
+.signUp_button:hover,
+.signUp_button:focus {
+  background-color: var(--mid);
+}
+
+.signUp_input {
+  border: 1px solid var(--dim-text);
+  border-radius: 10px;
+  margin-bottom: 30px;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+.signUp_input:focus {
+  border-color: var(--base-pickleball);
 }
