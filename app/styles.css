@@ -27,6 +27,7 @@
   --small-font-size: 16px;
   /* layout */
   --wrapper-width: 1200px;
+  --mobile-width: 700px;
 }
 
 /* resets */
@@ -152,11 +153,38 @@ body {
   background-color: rgba(255, 255, 255, 0.137);
   border-radius: 10px;
   padding: 10px 15px;
+  white-space: nowrap;
 }
 
 .header_link___button:hover,
 .header_link___button:focus {
   background-color: rgba(255, 255, 255, 0.323);
+}
+
+/* mobile header */
+
+@media screen and (max-width: 700px) {
+  .header {
+    min-height: 300px;
+  }
+
+  .h1 {
+    font-size: 34px;
+  }
+
+  .header_icon {
+    height: 40px;
+    width: 40px;
+  }
+
+  .header_icon img {
+    margin: 10px;
+  }
+
+  .header_link___button {
+    font-size: var(--small-font-size);
+    padding: 8px 10px;
+  }
 }
 
 /* nav */
