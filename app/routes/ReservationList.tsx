@@ -52,8 +52,12 @@ const DayList = ({
         </h3>
         <div className="schedule_content schedule_content___pickleball">
           <div className="schedule_row">
-            <button className="schedule_button">8:00</button>
-            <button className="schedule_button">8:30</button>
+            <button className="schedule_button schedule_button___private">
+              8:00
+            </button>
+            <button className="schedule_button schedule_button___private">
+              8:30
+            </button>
           </div>
           <div className="schedule_row">
             <button className="schedule_button">9:00</button>

@@ -27,7 +27,7 @@
   --body-font-size: 18px;
   --small-font-size: 16px;
   /* layout */
-  --wrapper-width: 1200px;
+  --wrapper-width: 1000px;
   --mobile-width: 700px;
 }
 
@@ -454,4 +454,149 @@ body {
 
 .magicLink_message {
   max-width: 500px;
+}
+
+/* new reservation */
+
+.newRes {
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 40px 20px;
+}
+
+.newRes_label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.newRes_bold {
+  font-weight: bold;
+}
+
+.newRes_select {
+  background-color: transparent;
+  border: 1px solid var(--dark);
+  border-radius: 10px;
+  color: var(--dark);
+  cursor: pointer;
+  max-width: 300px;
+  padding: 10px 15px;
+}
+
+.newRes_select:hover,
+.newRes_select:focus {
+  background-color: var(--mid-light);
+}
+
+.newRes_button {
+  background-color: var(--dark);
+  border-radius: 10px;
+  color: var(--light);
+  padding: 10px 15px;
+}
+
+.newRes_button___outline {
+  background-color: transparent;
+  border: 1px solid var(--dark);
+  color: var(--dark);
+}
+
+.newRes_group {
+  align-content: center;
+  display: grid;
+  gap: 50px;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.newRes_group.newRes_group___small {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: unset;
+}
+
+@media screen and (max-width: 700px) {
+  .newRes_group {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.newRes_stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* radio */
+
+.newRes_radio,
+.newRes_checkbox {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.newRes_radio input,
+.newRes_checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.newRes_checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: var(--mid-light);
+  border-radius: 50%;
+}
+
+.newRes_box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: var(--mid-light);
+}
+
+.newRes_box___check {
+  top: 12px;
+}
+
+.newRes_radio:hover input ~ .newRes_checkmark {
+  background-color: var(--mid-light);
+}
+
+.newRes_radio input:checked ~ .newRes_checkmark {
+  background-color: var(--dark);
+}
+
+.newRes_checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.newRes_radio input:checked ~ .newRes_checkmark:after {
+  display: block;
+}
+
+.newRes_radio .newRes_checkmark:after {
+  top: 7px;
+  left: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
 }

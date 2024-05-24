@@ -67,105 +67,110 @@ export default function NewReservationPage() {
   }, [actionData]);
 
   return (
-    <Form
-      method="post"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        width: "80%",
-      }}
-    >
-      <div>
-        <label htmlFor="startTime">
-          <span>What time are you starting?</span>
-        </label>
-        <br />
-        <select name="startTime" id="startTime" ref={startTimeRef}>
-          <option value="08:00">8:00 am</option>
-          <option value="09:00">9:00 am</option>
-          <option value="10:00">10:00 am</option>
-          <option value="11:00">11:00 am</option>
-          <option value="12:00">12:00 pm</option>
-          <option value="13:00">1:00 pm</option>
-          <option value="14:00">2:00 pm</option>
-          <option value="15:00">3:00 pm</option>
-          <option value="16:00">4:00 pm</option>
-          <option value="17:00">5:00 pm</option>
-          <option value="18:00">6:00 pm</option>
-        </select>
-        <br />
-        <br />
-        <fieldset ref={durationRef}>
-          <legend>How long are you playing?</legend>
-          <div>
-            <div className="flex items-center">
-              <input type="radio" id="duration30" name="duration" value="30" />
-              <label htmlFor="duration30">30 minutes</label>
-            </div>
-            <div className="flex items-center">
-              <input
-                defaultChecked
-                type="radio"
-                id="duration60"
-                name="duration"
-                value="60"
-              />
-              <label htmlFor="duration60">1 hour</label>
-            </div>
-            <div className="flex items-center">
-              <input
-                type="radio"
-                id="duration120"
-                name="duration"
-                value="120"
-              />
-              <label htmlFor="duration120">2 hours</label>
-            </div>
+    <div className="newRes">
+      <Form className="newRes_form" method="post">
+        <div className="newRes_group">
+          <div className="newRes_stack">
+            <label className="newRes_label" htmlFor="startTime">
+              <span>What time are you starting?</span>
+            </label>
+            <select
+              className="newRes_select"
+              name="startTime"
+              id="startTime"
+              ref={startTimeRef}
+            >
+              <option value="08:00">8:00 am</option>
+              <option value="09:00">9:00 am</option>
+              <option value="10:00">10:00 am</option>
+              <option value="11:00">11:00 am</option>
+              <option value="12:00">12:00 pm</option>
+              <option value="13:00">1:00 pm</option>
+              <option value="14:00">2:00 pm</option>
+              <option value="15:00">3:00 pm</option>
+              <option value="16:00">4:00 pm</option>
+              <option value="17:00">5:00 pm</option>
+              <option value="18:00">6:00 pm</option>
+            </select>
           </div>
-        </fieldset>
-        <br />
-
-        <fieldset ref={courtRef}>
-          <legend>which court?</legend>
-
-          <div className="flex items-center">
-            <input type="radio" id="court_bball" name="court" value="bball" />
-            <label htmlFor="court_bball">Basketball 🏀</label>
-          </div>
-          <div className="flex items-center">
-            <input
-              defaultChecked
-              type="radio"
-              id="court_pb"
-              name="court"
-              value="pb"
-            />
-            <label htmlFor="court_pb">Pickleball 🏓</label>
-          </div>
-          <div className="flex items-center">
-            <input type="radio" id="court_10s" name="court" value="10s" />
-            <label htmlFor="court_10s">Tennis 🎾</label>
-          </div>
-        </fieldset>
-        <br />
-        <fieldset>
-          <div className="flex">
-            <div className="flex items-center h-7">
-              <input
-                type="checkbox"
-                id="openPlay"
-                name="openPlay"
-                className="w-4 h-4"
-              />
+          <fieldset>
+            <label className="newRes_checkbox" htmlFor="openPlay">
+              <div className="newRes_bold">Open play</div>
+              <p>Others are welcome to join you</p>
+              <input type="checkbox" id="openPlay" name="openPlay" />
+              <span className="newRes_box newRes_box___check"></span>
+            </label>
+          </fieldset>
+        </div>
+        <div className="newRes_group">
+          <fieldset ref={durationRef}>
+            <legend className="newRes_label">How long are you playing?</legend>
+            <div>
+              <label htmlFor="duration30" className="newRes_radio">
+                30 minutes
+                <input
+                  type="radio"
+                  id="duration30"
+                  name="duration"
+                  value="30"
+                />
+                <span className="newRes_checkmark"></span>
+              </label>
+              <label htmlFor="duration60" className="newRes_radio">
+                1 hour
+                <input
+                  defaultChecked
+                  type="radio"
+                  id="duration60"
+                  name="duration"
+                  value="60"
+                />
+                <span className="newRes_checkmark"></span>
+              </label>
+              <label htmlFor="duration120" className="newRes_radio">
+                2 hours
+                <input
+                  type="radio"
+                  id="duration120"
+                  name="duration"
+                  value="120"
+                />
+                <span className="newRes_checkmark"></span>
+              </label>
             </div>
-            <div className="ms-2">
-              <label htmlFor="openPlay">Open play</label>
-              <p className="text-xs ">others are welcome to join you</p>
+          </fieldset>
+          <fieldset ref={courtRef}>
+            <legend className="newRes_label">Which court?</legend>
+            <div>
+              <label htmlFor="court_bball" className="newRes_radio">
+                Basketball
+                <input
+                  type="radio"
+                  id="court_bball"
+                  name="court"
+                  value="bball"
+                />
+                <span className="newRes_checkmark"></span>
+              </label>
+              <label htmlFor="court_pb" className="newRes_radio">
+                Pickleball
+                <input
+                  defaultChecked
+                  type="radio"
+                  id="court_pb"
+                  name="court"
+                  value="pb"
+                />
+                <span className="newRes_checkmark"></span>
+              </label>
+              <label htmlFor="10s" className="newRes_radio">
+                Tennis
+                <input type="radio" id="court_10s" name="court" value="10s" />
+                <span className="newRes_checkmark"></span>
+              </label>
             </div>
-          </div>
-        </fieldset>
-
+          </fieldset>
+        </div>
         <div style={{ display: "none" }}>
           <input
             name="startDate"
@@ -182,16 +187,19 @@ export default function NewReservationPage() {
             {actionData.errors.start}
           </div>
         ) : null}
-      </div>
 
-      <div className="text-right">
-        <button
-          type="submit"
-          className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-        >
-          Save
-        </button>
-      </div>
-    </Form>
+        <div className="newRes_group newRes_group___small">
+          <button type="submit" className="newRes_button">
+            Reserve
+          </button>
+          <button
+            type="submit"
+            className="newRes_button newRes_button___outline"
+          >
+            Cancel
+          </button>
+        </div>
+      </Form>
+    </div>
   );
 }
