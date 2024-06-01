@@ -6,7 +6,7 @@
 
 import { installGlobals } from "@remix-run/node";
 import { parse } from "cookie";
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 import { createUser } from "~/models/user.server";
 import { createUserSession } from "~/session.server";

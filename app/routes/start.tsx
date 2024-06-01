@@ -8,6 +8,8 @@ import invariant from "tiny-invariant";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { validateCoordinates, validateEmail } from "~/utils";
 
+import { HeaderLeft } from "./HeaderLeft";
+
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 
@@ -138,81 +140,84 @@ export default function Start() {
   const showAddress = actionData?.errors.address;
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
-      <div className="mx-auto w-full max-w-md px-8">
-        <p>sign up or login to your account, no password needed!</p>
-        <Form method="post" className="space-y-6">
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Email address
-            </label>
-            <div className="mt-1">
-              <input
-                ref={emailRef}
-                id="email"
-                required
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus={true}
-                name="email"
-                type="email"
-                autoComplete="email"
-                placeholder="me@website.com"
-                aria-invalid={actionData?.errors?.email ? true : undefined}
-                aria-describedby="email-error"
-                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
-              />
-              {actionData?.errors?.email ? (
-                <div className="pt-1 text-red-700" id="email-error">
-                  {actionData.errors.email}
-                </div>
-              ) : null}
-            </div>
-          </div>
-          {showAddress ? (
+    <>
+      <header className="header">
+        <div className="header_content">
+          <HeaderLeft />
+          <div className="header_right"></div>
+        </div>
+      </header>
+      <div className="signUp">
+        <div className="signUp_form">
+          <p className="signUp_insutructions">
+            Sign up or sign in to your account, no password needed!
+          </p>
+          <Form method="post">
             <div>
-              <label
-                htmlFor="street-address"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Street Address
+              <label htmlFor="email" className="signUp_label">
+                Email address
               </label>
-              <div className="mt-1">
+              <div>
                 <input
-                  id="street-address"
-                  ref={addressRef}
-                  name="street-address"
-                  type="text"
-                  autoComplete="off"
-                  aria-invalid={actionData?.errors?.address ? true : undefined}
-                  aria-describedby="street-address-error"
-                  className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                  ref={emailRef}
+                  id="email"
+                  required
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
+                  autoFocus={true}
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="me@website.com"
+                  aria-invalid={actionData?.errors?.email ? true : undefined}
+                  aria-describedby="email-error"
+                  className="signUp_input"
                 />
-                {actionData?.errors?.address ? (
-                  <div className="pt-1 text-red-700" id="password-error">
-                    {actionData.errors.address}
+                {actionData?.errors?.email ? (
+                  <div className="pt-1 text-red-700" id="email-error">
+                    {actionData.errors.email}
                   </div>
                 ) : null}
               </div>
             </div>
-          ) : null}
-          <input
-            type="text"
-            name="coordinates"
-            ref={coordinatesRef}
-            style={{ display: "none" }}
-          />
-          <input type="hidden" name="redirectTo" value={redirectTo} />
-          <button
-            type="submit"
-            className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
-          >
-            Continue
-          </button>
-        </Form>
+            {showAddress ? (
+              <div>
+                <label htmlFor="street-address" className="signUp_label">
+                  Street Address
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="street-address"
+                    ref={addressRef}
+                    name="street-address"
+                    type="text"
+                    autoComplete="off"
+                    aria-invalid={
+                      actionData?.errors?.address ? true : undefined
+                    }
+                    aria-describedby="street-address-error"
+                    className="signUp_input"
+                  />
+                  {actionData?.errors?.address ? (
+                    <div className="pt-1 text-red-700" id="password-error">
+                      {actionData.errors.address}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+            <input
+              type="text"
+              name="coordinates"
+              ref={coordinatesRef}
+              style={{ display: "none" }}
+            />
+            <input type="hidden" name="redirectTo" value={redirectTo} />
+            <button type="submit" className="signUp_button">
+              Continue
+            </button>
+          </Form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

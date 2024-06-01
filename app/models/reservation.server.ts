@@ -8,7 +8,7 @@ export function getReservation({
 }: Pick<Reservation, "id"> & {
   userId: User["id"];
 }) {
-  userId
+  userId;
   return prisma.reservation.findFirst({
     select: { id: true, start: true, end: true, court: true, user: true },
     where: { id },
@@ -23,7 +23,7 @@ export function getReservations() {
       start: true,
       end: true,
       court: true,
-      openPlay: true
+      openPlay: true,
     },
   });
 }
