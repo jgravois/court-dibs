@@ -95,8 +95,7 @@ export default function NewReservationPage() {
           </div>
           <fieldset>
             <label className="newRes_checkbox" htmlFor="openPlay">
-              <div className="newRes_bold">Open play</div>
-              <p>Others are welcome to join you</p>
+              <div className="newRes_bold">Are neighbors welcome to join?</div>
               <input type="checkbox" id="openPlay" name="openPlay" />
               <span className="newRes_box newRes_box___check"></span>
             </label>
@@ -163,7 +162,7 @@ export default function NewReservationPage() {
                 />
                 <span className="newRes_checkmark"></span>
               </label>
-              <label htmlFor="10s" className="newRes_radio">
+              <label htmlFor="court_10s" className="newRes_radio">
                 Tennis
                 <input type="radio" id="court_10s" name="court" value="10s" />
                 <span className="newRes_checkmark"></span>
