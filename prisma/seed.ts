@@ -11,14 +11,12 @@ async function seed() {
   await prisma.user.deleteMany().catch(() => {
     // no worries if records dont exist yet
   });
-  await prisma.reservation.deleteMany()
-
+  await prisma.reservation.deleteMany();
 
   const user = await prisma.user.create({
     data: {
       email,
-      stytchId: 'user-test-56e85954-ddf4-49eb-be5e-3901b0267f62'
-
+      stytchId: "user-test-56e85954-ddf4-49eb-be5e-3901b0267f62",
     },
   });
 
@@ -28,7 +26,7 @@ async function seed() {
       start: tomorrow,
       end: addMinutes(tomorrow, 30),
       userId: user.id,
-      court: 'pb' // 'pb' | 'bball' | '10s'
+      court: "pb", // 'pb' | 'bball' | '10s'
     },
   });
 

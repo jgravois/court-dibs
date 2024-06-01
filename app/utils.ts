@@ -78,7 +78,7 @@ export function validateEmail(email: unknown): email is string {
 }
 
 const HOA_BOUNDARY = {
-  "coordinates": [
+  coordinates: [
     [
       [-117.68496384123713, 33.48204151023167],
       [-117.68388255720208, 33.48203351752436],
@@ -88,11 +88,11 @@ const HOA_BOUNDARY = {
       [-117.67842443970255, 33.48174668927008],
       [-117.67732407755909, 33.48353464046207],
       [-117.68435950172221, 33.48353464046207],
-      [-117.68496384123713, 33.48204151023167]
-    ]
+      [-117.68496384123713, 33.48204151023167],
+    ],
   ],
-  "type": "Polygon"
-}
+  type: "Polygon",
+};
 
 export const validateCoordinates = (coordinates: [number, number]) =>
-  contains(HOA_BOUNDARY as GeoJSON, { type: 'Point', coordinates });
+  contains(HOA_BOUNDARY as GeoJSON, { type: "Point", coordinates });

@@ -29,10 +29,12 @@ describe("smoke tests", () => {
     cy.visit({
       url: "/reservations/new",
       qs: {
-        "day": "2024-04-24"
-      }
+        day: "2024-04-24",
+      },
     });
-    cy.findByRole("combobox", { name: /What time are you starting?/i }).select('8:00 am');
-    cy.findByRole("button", { name: /Save/i }).click();
+    cy.findByRole("combobox", { name: /What time are you starting?/i }).select(
+      "8:00 am",
+    );
+    cy.findByRole("button", { name: /Reserve/i }).click();
   });
 });

@@ -20,7 +20,7 @@ export async function createUser(email: User["email"], stytchId: string) {
   return prisma.user.create({
     data: {
       email,
-      stytchId
+      stytchId,
     },
   });
 }
@@ -28,4 +28,3 @@ export async function createUser(email: User["email"], stytchId: string) {
 export async function deleteUserByEmail(email: User["email"]) {
   return prisma.user.delete({ where: { email } });
 }
-

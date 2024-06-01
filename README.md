@@ -1,16 +1,16 @@
 ## setup
 
-  ```sh
-  npm install
-  npm run setup
+```sh
+npm install
+npm run setup
 ```
 
 ## development
 
-  ```sh
-  npm run dev
-  open http://localhost:3000
-  ```
+```sh
+npm run dev
+open http://localhost:3000
+```
 
 This starts the app in development mode, rebuilding assets on file changes.
 
