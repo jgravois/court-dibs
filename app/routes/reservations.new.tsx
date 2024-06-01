@@ -55,7 +55,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 export default function NewReservationPage() {
   const [params] = useSearchParams();
   const actionData = useActionData<typeof action>();
-  const startTimeRef = useRef<HTMLSelectElement>(null);
+
+  const startTimeRef = useRef<HTMLInputElement>(null);
   const startDateRef = useRef<HTMLInputElement>(null);
   const courtRef = useRef<HTMLFieldSetElement>(null);
   const durationRef = useRef<HTMLFieldSetElement>(null);
@@ -73,31 +74,14 @@ export default function NewReservationPage() {
           <div className="newRes_stack">
             <label className="newRes_label" htmlFor="startTime">
               <span>What time are you starting?</span>
+              <p>{params.get("start")}</p>
             </label>
-            <select
-              className="newRes_select"
-              name="startTime"
-              id="startTime"
-              ref={startTimeRef}
-            >
-              <option value="08:00">8:00 am</option>
-              <option value="09:00">9:00 am</option>
-              <option value="10:00">10:00 am</option>
-              <option value="11:00">11:00 am</option>
-              <option value="12:00">12:00 pm</option>
-              <option value="13:00">1:00 pm</option>
-              <option value="14:00">2:00 pm</option>
-              <option value="15:00">3:00 pm</option>
-              <option value="16:00">4:00 pm</option>
-              <option value="17:00">5:00 pm</option>
-              <option value="18:00">6:00 pm</option>
-            </select>
           </div>
           <fieldset>
             <label className="newRes_checkbox" htmlFor="openPlay">
               <div className="newRes_bold">Are neighbors welcome to join?</div>
               <input type="checkbox" id="openPlay" name="openPlay" />
-              <span className="newRes_box newRes_box___check"></span>
+              <span className="newRes_box"></span>
             </label>
           </fieldset>
         </div>
@@ -178,6 +162,12 @@ export default function NewReservationPage() {
             defaultValue={
               params.get("day") ?? startOfToday().toISOString().slice(0, 10)
             }
+          />
+          <input
+            name="startTime"
+            type="text"
+            ref={startTimeRef}
+            defaultValue={params.get("start") ?? "08:00"}
           />
         </div>
 

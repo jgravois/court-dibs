@@ -1,5 +1,5 @@
 import type { User } from "@prisma/client";
-import { Link, useNavigate } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import cn from "classnames";
 import {
   addDays,
@@ -38,17 +38,14 @@ const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const isOverlapping = (r: Rez, date: Date, hour: number) => {
-  return (
-    areIntervalsOverlapping(
-      { start: r.start, end: r.end },
-      {
-        start: addHours(date, hour),
-        end: addHours(date, hour + 0.01),
-      },
-    ) && !r.openPlay
+const isOverlapping = (r: Rez, date: Date, hour: number) =>
+  areIntervalsOverlapping(
+    { start: r.start, end: r.end },
+    {
+      start: addHours(date, hour),
+      end: addHours(date, hour + 0.01),
+    },
   );
-};
 
 const Guts = ({
   reservations,
@@ -105,7 +102,9 @@ const Guts = ({
                   ? navigate(
                       `/reservations/new?day=${date
                         .toISOString()
-                        .slice(0, 10)}`,
+                        .slice(0, 10)}&start=${
+                        String(num).padStart(2, "0") + ":00"
+                      }`,
                     )
                   : undefined
               }
@@ -122,7 +121,9 @@ const Guts = ({
                   ? navigate(
                       `/reservations/new?day=${date
                         .toISOString()
-                        .slice(0, 10)}`,
+                        .slice(0, 10)}&start=${
+                        String(num).padStart(2, "0") + ":30"
+                      }`,
                     )
                   : console.log("cant touch this")
               }
@@ -215,14 +216,6 @@ export const ReservationList = ({
           </a>
         </div>
       </nav>
-      {user ? (
-        <Link
-          to={`/reservations/new?day=${date.toISOString().slice(0, 10)}`}
-          className="text-blue-500"
-        >
-          +
-        </Link>
-      ) : null}
       <main className="main">
         <TimeSlots
           reservations={existingReservations.filter((r) => r.court === "pb")}
