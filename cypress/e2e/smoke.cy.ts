@@ -30,11 +30,9 @@ describe("smoke tests", () => {
       url: "/reservations/new",
       qs: {
         day: "2024-04-24",
+        start: "08:00"
       },
     });
-    cy.findByRole("combobox", { name: /What time are you starting?/i }).select(
-      "8:00 am",
-    );
     cy.findByRole("button", { name: /Reserve/i }).click();
   });
 });

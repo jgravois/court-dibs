@@ -473,21 +473,6 @@ body {
   font-weight: bold;
 }
 
-.newRes_select {
-  background-color: transparent;
-  border: 1px solid var(--dark);
-  border-radius: 10px;
-  color: var(--dark);
-  cursor: pointer;
-  max-width: 300px;
-  padding: 10px 15px;
-}
-
-.newRes_select:hover,
-.newRes_select:focus {
-  background-color: var(--mid-light);
-}
-
 .newRes_button {
   background-color: var(--dark);
   border-radius: 10px;
@@ -570,8 +555,9 @@ body {
   background-color: var(--mid-light);
 }
 
-.newRes_box___check {
-  top: 12px;
+input:checked ~ .newRes_box:before {
+  content: "✔️";
+  margin-left: 3px;
 }
 
 .newRes_radio:hover input ~ .newRes_checkmark {
