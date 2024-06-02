@@ -71,19 +71,19 @@ const Guts = ({
       })}
     >
       {rezTimes.map((num) => {
-        const onHourPrivate = reservations.some(
+        const onHourPrivate = reservations.find(
           (r) => isOverlapping(r, date, num) && !r.openPlay,
         );
 
-        const onHourOpenPlay = reservations.some(
+        const onHourOpenPlay = reservations.find(
           (r) => isOverlapping(r, date, num) && r.openPlay,
         );
 
-        const halfHourPrivate = reservations.some(
+        const halfHourPrivate = reservations.find(
           (r) => isOverlapping(r, date, num + 0.5) && !r.openPlay,
         );
 
-        const halfHourOpenPlay = reservations.some(
+        const halfHourOpenPlay = reservations.find(
           (r) => isOverlapping(r, date, num + 0.5) && r.openPlay,
         );
 
@@ -94,8 +94,8 @@ const Guts = ({
           <div className="schedule_row" key={num}>
             <button
               className={cn("schedule_button", {
-                schedule_button___private: onHourPrivate,
-                schedule_button___open: onHourOpenPlay,
+                schedule_button___private: !!onHourPrivate,
+                schedule_button___open: !!onHourOpenPlay,
               })}
               onClick={() =>
                 canReserveOnHour
@@ -106,15 +106,19 @@ const Guts = ({
                         String(num).padStart(2, "0") + ":00"
                       }`,
                     )
-                  : undefined
+                  : navigate(
+                      `/reservations/${
+                        onHourPrivate?.id ?? onHourOpenPlay?.id
+                      }`,
+                    )
               }
             >
               {num + ":00"}
             </button>
             <button
               className={cn("schedule_button", {
-                schedule_button___private: halfHourPrivate,
-                schedule_button___open: halfHourOpenPlay,
+                schedule_button___private: !!halfHourPrivate,
+                schedule_button___open: !!halfHourOpenPlay,
               })}
               onClick={() =>
                 canReserveOnHalfHour
@@ -125,7 +129,11 @@ const Guts = ({
                         String(num).padStart(2, "0") + ":30"
                       }`,
                     )
-                  : console.log("cant touch this")
+                  : navigate(
+                      `/reservations/${
+                        halfHourPrivate?.id ?? halfHourOpenPlay?.id
+                      }`,
+                    )
               }
             >
               {num + ":30"}

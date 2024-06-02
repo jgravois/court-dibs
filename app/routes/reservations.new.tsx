@@ -74,7 +74,7 @@ export default function NewReservationPage() {
           <div className="newRes_stack">
             <label className="newRes_label" htmlFor="startTime">
               <span>What time are you starting?</span>
-              <p>{params.get("start")}</p>
+              <p>{params.get("start") + " on " + params.get("day")}</p>
             </label>
           </div>
           <fieldset>
