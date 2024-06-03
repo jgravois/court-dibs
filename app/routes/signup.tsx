@@ -94,7 +94,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/magic");
 };
 
-export const meta: MetaFunction = () => [{ title: "Sign up or login" }];
+export const meta: MetaFunction = () => [{ title: "Sign up" }];
 
 export default function Start() {
   const [searchParams] = useSearchParams();
@@ -103,14 +103,7 @@ export default function Start() {
   const emailRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const coordinatesRef = useRef<HTMLInputElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const autoCompleteRef = useRef<any>(null);
-
-  useEffect(() => {
-    if (actionData?.errors?.address) {
-      addressRef.current?.focus();
-    }
-  }, [actionData]);
+  const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const options = { fields: ["geometry"] };
 
@@ -121,13 +114,18 @@ export default function Start() {
     });
 
     loader.load().then(async (goo) => {
-      const { Autocomplete } = await goo.maps.importLibrary("places");
-      autoCompleteRef.current = new Autocomplete(addressRef.current, options);
+      const { Autocomplete } = (await goo.maps.importLibrary(
+        "places",
+      )) as google.maps.PlacesLibrary;
+      autoCompleteRef.current = new Autocomplete(
+        addressRef.current as HTMLInputElement,
+        options,
+      );
 
       autoCompleteRef.current?.addListener("place_changed", async function () {
         if (autoCompleteRef.current && coordinatesRef.current) {
           const { geometry } = await autoCompleteRef.current.getPlace();
-          coordinatesRef.current.value = `${geometry.location.lng()},${geometry.location.lat()}`;
+          coordinatesRef.current.value = `${geometry?.location?.lng()},${geometry?.location?.lat()}`;
         }
       });
     });
@@ -136,8 +134,6 @@ export default function Start() {
       autoCompleteRef.current = null;
     };
   });
-
-  const showAddress = actionData?.errors.address;
 
   return (
     <>
@@ -149,21 +145,22 @@ export default function Start() {
       </header>
       <div className="signUp">
         <div className="signUp_form">
-          <p className="signUp_insutructions">
-            Sign up or sign in to your account, no password needed!
-          </p>
+          <p>Create a new account or login</p>
           <Form method="post">
             <div>
               <label htmlFor="email" className="signUp_label">
                 Email address
               </label>
               <div>
+                {actionData?.errors?.email ? (
+                  <div className="pt-1 text-red-700" id="email-error">
+                    {actionData.errors.email}
+                  </div>
+                ) : null}
                 <input
                   ref={emailRef}
                   id="email"
                   required
-                  // eslint-disable-next-line jsx-a11y/no-autofocus
-                  autoFocus={true}
                   name="email"
                   type="email"
                   autoComplete="email"
@@ -172,39 +169,31 @@ export default function Start() {
                   aria-describedby="email-error"
                   className="signUp_input"
                 />
-                {actionData?.errors?.email ? (
-                  <div className="pt-1 text-red-700" id="email-error">
-                    {actionData.errors.email}
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="street-address" className="signUp_label">
+                Street Address
+              </label>
+              <div className="mt-1">
+                <input
+                  id="street-address"
+                  ref={addressRef}
+                  name="street-address"
+                  type="text"
+                  autoComplete="off"
+                  aria-invalid={actionData?.errors?.address ? true : undefined}
+                  aria-describedby="street-address-error"
+                  className="signUp_input"
+                />
+                {actionData?.errors?.address ? (
+                  <div className="pt-1 text-red-700" id="password-error">
+                    {actionData.errors.address}
                   </div>
                 ) : null}
               </div>
             </div>
-            {showAddress ? (
-              <div>
-                <label htmlFor="street-address" className="signUp_label">
-                  Street Address
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="street-address"
-                    ref={addressRef}
-                    name="street-address"
-                    type="text"
-                    autoComplete="off"
-                    aria-invalid={
-                      actionData?.errors?.address ? true : undefined
-                    }
-                    aria-describedby="street-address-error"
-                    className="signUp_input"
-                  />
-                  {actionData?.errors?.address ? (
-                    <div className="pt-1 text-red-700" id="password-error">
-                      {actionData.errors.address}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
             <input
               type="text"
               name="coordinates"

@@ -400,6 +400,11 @@ body {
   box-shadow: var(--basketball-shadow);
 }
 
+.loginButtons {
+  display: flex;
+  gap: 10px;
+}
+
 /* sign up */
 
 .signUp {
@@ -442,6 +447,11 @@ body {
 
 .signUp_input:focus {
   border-color: var(--base-pickleball);
+}
+
+.tradLink {
+  color: #00f;
+  text-decoration: underline;
 }
 
 /* magic link message */
