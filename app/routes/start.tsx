@@ -83,7 +83,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         errors: {
           email: null,
           password: null,
-          address: "signup is only available to HOA residents",
+          address: "Sign up is only available to HOA residents",
         },
       },
       { status: 400 },
@@ -150,7 +150,6 @@ export default function Start() {
     };
   });
 
-  console.log("john", coordinatesRef.current?.value);
   return (
     <>
       <header className="header">
@@ -161,7 +160,7 @@ export default function Start() {
       </header>
       <div className="signUp">
         <div className="signUp_form">
-          <p>Sign up or sign in to your account, no password needed!</p>
+          <p>Sign up or log in to your account, no password needed!</p>
           <Form method="post">
             <div>
               <label htmlFor="email" className="signUp_label">
@@ -176,6 +175,7 @@ export default function Start() {
                   type="email"
                   autoComplete="email"
                   placeholder="me@website.com"
+                  aria-invalid={actionData?.errors?.email ? true : undefined}
                   aria-describedby="email-error"
                   className="signUp_input"
                 />
@@ -205,9 +205,10 @@ export default function Start() {
                     aria-describedby="street-address-error"
                     className="signUp_input"
                   />
-                  {actionData?.errors?.address !== ADDRESS_REQUIRED ? (
+                  {actionData?.errors?.address &&
+                  actionData?.errors?.address !== ADDRESS_REQUIRED ? (
                     <div className="pt-1 text-red-700" id="password-error">
-                      {actionData?.errors.address}
+                      {actionData.errors.address}
                     </div>
                   ) : null}
                 </div>
