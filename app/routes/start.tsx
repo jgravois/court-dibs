@@ -2,7 +2,7 @@ import { Loader } from "@googlemaps/js-api-loader";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
@@ -12,6 +12,29 @@ import { HeaderLeft } from "./HeaderLeft";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
+
+const ADDRESS_REQUIRED = "Street address is required";
+
+const callStytch = async (email: string) => {
+  const rawResponse = await fetch(
+    "https://test.stytch.com/v1/magic_links/email/login_or_create",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${btoa(
+          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+        )}`,
+      },
+
+      body: JSON.stringify({
+        email,
+        login_magic_link_url: "http://localhost:3000/authenticate",
+      }),
+    },
+  );
+  return rawResponse.json();
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   invariant(process.env.STYTCH_PROJECT_ID, "STYTCH_PROJECT_ID must be set");
@@ -35,66 +58,45 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   // if valid, call stytch, create user in DB and redirect to same generic landing page
   const existingUser = await getUserByEmail(email);
 
-  if (!existingUser) {
-    if (typeof rawCoordinates !== "string" || rawCoordinates.length === 0) {
-      return json(
-        {
-          errors: {
-            email: null,
-            password: null,
-            address: "Street address is required",
-          },
-        },
-        { status: 400 },
-      );
-    }
-
-    const coordinates = rawCoordinates?.split(",") as unknown as [
-      number,
-      number,
-    ];
-    if (!validateCoordinates(coordinates)) {
-      return json(
-        {
-          errors: {
-            email: null,
-            password: null,
-            address: "signup is only available to HOA residents",
-          },
-        },
-        { status: 400 },
-      );
-    }
+  if (existingUser) {
+    await callStytch(email);
+    return redirect("/magic");
   }
 
-  const raw = await fetch(
-    "https://test.stytch.com/v1/magic_links/email/login_or_create",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(
-          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-        )}`,
+  if (typeof rawCoordinates !== "string" || rawCoordinates.length === 0) {
+    return json(
+      {
+        errors: {
+          email: null,
+          password: null,
+          address: ADDRESS_REQUIRED,
+        },
       },
-
-      body: JSON.stringify({
-        email,
-        login_magic_link_url: "http://localhost:3000/authenticate",
-      }),
-    },
-  );
-
-  const res = await raw.json();
-
-  if (res.user_id && !existingUser) {
-    await createUser(email, res.user_id);
+      { status: 400 },
+    );
   }
+
+  const coordinates = rawCoordinates?.split(",") as unknown as [number, number];
+  if (!validateCoordinates(coordinates)) {
+    return json(
+      {
+        errors: {
+          email: null,
+          password: null,
+          address: "signup is only available to HOA residents",
+        },
+      },
+      { status: 400 },
+    );
+  }
+
+  const response = await callStytch(email);
+  if (response.user_id) await createUser(email, response.user_id);
 
   return redirect("/magic");
 };
 
-export const meta: MetaFunction = () => [{ title: "Sign up" }];
+export const meta: MetaFunction = () => [{ title: "Sign up or login" }];
 
 export default function Start() {
   const [searchParams] = useSearchParams();
@@ -104,8 +106,15 @@ export default function Start() {
   const addressRef = useRef<HTMLInputElement>(null);
   const coordinatesRef = useRef<HTMLInputElement>(null);
   const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const [showAddress, setShowAddress] = useState(false);
 
   const options = { fields: ["geometry"] };
+
+  useEffect(() => {
+    if (!showAddress && actionData?.errors.address === ADDRESS_REQUIRED) {
+      setShowAddress(true);
+    }
+  }, [actionData?.errors.address, showAddress, setShowAddress]);
 
   useEffect(() => {
     const loader = new Loader({
@@ -117,17 +126,23 @@ export default function Start() {
       const { Autocomplete } = (await goo.maps.importLibrary(
         "places",
       )) as google.maps.PlacesLibrary;
-      autoCompleteRef.current = new Autocomplete(
-        addressRef.current as HTMLInputElement,
-        options,
-      );
 
-      autoCompleteRef.current?.addListener("place_changed", async function () {
-        if (autoCompleteRef.current && coordinatesRef.current) {
-          const { geometry } = await autoCompleteRef.current.getPlace();
-          coordinatesRef.current.value = `${geometry?.location?.lng()},${geometry?.location?.lat()}`;
-        }
-      });
+      if (addressRef.current) {
+        autoCompleteRef.current = new Autocomplete(
+          addressRef.current as HTMLInputElement,
+          options,
+        );
+
+        autoCompleteRef.current?.addListener(
+          "place_changed",
+          async function () {
+            if (autoCompleteRef.current && coordinatesRef.current) {
+              const { geometry } = await autoCompleteRef.current.getPlace();
+              coordinatesRef.current.value = `${geometry?.location?.lng()},${geometry?.location?.lat()}`;
+            }
+          },
+        );
+      }
     });
 
     return () => {
@@ -135,6 +150,7 @@ export default function Start() {
     };
   });
 
+  console.log("john", coordinatesRef.current?.value);
   return (
     <>
       <header className="header">
@@ -145,18 +161,13 @@ export default function Start() {
       </header>
       <div className="signUp">
         <div className="signUp_form">
-          <p>Create a new account or login</p>
+          <p>Sign up or sign in to your account, no password needed!</p>
           <Form method="post">
             <div>
               <label htmlFor="email" className="signUp_label">
                 Email address
               </label>
               <div>
-                {actionData?.errors?.email ? (
-                  <div className="pt-1 text-red-700" id="email-error">
-                    {actionData.errors.email}
-                  </div>
-                ) : null}
                 <input
                   ref={emailRef}
                   id="email"
@@ -165,35 +176,43 @@ export default function Start() {
                   type="email"
                   autoComplete="email"
                   placeholder="me@website.com"
-                  aria-invalid={actionData?.errors?.email ? true : undefined}
                   aria-describedby="email-error"
                   className="signUp_input"
                 />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="street-address" className="signUp_label">
-                Street Address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="street-address"
-                  ref={addressRef}
-                  name="street-address"
-                  type="text"
-                  autoComplete="off"
-                  aria-invalid={actionData?.errors?.address ? true : undefined}
-                  aria-describedby="street-address-error"
-                  className="signUp_input"
-                />
-                {actionData?.errors?.address ? (
-                  <div className="pt-1 text-red-700" id="password-error">
-                    {actionData.errors.address}
+                {actionData?.errors?.email ? (
+                  <div className="pt-1 text-red-700" id="email-error">
+                    {actionData.errors.email}
                   </div>
                 ) : null}
               </div>
             </div>
+            {showAddress ? (
+              <div>
+                <label htmlFor="street-address" className="signUp_label">
+                  Street Address
+                </label>
+                <div className="mt-1">
+                  <input
+                    id="street-address"
+                    ref={addressRef}
+                    name="street-address"
+                    type="text"
+                    autoComplete="off"
+                    required
+                    aria-invalid={
+                      actionData?.errors?.address ? true : undefined
+                    }
+                    aria-describedby="street-address-error"
+                    className="signUp_input"
+                  />
+                  {actionData?.errors?.address !== ADDRESS_REQUIRED ? (
+                    <div className="pt-1 text-red-700" id="password-error">
+                      {actionData?.errors.address}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
             <input
               type="text"
               name="coordinates"

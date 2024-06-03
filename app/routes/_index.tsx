@@ -47,14 +47,9 @@ export default function Index() {
                 </Form>
               </>
             ) : (
-              <div className="loginButtons">
-                <Link to="/signup" className="header_link header_link___button">
-                  Sign up
-                </Link>
-                <Link to="/login" className="header_link header_link___button">
-                  Log in
-                </Link>
-              </div>
+              <Link to="/start" className="header_link header_link___button">
+                Sign up or sign in
+              </Link>
             )}
           </div>
         </div>
