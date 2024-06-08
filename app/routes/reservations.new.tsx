@@ -1,6 +1,6 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useSearchParams } from "@remix-run/react";
+import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { addMinutes, startOfToday } from "date-fns";
 import { useEffect, useRef } from "react";
 
@@ -41,13 +41,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const start = new Date(`${startDate}T${startTime}:00`);
-  await createReservation({
-    start,
-    end: addMinutes(start, Number(duration)),
-    court,
-    userId,
-    openPlay: !!openPlay,
-  });
+  try {
+    await createReservation({
+      start,
+      end: addMinutes(start, Number(duration)),
+      court,
+      userId,
+      openPlay: !!openPlay,
+    });
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return json({ errors: { start: (e as any).message } }, { status: 400 });
+  }
 
   return redirect("/");
 };
@@ -74,8 +79,8 @@ export default function NewReservationPage() {
           <div className="newRes_stack">
             <label className="newRes_label" htmlFor="startTime">
               <span>What time are you starting?</span>
-              <p>{params.get("start") + " on " + params.get("day")}</p>
             </label>
+            <p>{params.get("start") + " on " + params.get("day")}</p>
           </div>
           <fieldset>
             <label className="newRes_checkbox" htmlFor="openPlay">
@@ -122,12 +127,16 @@ export default function NewReservationPage() {
               </label>
             </div>
           </fieldset>
-          <fieldset ref={courtRef}>
+          <fieldset
+            ref={courtRef}
+            // onChange={(e) => console.log(e.target.value)}
+          >
             <legend className="newRes_label">Which court?</legend>
             <div>
               <label htmlFor="court_bball" className="newRes_radio">
                 Basketball
                 <input
+                  defaultChecked={params.get("court") === "bball"}
                   type="radio"
                   id="court_bball"
                   name="court"
@@ -138,7 +147,7 @@ export default function NewReservationPage() {
               <label htmlFor="court_pb" className="newRes_radio">
                 Pickleball
                 <input
-                  defaultChecked
+                  defaultChecked={params.get("court") === "pb"}
                   type="radio"
                   id="court_pb"
                   name="court"
@@ -148,7 +157,13 @@ export default function NewReservationPage() {
               </label>
               <label htmlFor="court_10s" className="newRes_radio">
                 Tennis
-                <input type="radio" id="court_10s" name="court" value="10s" />
+                <input
+                  defaultChecked={params.get("court") === "10s"}
+                  type="radio"
+                  id="court_10s"
+                  name="court"
+                  value="10s"
+                />
                 <span className="newRes_checkmark"></span>
               </label>
             </div>
@@ -181,12 +196,9 @@ export default function NewReservationPage() {
           <button type="submit" className="newRes_button">
             Reserve
           </button>
-          <button
-            type="submit"
-            className="newRes_button newRes_button___outline"
-          >
+          <Link to="/" className="newRes_button newRes_button___outline">
             Cancel
-          </button>
+          </Link>
         </div>
       </Form>
     </div>
