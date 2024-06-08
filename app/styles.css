@@ -343,6 +343,10 @@ body {
   justify-content: space-between;
 }
 
+.schedule_content .schedule_button___anon {
+  cursor: default;
+}
+
 .schedule_content___pickleball .schedule_button.schedule_button___private {
   background-color: var(--light-pickleball);
   color: var(--dark-pickleball);
@@ -385,6 +389,11 @@ body {
 .schedule_content___basketball .schedule_button.schedule_button___private:focus,
 .schedule_content___basketball .schedule_button.schedule_button___open:hover,
 .schedule_content___basketball .schedule_button.schedule_button___open:focus {
+  transform: none;
+}
+
+.schedule_content .schedule_button.schedule_button___anon:hover,
+.schedule_content .schedule_button.schedule_button___anon:focus {
   transform: none;
 }
 

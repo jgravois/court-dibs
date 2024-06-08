@@ -96,15 +96,18 @@ const Guts = ({
               className={cn("schedule_button", {
                 schedule_button___private: !!onHourPrivate,
                 schedule_button___open: !!onHourOpenPlay,
+                schedule_button___anon: !isLoggedIn,
               })}
               onClick={() =>
-                canReserveOnHour
+                !isLoggedIn
+                  ? undefined
+                  : canReserveOnHour
                   ? navigate(
                       `/reservations/new?day=${date
                         .toISOString()
                         .slice(0, 10)}&start=${
                         String(num).padStart(2, "0") + ":00"
-                      }`,
+                      }&court=${court}`,
                     )
                   : navigate(
                       `/reservations/${
@@ -119,15 +122,18 @@ const Guts = ({
               className={cn("schedule_button", {
                 schedule_button___private: !!halfHourPrivate,
                 schedule_button___open: !!halfHourOpenPlay,
+                schedule_button___anon: !isLoggedIn,
               })}
               onClick={() =>
-                canReserveOnHalfHour
+                !isLoggedIn
+                  ? undefined
+                  : canReserveOnHalfHour
                   ? navigate(
                       `/reservations/new?day=${date
                         .toISOString()
                         .slice(0, 10)}&start=${
                         String(num).padStart(2, "0") + ":30"
-                      }`,
+                      }&court=${court}`,
                     )
                   : navigate(
                       `/reservations/${
