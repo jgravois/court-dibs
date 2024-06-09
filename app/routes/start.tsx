@@ -8,7 +8,7 @@ import invariant from "tiny-invariant";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { validateCoordinates, validateEmail } from "~/utils";
 
-import { HeaderLeft } from "./HeaderLeft";
+import { Header } from "./Header";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
@@ -152,12 +152,7 @@ export default function Start() {
 
   return (
     <>
-      <header className="header">
-        <div className="header_content">
-          <HeaderLeft />
-          <div className="header_right"></div>
-        </div>
-      </header>
+      <Header hideLoginLinks />
       <div className="signUp">
         <div className="signUp_form">
           <p>Sign up or log in to your account, no password needed!</p>

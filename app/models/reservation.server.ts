@@ -11,7 +11,7 @@ export function getReservation({
 }) {
   userId;
   return prisma.reservation.findFirst({
-    select: { id: true, start: true, end: true, court: true, user: true },
+    select: { id: true, start: true, end: true, court: true, user: true, openPlay: true },
     where: { id },
   });
 }
@@ -61,7 +61,7 @@ export async function createReservation({
   }
 
   // bonus: warn if after dusk
-  if (compareAsc(end, addHours(startOfToday(), 20)) === 1) {
+  if (compareAsc(end, addHours(startOfDay(start), 20)) === 1) {
     throw new Error('Reservations must conclude by 20:00')
   }
 
@@ -80,6 +80,7 @@ export async function createReservation({
   const sameDay = await prisma.reservation.findFirst({
     where: {
       userId,
+      court,
       start: {
         gte: startOfDay(start),
         lte: addDays(startOfDay(start), 1)

@@ -24,7 +24,7 @@ export interface Rez {
   openPlay: boolean;
 }
 
-const dateToHeader = (date: Date) => {
+export const dateToHeader = (date: Date) => {
   const prefix = isToday(date)
     ? "Today - "
     : isTomorrow(date)

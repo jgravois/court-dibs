@@ -1,12 +1,12 @@
 import type { User } from "@prisma/client";
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, Link, json, useLoaderData } from "@remix-run/react";
+import { json, useLoaderData } from "@remix-run/react";
 
 import { getReservations } from "~/models/reservation.server";
 import { getSession } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
-import { HeaderLeft } from "./HeaderLeft";
+import { Header } from "./Header";
 import { ReservationList, Rez } from "./ReservationList";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
@@ -30,30 +30,7 @@ export default function Index() {
 
   return (
     <>
-      <header className="header">
-        <div className="header_content">
-          <HeaderLeft />
-          <div className="header_right">
-            {user ? (
-              <>
-                <p className="header_user">{user.email}</p>
-                <Form action="/logout" method="post">
-                  <button
-                    type="submit"
-                    className="header_link header_link___button"
-                  >
-                    Sign out
-                  </button>
-                </Form>
-              </>
-            ) : (
-              <Link to="/start" className="header_link header_link___button">
-                Sign up or sign in
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+      <Header />
       <div className="wrapper">
         <ReservationList
           reservations={data.reservations as Rez[]}
