@@ -72,7 +72,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           address: ADDRESS_REQUIRED,
         },
       },
-      { status: 400 },
+      { status: 200 },
     );
   }
 
@@ -137,8 +137,8 @@ export default function Start() {
           "place_changed",
           async function () {
             if (autoCompleteRef.current && coordinatesRef.current) {
-              const { geometry } = await autoCompleteRef.current.getPlace();
-              coordinatesRef.current.value = `${geometry?.location?.lng()},${geometry?.location?.lat()}`;
+              const result = await autoCompleteRef.current.getPlace();
+              coordinatesRef.current.value = `${result?.geometry?.location?.lng()},${result?.geometry?.location?.lat()}`;
             }
           },
         );
