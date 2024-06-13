@@ -31,22 +31,20 @@ WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
 
-ENV DATABASE_URL=file:/data/sqlite.db
-
 ADD prisma .
 RUN npx prisma generate
 
 ADD . .
-RUN npm run setup
 RUN npm run build
 
 # Finally, build the production image with minimal footprint
 FROM base
 
 ENV DATABASE_URL=file:/data/sqlite.db
-
 ENV PORT="8080"
 ENV NODE_ENV="production"
+
+RUN npx prisma db push
 
 # add shortcut for connecting to database CLI
 RUN echo "#!/bin/sh\nset -x\nsqlite3 \$DATABASE_URL" > /usr/local/bin/database-cli && chmod +x /usr/local/bin/database-cli
