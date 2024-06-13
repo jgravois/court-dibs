@@ -38,13 +38,8 @@ ENV DATABASE_URL=file:/data/sqlite.db
 ENV PORT="8080"
 ENV NODE_ENV="production"
 
-RUN pwd
-RUN ls -a
-
 ADD . .
 
-RUN npx prisma db push --force-reset
-RUN npx prisma db seed
 RUN npm run setup
 RUN npm run build
 
