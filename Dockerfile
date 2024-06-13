@@ -38,8 +38,11 @@ ENV DATABASE_URL=file:/data/sqlite.db
 ENV PORT="8080"
 ENV NODE_ENV="production"
 
+RUN pwd
+RUN rm ./data/sqlite.db
+
 ADD . .
-RUN rm /data/sqlite.db
+
 RUN npm run setup
 RUN npm run build
 
