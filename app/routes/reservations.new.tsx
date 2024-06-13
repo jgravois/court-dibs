@@ -72,7 +72,7 @@ export default function NewReservationPage() {
   return (
     <>
       <Header />
-      <div className="newRes">
+      <div className="container">
         <Form className="newRes_form" method="post">
           <div className="newRes_group">
             <div className="newRes_stack">

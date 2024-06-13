@@ -73,7 +73,7 @@ export default function ReservationDetailsPage() {
   return (
     <>
       <Header />
-      <div className="existingRes">
+      <div className="container">
         <div className="existingRes_stack">
           <p className="existingRes_label">{format(start, "iiii, MMMM dd")}</p>
           <p>{user.email}</p>
