@@ -39,8 +39,9 @@ ENV PORT="8080"
 ENV NODE_ENV="production"
 
 ADD . .
+RUN rm /data/sqlite.db
+RUN npm run setup
 RUN npm run build
-RUN npx prisma db push --force-reset
 
 # Finally, build the production image with minimal footprint
 FROM base
