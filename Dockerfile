@@ -39,7 +39,8 @@ ENV PORT="8080"
 ENV NODE_ENV="production"
 
 RUN pwd
-RUN rm ./data/sqlite.db
+RUN ls -a
+RUN rm ./prisma/data/sqlite.db
 
 ADD . .
 
