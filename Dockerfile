@@ -31,6 +31,8 @@ WORKDIR /myapp
 
 COPY --from=deps /myapp/node_modules /myapp/node_modules
 
+ENV DATABASE_URL=file:/data/sqlite.db
+
 ADD prisma .
 RUN npx prisma generate
 
@@ -41,7 +43,6 @@ RUN npm run build
 # Finally, build the production image with minimal footprint
 FROM base
 
-ENV DATABASE_URL=file:/data/sqlite.db
 ENV PORT="8080"
 ENV NODE_ENV="production"
 
