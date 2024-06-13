@@ -68,8 +68,4 @@ COPY --from=build /myapp/package.json /myapp/package.json
 COPY --from=build /myapp/start.sh /myapp/start.sh
 COPY --from=build /myapp/prisma /myapp/prisma
 
-RUN cd /data
-RUN pwd
-RUN ls -a
-
 ENTRYPOINT [ "./start.sh" ]
