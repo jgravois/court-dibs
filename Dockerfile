@@ -45,7 +45,7 @@ ADD . .
 
 RUN npx prisma db push --force-reset
 RUN npx prisma db seed
-RUN npx run setup
+RUN npm run setup
 RUN npm run build
 
 # Finally, build the production image with minimal footprint
