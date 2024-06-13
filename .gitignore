@@ -9,5 +9,10 @@ node_modules
 /prisma/data.db
 /prisma/data.db-journal
 
+/prisma/data.db-backup
+/staging-wireguard.conf
+/wireguard-key
+/wireguard-key-cert.pub
+
 notes
 coverage/
