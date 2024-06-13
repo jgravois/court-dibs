@@ -29,7 +29,7 @@ const callStytch = async (email: string) => {
 
       body: JSON.stringify({
         email,
-        login_magic_link_url: "http://localhost:3000/authenticate",
+        login_magic_link_url: window.location.origin + "/authenticate",
       }),
     },
   );
