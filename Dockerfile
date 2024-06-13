@@ -40,11 +40,10 @@ ENV NODE_ENV="production"
 
 RUN pwd
 RUN ls -a
-RUN rm ./prisma/data/sqlite.db
 
 ADD . .
 
-RUN npm run setup
+RUN npx prisma db push --force-reset
 RUN npm run build
 
 # Finally, build the production image with minimal footprint
@@ -67,5 +66,9 @@ COPY --from=build /myapp/public /myapp/public
 COPY --from=build /myapp/package.json /myapp/package.json
 COPY --from=build /myapp/start.sh /myapp/start.sh
 COPY --from=build /myapp/prisma /myapp/prisma
+
+RUN cd /data
+RUN pwd
+RUN ls -a
 
 ENTRYPOINT [ "./start.sh" ]
