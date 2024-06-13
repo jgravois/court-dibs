@@ -40,7 +40,7 @@ ENV NODE_ENV="production"
 
 ADD . .
 RUN npm run build
-RUN npx prisma db push
+RUN npx prisma db push --force-reset
 
 # Finally, build the production image with minimal footprint
 FROM base
