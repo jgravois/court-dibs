@@ -412,12 +412,6 @@ body {
 
 /* sign up */
 
-.signUp {
-  margin: 0 auto;
-  max-width: var(--wrapper-width);
-  padding: 40px 20px;
-}
-
 .signUp_form {
   display: flex;
   flex-direction: column;
@@ -456,23 +450,11 @@ body {
 
 /* magic link message */
 
-.magicLink {
-  margin: 0 auto;
-  max-width: var(--wrapper-width);
-  padding: 40px 20px;
-}
-
 .magicLink_message {
   max-width: 500px;
 }
 
 /* new reservation */
-
-.newRes {
-  margin: 0 auto;
-  max-width: var(--wrapper-width);
-  padding: 40px 20px;
-}
 
 .newRes_label {
   font-weight: bold;
@@ -599,12 +581,6 @@ input:checked ~ .newRes_box:before {
 
 /* existing reservation detail */
 
-.existingRes {
-  margin: 0 auto;
-  max-width: var(--wrapper-width);
-  padding: 40px 20px;
-}
-
 .existingRes_stack {
   display: flex;
   flex-direction: column;
@@ -621,4 +597,34 @@ input:checked ~ .newRes_box:before {
   box-shadow: var(--neutral-dark-shadow);
   height: 20px;
   width: 20px;
+}
+
+/* faq */
+
+.faq-q {
+  font-size: 24px;
+  font-weight: 900;
+  padding-bottom: 15px;
+}
+
+.faq-a {
+  padding-bottom: 30px;
+}
+
+.faq-list {
+  list-style: unset;
+  padding: revert;
+}
+
+/* generic */
+
+.container {
+  margin: 0 auto;
+  max-width: var(--wrapper-width);
+  padding: 40px 20px;
+}
+
+.oldschool-link {
+  color: #00f;
+  text-decoration: underline;
 }

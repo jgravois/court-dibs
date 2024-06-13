@@ -38,6 +38,9 @@ export function Header({
               />
             </div>
           </div>
+          <Link to="/faq" className="h2" style={{ paddingTop: 10 }}>
+            learn more
+          </Link>
         </div>
         <div className="header_right">
           {hideLoginLinks ? null : user ? (
