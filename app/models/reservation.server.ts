@@ -40,17 +40,17 @@ export async function createReservation({
     throw new Error('Reservations more than seven days in the future are not allowed')
   }
 
-  if (compareAsc(start, new Date()) === -1) {
-    throw new Error('You\'re livin in the past dude')
-  }
+  // if (compareAsc(start, new Date()) === -1) {
+  //   throw new Error('You\'re livin in the past dude')
+  // }
 
-  const closestHour = new Date()
-  closestHour.setHours(closestHour.getHours() + 1);
-  closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
+  // const closestHour = new Date()
+  // closestHour.setHours(closestHour.getHours() + 1);
+  // closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
 
-  if (compareAsc(start, closestHour) === -1) {
-    throw new Error('Reservations cannot be made until the top of the hour')
-  }
+  // if (compareAsc(start, closestHour) === -1) {
+  //   throw new Error('Reservations cannot be made until the top of the hour')
+  // }
 
   if (compareAsc(addDays(startOfToday(), 7), start) === -1) {
     throw new Error('Reservations more than seven days away are not allowed')
