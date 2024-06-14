@@ -218,7 +218,7 @@ export default function Start() {
               type="text"
               name="baseUrl"
               ref={baseUrlRef}
-              value={window.location.origin}
+              defaultValue={window.location.origin}
               style={{ display: "none" }}
             />
             <input type="hidden" name="redirectTo" value={redirectTo} />
