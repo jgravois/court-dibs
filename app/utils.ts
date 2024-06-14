@@ -7,6 +7,11 @@ import type { User } from "~/models/user.server";
 
 const DEFAULT_REDIRECT = "/";
 
+export const STYTCH_URL_BASE =
+  process.env.NODE_ENV === "production"
+    ? "https://api.stytch.com/v1/magic_links"
+    : "https://test.stytch.com/v1/magic_links";
+
 /**
  * This should be used any time the redirect path is user-provided
  * (Like the query string on our login/signup pages). This avoids
