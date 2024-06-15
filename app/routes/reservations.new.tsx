@@ -6,7 +6,7 @@ import { useRef } from "react";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
-import { startOfToday, toPacific } from "~/utils";
+import { startOfToday } from "~/utils";
 
 import { Header } from "./Header";
 import { dateToHeader } from "./ReservationList";
@@ -44,7 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors: { start: "court is required" } }, { status: 400 });
   }
 
-  const start = toPacific(new Date(`${startDate}T${startTime}:00`));
+  const start = new Date(`${startDate}T${startTime}:00`);
 
   try {
     await createReservation({

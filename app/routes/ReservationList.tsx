@@ -35,18 +35,21 @@ export const dateToHeader = (rawDate: Date) => {
   return prefix + format(date, "iiii, MMMM dd");
 };
 
-const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
+const rezTimes = [12]; // [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const isOverlapping = (r: Rez, date: Date, hour: number) =>
-  areIntervalsOverlapping(
+const isOverlapping = (r: Rez, date: Date, hour: number) => {
+  const over = areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
       start: addHours(date, hour),
       end: addHours(date, hour + 0.01),
     },
   );
+  console.log(r, date, hour, over);
+  return over;
+};
 
 const Guts = ({
   reservations,
@@ -212,7 +215,10 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
-  const availableDays = [...Array(7).keys()].map((num) => {
+  console.log("all reservations", reservations);
+
+  // [...Array(7).keys()]
+  const availableDays = [1].map((num) => {
     const date = addDays(startOfToday(), num);
     return {
       date,
@@ -238,7 +244,7 @@ export const ReservationList = ({
           court="pb"
           date={date}
         />
-        <TimeSlots
+        {/* <TimeSlots
           reservations={existingReservations.filter((r) => r.court === "bball")}
           isLoggedIn={!!user}
           court="bball"
@@ -249,7 +255,7 @@ export const ReservationList = ({
           isLoggedIn={!!user}
           court="10s"
           date={date}
-        />
+        /> */}
       </main>
     </React.Fragment>
   ));
