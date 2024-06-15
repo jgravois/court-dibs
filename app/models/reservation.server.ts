@@ -1,7 +1,8 @@
 import type { User, Reservation } from "@prisma/client";
-import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday } from "date-fns";
+import { addDays, addHours, compareAsc, differenceInMinutes } from "date-fns";
 
 import { prisma } from "~/db.server";
+import { startOfDay, startOfToday } from "~/utils";
 
 export function getReservation({
   id,
@@ -60,7 +61,7 @@ export async function createReservation({
     throw new Error('Reservations before 8:00 are not allowed')
   }
 
-  // bonus: warn if after dusk
+  // TODO: warn if after dusk
   if (compareAsc(end, addHours(startOfDay(start), 20)) === 1) {
     throw new Error('Reservations must conclude by 20:00')
   }

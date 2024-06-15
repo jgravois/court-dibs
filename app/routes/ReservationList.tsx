@@ -9,10 +9,10 @@ import {
   isEqual,
   isToday,
   isTomorrow,
-  startOfDay,
-  startOfToday,
 } from "date-fns";
 import React from "react";
+
+import { startOfDay, startOfToday, toPacific } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -24,7 +24,8 @@ export interface Rez {
   openPlay: boolean;
 }
 
-export const dateToHeader = (date: Date) => {
+export const dateToHeader = (rawDate: Date) => {
+  const date = toPacific(rawDate);
   const prefix = isToday(date)
     ? "Today - "
     : isTomorrow(date)

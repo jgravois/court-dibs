@@ -75,13 +75,13 @@ export default function FAQ() {
         <p>
           email:&nbsp;
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
-            placeholder@mail.com
+            courtdibs@gmail.com
           </a>
         </p>
         <p>
           call/text:&nbsp;
-          <a className="oldschool-link" href="tel:9490000000">
-            (949)xxx-xxxx
+          <a className="oldschool-link" href="tel:+19093074532">
+            (909)307-4532
           </a>
         </p>
       </main>
