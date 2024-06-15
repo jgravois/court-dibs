@@ -6,7 +6,7 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import invariant from "tiny-invariant";
 
 import { deleteReservation, getReservation } from "~/models/reservation.server";
@@ -14,6 +14,9 @@ import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 
 import { Header } from "./Header";
+
+const format = (date: string, format: string) =>
+  formatInTimeZone(date, "America/Los_Angeles", format);
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -83,7 +86,7 @@ export default function ReservationDetailsPage() {
             {format(end, "h:mm bbb")}
           </p>
           <p>{openPlay ? "Open play" : null}</p>
-          <p>{courtIcon(court)}</p>
+          {courtIcon(court)}
           {canDelete ? (
             <>
               <hr className="my-4" />
