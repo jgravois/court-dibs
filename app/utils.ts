@@ -1,6 +1,6 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
-import dateFns from "date-fns";
+import * as dateFns from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
