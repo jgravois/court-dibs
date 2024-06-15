@@ -44,7 +44,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors: { start: "court is required" } }, { status: 400 });
   }
 
-  const start = new Date(`${startDate}T${startTime}:00`);
+  const start = new Date(`${startDate}T${startTime}:00-07:00`);
 
   try {
     await createReservation({

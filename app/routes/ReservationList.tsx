@@ -47,7 +47,7 @@ const isOverlapping = (r: Rez, date: Date, hour: number) => {
       end: addHours(date, hour + 0.01),
     },
   );
-  console.log(r, date, hour, over);
+  console.log(r.start, addHours(date, hour), over);
   return over;
 };
 
@@ -218,7 +218,7 @@ export const ReservationList = ({
   console.log("all reservations", reservations);
 
   // [...Array(7).keys()]
-  const availableDays = [1].map((num) => {
+  const availableDays = [3].map((num) => {
     const date = addDays(startOfToday(), num);
     return {
       date,
