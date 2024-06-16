@@ -73,6 +73,8 @@ export default function NewReservationPage() {
   const rawDay = params.get("day");
   const serverOffset = new Date().getTimezoneOffset() / 60;
   const offset = 7 - serverOffset;
+
+  // console.log(rawDay, new Date(params.get("day") as string), serverOffset);
   const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
 
   return (
