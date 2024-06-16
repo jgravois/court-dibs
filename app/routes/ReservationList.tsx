@@ -221,9 +221,9 @@ export const ReservationList = ({
 
     // const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
 
-    const date = subHours(
-      addHours(addDays(startOfToday(), num), 7),
-      serverOffset,
+    const date = addDays(
+      subHours(addHours(startOfToday(), 7), serverOffset),
+      num,
     );
 
     // const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
