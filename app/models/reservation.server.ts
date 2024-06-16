@@ -72,31 +72,31 @@ export async function createReservation({
     throw new Error('Reservations must conclude by 20:00')
   }
 
-  // const overlaps = await prisma.reservation.findFirst({
-  //   where: {
-  //     AND: { court },
-  //     OR: {
-  //       end: { gt: start },
-  //       start: { lt: end }
-  //     }
-  //   }
-  // })
+  const overlaps = await prisma.reservation.findFirst({
+    where: {
+      AND: { court },
+      OR: {
+        end: { gt: start },
+        start: { lt: end }
+      }
+    }
+  })
 
-  // if (overlaps) throw new Error('This would overlap an existing reservation')
+  if (overlaps) throw new Error('This would overlap an existing reservation')
 
-  // const sameDay = await prisma.reservation.findFirst({
-  //   where: {
-  //     userId,
-  //     court,
-  //     start: {
-  //       gte: startOfDay(start),
-  //       lte: addDays(startOfDay(start), 1)
-  //     }
+  const sameDay = await prisma.reservation.findFirst({
+    where: {
+      userId,
+      court,
+      start: {
+        gte: startOfDay(start),
+        lte: addDays(startOfDay(start), 1)
+      }
 
-  //   }
-  // })
+    }
+  })
 
-  // if (sameDay) throw new Error('Each court can only be reserved once per day')
+  if (sameDay) throw new Error('Each court can only be reserved once per day')
 
   return prisma.reservation.create({
     data: {
