@@ -33,42 +33,44 @@ export async function createReservation({
 }: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
   userId: User["id"];
 }) {
+  process.env.TZ = 'America/Los_Angeles'
+
   console.log('new res start', start)
   console.log('now', new Date())
   // const offsetStart = subHours(start, getCombinedOffset())
 
-  // if (differenceInMinutes(end, start) > 120) {
-  //   throw new Error('Reservations must be two hours or less')
-  // }
+  if (differenceInMinutes(end, start) > 120) {
+    throw new Error('Reservations must be two hours or less')
+  }
 
-  // if (compareAsc(addDays(startOfToday(), 7), offsetStart) === -1) {
-  //   throw new Error('Reservations more than seven days in the future are not allowed')
-  // }
+  if (compareAsc(addDays(startOfToday(), 7), start) === -1) {
+    throw new Error('Reservations more than seven days in the future are not allowed')
+  }
 
-  // if (compareAsc(offsetStart, new Date()) === -1) {
-  //   throw new Error('You\'re livin in the past dude')
-  // }
+  if (compareAsc(start, new Date()) === -1) {
+    throw new Error('You\'re livin in the past dude')
+  }
 
-  // const closestHour = new Date()
-  // closestHour.setHours(closestHour.getHours() + 1);
-  // closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
+  const closestHour = new Date()
+  closestHour.setHours(closestHour.getHours() + 1);
+  closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
 
-  // if (compareAsc(offsetStart, closestHour) === -1) {
-  //   throw new Error('Reservations cannot be made until the top of the hour')
-  // }
+  if (compareAsc(start, closestHour) === -1) {
+    throw new Error('Reservations cannot be made until the top of the hour')
+  }
 
-  // if (compareAsc(addDays(startOfToday(), 7), offsetStart) === -1) {
-  //   throw new Error('Reservations more than seven days away are not allowed')
-  // }
+  if (compareAsc(addDays(startOfToday(), 7), start) === -1) {
+    throw new Error('Reservations more than seven days away are not allowed')
+  }
 
-  // if (offsetStart.getHours() < 8) {
-  //   throw new Error('Reservations before 8:00 are not allowed')
-  // }
+  if (start.getHours() < 8) {
+    throw new Error('Reservations before 8:00 are not allowed')
+  }
 
-  // // TODO: warn if after dusk
-  // if (compareAsc(subHours(end, getCombinedOffset()), addHours(startOfDay(offsetStart), 20)) === 1) {
-  //   throw new Error('Reservations must conclude by 20:00')
-  // }
+  // TODO: warn if after dusk
+  if (compareAsc(subHours(end, getCombinedOffset()), addHours(startOfDay(start), 20)) === 1) {
+    throw new Error('Reservations must conclude by 20:00')
+  }
 
   // const overlaps = await prisma.reservation.findFirst({
   //   where: {
@@ -98,8 +100,8 @@ export async function createReservation({
 
   return prisma.reservation.create({
     data: {
-      start: subHours(start, getCombinedOffset()),
-      end: subHours(end, getCombinedOffset()),
+      start,
+      end,
       court,
       openPlay,
       user: {
