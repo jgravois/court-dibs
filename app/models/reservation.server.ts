@@ -1,5 +1,6 @@
 import type { User, Reservation } from "@prisma/client";
 import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subHours } from "date-fns";
+import { getTimezoneOffset } from "date-fns-tz";
 
 import { prisma } from "~/db.server";
 
@@ -23,6 +24,7 @@ export function getReservations() {
   });
 }
 
+
 export async function createReservation({
   start,
   end,
@@ -32,6 +34,8 @@ export async function createReservation({
 }: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
   userId: User["id"];
 }) {
+  const clientOffset = getTimezoneOffset('America/Los_Angeles', new Date())
+  //=> -18000000 (-5 * 60 * 60 * 1000)
   const serverOffset = new Date().getTimezoneOffset() / 60
   const offset = 7 - serverOffset
   const offsetStart = subHours(start, offset)
