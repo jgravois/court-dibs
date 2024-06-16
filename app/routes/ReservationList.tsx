@@ -11,7 +11,7 @@ import {
   isTomorrow,
   startOfDay,
   startOfToday,
-  subHours,
+  // subHours,
 } from "date-fns";
 import React from "react";
 
@@ -42,16 +42,13 @@ type CourtType = "pb" | "bball" | "10s";
 const isOverlapping = (r: Rez, date: Date, hour: number) => {
   const serverOffset = new Date().getTimezoneOffset() / 60;
   const offset = 7 - serverOffset;
-  const offsetStart = subHours(r.start, offset);
-  const offsetEnd = subHours(r.end, offset);
-
   console.log("overlap offset: ", offset);
 
   return areIntervalsOverlapping(
-    { start: offsetStart, end: offsetEnd },
+    { start: r.start, end: r.end },
     {
-      start: addHours(date, hour),
-      end: addHours(date, hour + 0.01),
+      start: addHours(date, hour + offset),
+      end: addHours(date, hour + 0.01 + offset),
     },
   );
 };
@@ -228,8 +225,7 @@ export const ReservationList = ({
       existingReservations: reservations.filter((r) => {
         const serverOffset = new Date().getTimezoneOffset() / 60;
         const offset = 7 - serverOffset;
-        const offsetStart = subHours(r.start, offset);
-        return isEqual(startOfDay(offsetStart), date);
+        return isEqual(startOfDay(r.start), addHours(date, offset));
       }),
     };
   });
