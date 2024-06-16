@@ -34,8 +34,6 @@ export async function createReservation({
 }: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
   userId: User["id"];
 }) {
-  const clientOffset = getTimezoneOffset('America/Los_Angeles', new Date())
-  //=> -18000000 (-5 * 60 * 60 * 1000)
   const serverOffset = new Date().getTimezoneOffset() / 60
   const offset = 7 - serverOffset
   const offsetStart = subHours(start, offset)

@@ -12,6 +12,7 @@ import {
   startOfDay,
   startOfToday,
 } from "date-fns";
+import { getTimezoneOffset } from "date-fns-tz";
 import React from "react";
 
 // it would be nicer to use Reservation from @prisma/client
@@ -41,7 +42,6 @@ type CourtType = "pb" | "bball" | "10s";
 const isOverlapping = (r: Rez, date: Date, hour: number) => {
   const serverOffset = new Date().getTimezoneOffset() / 60;
   const offset = 7 - serverOffset;
-  console.log("overlap offset: ", offset);
 
   return areIntervalsOverlapping(
     { start: r.start, end: r.end },
@@ -216,7 +216,14 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
-  console.log("all reservations: ", reservations);
+  // hours
+  const clientOffset =
+    (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
+    -1;
+  console.log("off", clientOffset);
+  //=> -18000000 (-5 * 60 * 60 * 1000)
+
+  console.log("all reservations: ", reservations, clientOffset);
   const availableDays = [...Array(7).keys()].map((num) => {
     const serverOffset = new Date().getTimezoneOffset() / 60;
     const offset = 7 - serverOffset;
