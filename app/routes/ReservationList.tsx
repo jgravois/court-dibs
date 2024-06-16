@@ -10,6 +10,7 @@ import {
   isTomorrow,
   startOfDay,
   startOfToday,
+  subHours,
 } from "date-fns";
 import React from "react";
 
@@ -39,14 +40,22 @@ const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const isOverlapping = (r: Rez, date: Date, hour: number) =>
-  areIntervalsOverlapping(
-    { start: r.start, end: r.end },
+const isOverlapping = (r: Rez, date: Date, hour: number) => {
+  const serverOffset = new Date().getTimezoneOffset() / 60;
+  const offset = 7 - serverOffset;
+  const offsetStart = subHours(r.start, offset);
+  const offsetEnd = subHours(r.end, offset);
+
+  console.log("overlap offset: ", offset);
+
+  return areIntervalsOverlapping(
+    { start: offsetStart, end: offsetEnd },
     {
       start: addHours(date, hour),
       end: addHours(date, hour + 0.01),
     },
   );
+};
 
 const Guts = ({
   reservations,
