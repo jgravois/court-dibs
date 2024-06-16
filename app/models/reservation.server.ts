@@ -23,7 +23,6 @@ export function getReservations() {
   });
 }
 
-
 export async function createReservation({
   start,
   end,

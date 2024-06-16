@@ -14,9 +14,14 @@ export const STYTCH_URL_BASE =
     : "https://test.stytch.com/v1/magic_links";
 
 // hours
-export const getClientOffset = () =>
+export const getClientOffset = (): number =>
   (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
   -1;
+
+export const getCombinedOffset = () => {
+  const serverOffset = new Date().getTimezoneOffset() / 60
+  return getClientOffset() - serverOffset
+}
 
 export const format = (date: Date | string, format: string) =>
   formatInTimeZone(date, "America/Los_Angeles", format);

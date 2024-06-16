@@ -14,6 +14,7 @@ import {
   subHours,
 } from "date-fns";
 import React from "react";
+import { getCombinedOffset } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -214,12 +215,8 @@ export const ReservationList = ({
   user?: User;
 }) => {
   const availableDays = [...Array(7).keys()].map((num) => {
-    const serverOffset = new Date().getTimezoneOffset() / 60;
-    const date = addDays(
-      addHours(subHours(startOfToday(), 7), serverOffset),
-      num,
-    );
-
+    const date = addDays(subHours(startOfToday(), getCombinedOffset()), num);
+    console.log("should be 12:00am PST: ", date);
     return {
       date,
       existingReservations: reservations.filter((r) => {
