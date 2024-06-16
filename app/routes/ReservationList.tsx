@@ -254,7 +254,7 @@ export const ReservationList = ({
           court="pb"
           date={date}
         />
-        {/* <TimeSlots
+        <TimeSlots
           reservations={existingReservations.filter((r) => r.court === "bball")}
           isLoggedIn={!!user}
           court="bball"
@@ -265,7 +265,7 @@ export const ReservationList = ({
           isLoggedIn={!!user}
           court="10s"
           date={date}
-        /> */}
+        />
       </main>
     </React.Fragment>
   ));
