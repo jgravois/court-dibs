@@ -1,5 +1,6 @@
 import type { User, Reservation } from "@prisma/client";
 import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday } from "date-fns";
+import { off } from "process";
 
 import { prisma } from "~/db.server";
 
@@ -32,7 +33,10 @@ export async function createReservation({
 }: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
   userId: User["id"];
 }) {
-  console.log('offset: ', new Date().getTimezoneOffset() / 60)
+  const serverOffset = new Date().getTimezoneOffset() / 60
+  const offset = 7 - serverOffset
+
+  console.log(start, 'offset: ',)
 
   if (differenceInMinutes(end, start) > 120) {
     throw new Error('Reservations must be two hours or less')
@@ -58,7 +62,7 @@ export async function createReservation({
   //   throw new Error('Reservations more than seven days away are not allowed')
   // }
 
-  if (start.getHours() < 8) {
+  if (addHours(start, offset).getHours() < 8) {
     throw new Error('Reservations before 8:00 are not allowed')
   }
 
