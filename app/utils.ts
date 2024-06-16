@@ -1,7 +1,6 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
-import * as dateFns from "date-fns";
-import { toZonedTime } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
@@ -14,13 +13,9 @@ export const STYTCH_URL_BASE =
     ? "https://api.stytch.com/v1/magic_links"
     : "https://test.stytch.com/v1/magic_links";
 
-export const toPacific = (date: Date) => toZonedTime(
-  date,
-  "America/Los_Angeles",
-);
+export const format = (date: Date | string, format: string) =>
+  formatInTimeZone(date, "America/Los_Angeles", format);
 
-export const startOfToday = () => toPacific(dateFns.startOfToday())
-export const startOfDay = (date: Date | string) => toPacific(dateFns.startOfDay(date))
 /**
  * This should be used any time the redirect path is user-provided
  * (Like the query string on our login/signup pages). This avoids

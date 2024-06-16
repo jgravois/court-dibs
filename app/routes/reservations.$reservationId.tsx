@@ -6,17 +6,13 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import { formatInTimeZone } from "date-fns-tz";
 import invariant from "tiny-invariant";
 
 import { deleteReservation, getReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
+import { format, useUser } from "~/utils";
 
 import { Header } from "./Header";
-
-const format = (date: string, format: string) =>
-  formatInTimeZone(date, "America/Los_Angeles", format);
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);

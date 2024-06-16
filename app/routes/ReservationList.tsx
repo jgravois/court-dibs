@@ -5,14 +5,15 @@ import {
   addDays,
   addHours,
   areIntervalsOverlapping,
-  format,
   isEqual,
   isToday,
   isTomorrow,
+  startOfDay,
+  startOfToday,
 } from "date-fns";
 import React from "react";
 
-import { startOfDay, startOfToday, toPacific } from "~/utils";
+import { format } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -24,8 +25,7 @@ export interface Rez {
   openPlay: boolean;
 }
 
-export const dateToHeader = (rawDate: Date) => {
-  const date = toPacific(rawDate);
+export const dateToHeader = (date: Date) => {
   const prefix = isToday(date)
     ? "Today - "
     : isTomorrow(date)
@@ -35,21 +35,18 @@ export const dateToHeader = (rawDate: Date) => {
   return prefix + format(date, "iiii, MMMM dd");
 };
 
-const rezTimes = [12]; // [...Array(12).keys()].map((v: number) => v + 8);
+const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const isOverlapping = (r: Rez, date: Date, hour: number) => {
-  const over = areIntervalsOverlapping(
+const isOverlapping = (r: Rez, date: Date, hour: number) =>
+  areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
       start: addHours(date, hour),
       end: addHours(date, hour + 0.01),
     },
   );
-  console.log(r.start, addHours(date, hour), over);
-  return over;
-};
 
 const Guts = ({
   reservations,
@@ -215,10 +212,7 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
-  console.log("all reservations", reservations);
-
-  // [...Array(7).keys()]
-  const availableDays = [3].map((num) => {
+  const availableDays = [...Array(7).keys()].map((num) => {
     const date = addDays(startOfToday(), num);
     return {
       date,

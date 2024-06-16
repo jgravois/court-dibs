@@ -1,12 +1,11 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { addMinutes } from "date-fns";
+import { addMinutes, startOfToday } from "date-fns";
 import { useRef } from "react";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
-import { startOfToday } from "~/utils";
 
 import { Header } from "./Header";
 import { dateToHeader } from "./ReservationList";
