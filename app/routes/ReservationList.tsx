@@ -215,14 +215,12 @@ export const ReservationList = ({
   user?: User;
 }) => {
   const availableDays = [...Array(7).keys()].map((num) => {
-    const gmtDate = addDays(
+    console.log(getCombinedOffset());
+    const date = addDays(
       startOfDay(subHours(new Date(), getCombinedOffset())),
       num,
     );
-    console.log("should be 12:00am GMT: ", gmtDate);
-
-    const date = new Date(gmtDate.toISOString().slice(0, 19) + "-07:00");
-    console.log("should be 12:00am PST: ", date);
+    console.log("should be 12:00am PT: ", date);
     return {
       date,
       existingReservations: reservations.filter((r) => {
