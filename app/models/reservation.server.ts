@@ -35,7 +35,7 @@ export async function createReservation({
 }) {
   console.log('new res start', start)
   console.log('now', new Date())
-  const offsetStart = subHours(start, getCombinedOffset())
+  // const offsetStart = subHours(start, getCombinedOffset())
 
   // if (differenceInMinutes(end, start) > 120) {
   //   throw new Error('Reservations must be two hours or less')
@@ -96,19 +96,19 @@ export async function createReservation({
 
   // if (sameDay) throw new Error('Each court can only be reserved once per day')
 
-  // return prisma.reservation.create({
-  //   data: {
-  //     start,
-  //     end,
-  //     court,
-  //     openPlay,
-  //     user: {
-  //       connect: {
-  //         id: userId,
-  //       },
-  //     },
-  //   },
-  // });
+  return prisma.reservation.create({
+    data: {
+      start,
+      end,
+      court,
+      openPlay,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  });
 }
 
 // TODO: confirm that a hardcoded userId cant be used to bypass auth here
