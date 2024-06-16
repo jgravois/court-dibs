@@ -39,11 +39,13 @@ export const dateToHeader = (date: Date) => {
   return prefix + format(date, "iiii, MMMM dd");
 };
 
-const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
+const rezTimes = [12]; // [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
 const isOverlapping = (r: Rez, date: Date, hour: number) => {
+  console.log("start", r.start);
+  console.log("date", date);
   return areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
@@ -217,7 +219,7 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
-  const availableDays = [...Array(7).keys()].map((num) => {
+  const availableDays = [...Array(1).keys()].map((num) => {
     const date1 = addDays(
       startOfDay(subHours(new Date(), getCombinedOffset())),
       num,
