@@ -220,7 +220,8 @@ export const ReservationList = ({
       num,
     );
     console.log("should be 12:00am GMT: ", gmtDate);
-    const date = new Date(gmtDate.toISOString().slice(0, 10) + "-07:00");
+
+    const date = new Date(gmtDate.toISOString().slice(0, 19) + "-07:00");
     console.log("should be 12:00am PST: ", date);
     return {
       date,
