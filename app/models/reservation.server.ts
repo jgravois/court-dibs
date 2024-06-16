@@ -1,6 +1,5 @@
 import type { User, Reservation } from "@prisma/client";
 import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday } from "date-fns";
-import { off } from "process";
 
 import { prisma } from "~/db.server";
 
@@ -35,41 +34,42 @@ export async function createReservation({
 }) {
   const serverOffset = new Date().getTimezoneOffset() / 60
   const offset = 7 - serverOffset
+  const offsetStart = addHours(start, offset)
 
-  console.log(start, 'offset: ',)
+  console.log(offset)
 
   if (differenceInMinutes(end, start) > 120) {
     throw new Error('Reservations must be two hours or less')
   }
 
-  if (compareAsc(addDays(startOfToday(), 7), start) === -1) {
+  if (compareAsc(addDays(startOfToday(), 7), offsetStart) === -1) {
     throw new Error('Reservations more than seven days in the future are not allowed')
   }
 
-  // if (compareAsc(start, new Date()) === -1) {
-  //   throw new Error('You\'re livin in the past dude')
-  // }
+  if (compareAsc(offsetStart, new Date()) === -1) {
+    throw new Error('You\'re livin in the past dude')
+  }
 
-  // const closestHour = new Date()
-  // closestHour.setHours(closestHour.getHours() + 1);
-  // closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
+  const closestHour = new Date()
+  closestHour.setHours(closestHour.getHours() + 1);
+  closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
 
-  // if (compareAsc(start, closestHour) === -1) {
-  //   throw new Error('Reservations cannot be made until the top of the hour')
-  // }
+  if (compareAsc(offsetStart, closestHour) === -1) {
+    throw new Error('Reservations cannot be made until the top of the hour')
+  }
 
-  // if (compareAsc(addDays(startOfToday(), 7), start) === -1) {
-  //   throw new Error('Reservations more than seven days away are not allowed')
-  // }
+  if (compareAsc(addDays(startOfToday(), 7), offsetStart) === -1) {
+    throw new Error('Reservations more than seven days away are not allowed')
+  }
 
-  if (addHours(start, offset).getHours() < 8) {
+  if (offsetStart.getHours() < 8) {
     throw new Error('Reservations before 8:00 are not allowed')
   }
 
-  // // TODO: warn if after dusk
-  // if (compareAsc(end, addHours(startOfDay(start), 20)) === 1) {
-  //   throw new Error('Reservations must conclude by 20:00')
-  // }
+  // TODO: warn if after dusk
+  if (compareAsc(addHours(end, offset), addHours(startOfDay(offsetStart), 20)) === 1) {
+    throw new Error('Reservations must conclude by 20:00')
+  }
 
   const overlaps = await prisma.reservation.findFirst({
     where: {
