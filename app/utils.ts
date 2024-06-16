@@ -1,6 +1,6 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
-import { formatInTimeZone } from "date-fns-tz";
+import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
@@ -12,6 +12,11 @@ export const STYTCH_URL_BASE =
   process.env.NODE_ENV === "production"
     ? "https://api.stytch.com/v1/magic_links"
     : "https://test.stytch.com/v1/magic_links";
+
+// hours
+export const getClientOffset = () =>
+  (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
+  -1;
 
 export const format = (date: Date | string, format: string) =>
   formatInTimeZone(date, "America/Los_Angeles", format);

@@ -216,14 +216,6 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
-  // hours
-  const clientOffset =
-    (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
-    -1;
-  console.log("off", clientOffset);
-  //=> -18000000 (-5 * 60 * 60 * 1000)
-
-  console.log("all reservations: ", reservations, clientOffset);
   const availableDays = [...Array(7).keys()].map((num) => {
     const serverOffset = new Date().getTimezoneOffset() / 60;
     const offset = 7 - serverOffset;
