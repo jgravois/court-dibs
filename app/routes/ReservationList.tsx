@@ -7,6 +7,7 @@ import {
   areIntervalsOverlapping,
   format,
   isEqual,
+  isSameDay,
   // isToday,
   // isTomorrow,
   startOfDay,
@@ -219,16 +220,22 @@ export const ReservationList = ({
       startOfDay(subHours(new Date(), getCombinedOffset())),
       num,
     );
-    console.log("12:00am wherever code is running: ", date1);
+    // 12:00am wherever code is running
     const date = new Date(date1.toISOString().slice(0, 19) + "-07:00");
-    console.log("should be 12:00am PST: ", date);
+    date.setHours(0);
+    console.log("12:00am PST?: ", date);
+
     return {
       date,
       existingReservations: reservations.filter((r) => {
-        return isEqual(
+        const foo = isSameDay(
           startOfDay(subHours(r.start, getCombinedOffset())),
           date,
         );
+        if (foo) {
+          console.log("match");
+        }
+        return foo;
       }),
     };
   });
@@ -249,7 +256,7 @@ export const ReservationList = ({
           court="pb"
           date={date}
         />
-        <TimeSlots
+        {/* <TimeSlots
           reservations={existingReservations.filter((r) => r.court === "bball")}
           isLoggedIn={!!user}
           court="bball"
@@ -260,7 +267,7 @@ export const ReservationList = ({
           isLoggedIn={!!user}
           court="10s"
           date={date}
-        />
+        /> */}
       </main>
     </React.Fragment>
   ));
