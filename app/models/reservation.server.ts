@@ -98,8 +98,8 @@ export async function createReservation({
 
   return prisma.reservation.create({
     data: {
-      start,
-      end,
+      start: subHours(start, getCombinedOffset()),
+      end: subHours(end, getCombinedOffset()),
       court,
       openPlay,
       user: {

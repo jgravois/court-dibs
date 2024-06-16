@@ -44,13 +44,12 @@ const rezTimes = [12]; // [...Array(12).keys()].map((v: number) => v + 8);
 type CourtType = "pb" | "bball" | "10s";
 
 const isOverlapping = (r: Rez, date: Date, hour: number) => {
-  console.log("start", r.start);
-  console.log("date", date);
+  // addOffset
   return areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
-      start: addHours(date, hour),
-      end: addHours(date, hour + 0.01),
+      start: addHours(date, hour + getCombinedOffset()),
+      end: addHours(date, hour + 0.01 + getCombinedOffset()),
     },
   );
 };
