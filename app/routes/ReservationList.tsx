@@ -25,12 +25,12 @@ export interface Rez {
 }
 
 export const dateToHeader = (date: Date) => {
-  const prefix = isToday(date)
-    ? "Today - "
-    : isTomorrow(date)
-    ? "Tomorrow - "
-    : "";
-
+  // const prefix = isToday(date)
+  //   ? "Today - "
+  //   : isTomorrow(date)
+  //   ? "Tomorrow - "
+  //   : "";
+  const prefix = "";
   return prefix + format(date, "iiii, MMMM dd");
 };
 
