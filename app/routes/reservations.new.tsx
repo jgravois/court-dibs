@@ -70,7 +70,7 @@ export default function NewReservationPage() {
   const courtRef = useRef<HTMLFieldSetElement>(null);
   const durationRef = useRef<HTMLFieldSetElement>(null);
 
-  const rawDay = params.get("day") + ":00:00:00-07:00";
+  const rawDay = params.get("day");
   const serverOffset = new Date().getTimezoneOffset() / 60;
   const offset = 7 - serverOffset;
   const offsetDay = subHours(rawDay as unknown as Date, offset);
