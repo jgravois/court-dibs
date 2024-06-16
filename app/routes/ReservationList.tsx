@@ -222,7 +222,7 @@ export const ReservationList = ({
     );
     // 12:00am wherever code is running
     const date = new Date(date1.toISOString().slice(0, 19) + "-07:00");
-    date.setHours(0);
+    date.setHours(0 + getCombinedOffset());
     console.log("12:00am PST?: ", date);
 
     return {
