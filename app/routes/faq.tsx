@@ -23,15 +23,20 @@ export default function FAQ() {
           &nbsp;HOA residents to reserve the pickleball, tennis and basketball
           courts
         </p>
-        <p className="faq-q">are reservations mandatory?</p>
+        <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
-          no! you can use the facilities on a first come first served basis if
-          that&apos;s more your style
+          Logging in is not required to view existing reservations, only to
+          create new ones. Only HOA residents are eligble to create an account.
         </p>
         <p className="faq-q">what&apos;s the catch?</p>
         <p className="faq-a">
           nothing! court dibs is neighbor-made, free to use, ad-free. none of
           your personal information will be shared with third parties
+        </p>
+        <p className="faq-q">are reservations mandatory?</p>
+        <p className="faq-a">
+          no! you can use the facilities on a first come first served basis if
+          that&apos;s more your style
         </p>
         <p className="faq-q">
           why not just use&nbsp;
