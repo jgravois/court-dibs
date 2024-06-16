@@ -10,10 +10,10 @@ import {
   // isToday,
   // isTomorrow,
   startOfDay,
-  startOfToday,
   subHours,
 } from "date-fns";
 import React from "react";
+
 import { getCombinedOffset } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
@@ -215,10 +215,12 @@ export const ReservationList = ({
   user?: User;
 }) => {
   const availableDays = [...Array(7).keys()].map((num) => {
-    const date = addDays(
+    const gmtDate = addDays(
       startOfDay(subHours(new Date(), getCombinedOffset())),
       num,
     );
+    console.log("should be 12:00am GMT: ", gmtDate);
+    const date = new Date(gmtDate.toISOString().slice(0, 10) + "-07:00");
     console.log("should be 12:00am PST: ", date);
     return {
       date,
