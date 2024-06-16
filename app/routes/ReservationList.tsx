@@ -5,6 +5,7 @@ import {
   addDays,
   addHours,
   areIntervalsOverlapping,
+  format,
   isEqual,
   isToday,
   isTomorrow,
@@ -13,8 +14,6 @@ import {
   subHours,
 } from "date-fns";
 import React from "react";
-
-import { format } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -221,13 +220,17 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
+  console.log("all reservations: ", reservations);
   const availableDays = [...Array(7).keys()].map((num) => {
     const date = addDays(startOfToday(), num);
     return {
       date,
-      existingReservations: reservations.filter((r) =>
-        isEqual(startOfDay(r.start), date),
-      ),
+      existingReservations: reservations.filter((r) => {
+        const serverOffset = new Date().getTimezoneOffset() / 60;
+        const offset = 7 - serverOffset;
+        const offsetStart = subHours(r.start, offset);
+        return isEqual(startOfDay(offsetStart), date);
+      }),
     };
   });
 
