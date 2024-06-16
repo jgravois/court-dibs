@@ -7,8 +7,8 @@ import {
   areIntervalsOverlapping,
   format,
   isEqual,
-  isToday,
-  isTomorrow,
+  // isToday,
+  // isTomorrow,
   startOfDay,
   startOfToday,
   subHours,
@@ -46,8 +46,8 @@ const isOverlapping = (r: Rez, date: Date, hour: number) => {
   return areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
-      start: addHours(date, hour + offset),
-      end: addHours(date, hour + 0.01 + offset),
+      start: addHours(date, hour - offset),
+      end: addHours(date, hour + 0.01 - offset),
     },
   );
 };
