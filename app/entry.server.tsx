@@ -96,25 +96,6 @@ function handleBrowserRequest(
 
           responseHeaders.set("Content-Type", "text/html");
 
-          if (!request.headers.get("cookie")?.includes("utcOffset")) {
-            const script = `
-              document.cookie = 'utcOffset=' + (new Date().getTimezoneOffset() / 60) + '; path=/' + ';max-age=' + (3600*24);
-              window.location.reload();
-            `;
-            resolve(
-              new Response(
-                `<html><body><script>${script}</script></body></html>`,
-                {
-                  headers: {
-                    "Content-Type": "text/html",
-                    "Set-Cookie": "utcOffset=0; path=/",
-                    Refresh: `0; url=${request.url}`,
-                  },
-                },
-              ),
-            );
-          }
-
           resolve(
             new Response(createReadableStreamFromReadable(body), {
               headers: responseHeaders,

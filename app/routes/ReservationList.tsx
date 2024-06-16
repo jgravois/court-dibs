@@ -219,7 +219,7 @@ export const ReservationList = ({
   const availableDays = [...Array(7).keys()].map((num) => {
     const serverOffset = new Date().getTimezoneOffset() / 60;
     const date = addDays(
-      subHours(addHours(startOfToday(), 7), serverOffset),
+      addHours(subHours(startOfToday(), 7), serverOffset),
       num,
     );
 
