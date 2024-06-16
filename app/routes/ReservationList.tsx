@@ -11,7 +11,6 @@ import {
   isTomorrow,
   startOfDay,
   startOfToday,
-  // subHours,
 } from "date-fns";
 import React from "react";
 
@@ -219,13 +218,13 @@ export const ReservationList = ({
 }) => {
   console.log("all reservations: ", reservations);
   const availableDays = [...Array(7).keys()].map((num) => {
-    const date = addDays(startOfToday(), num);
+    const serverOffset = new Date().getTimezoneOffset() / 60;
+    const offset = 7 - serverOffset;
+    const date = addHours(addDays(startOfToday(), num), offset);
     return {
       date,
       existingReservations: reservations.filter((r) => {
-        const serverOffset = new Date().getTimezoneOffset() / 60;
-        const offset = 7 - serverOffset;
-        return isEqual(startOfDay(r.start), addHours(date, offset));
+        return isEqual(startOfDay(r.start), date);
       }),
     };
   });
