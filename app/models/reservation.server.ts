@@ -1,5 +1,5 @@
 import type { User, Reservation } from "@prisma/client";
-import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday } from "date-fns";
+import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subHours } from "date-fns";
 
 import { prisma } from "~/db.server";
 
@@ -34,7 +34,7 @@ export async function createReservation({
 }) {
   const serverOffset = new Date().getTimezoneOffset() / 60
   const offset = 7 - serverOffset
-  const offsetStart = addHours(start, offset)
+  const offsetStart = subHours(start, offset)
 
   console.log(offset)
 
@@ -67,7 +67,7 @@ export async function createReservation({
   }
 
   // TODO: warn if after dusk
-  if (compareAsc(addHours(end, offset), addHours(startOfDay(offsetStart), 20)) === 1) {
+  if (compareAsc(subHours(end, offset), addHours(startOfDay(offsetStart), 20)) === 1) {
     throw new Error('Reservations must conclude by 20:00')
   }
 
