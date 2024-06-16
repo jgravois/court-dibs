@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { addMinutes, startOfToday } from "date-fns";
+import { addMinutes, startOfToday, subHours } from "date-fns";
 import { useRef } from "react";
 
 import { createReservation } from "~/models/reservation.server";
@@ -70,6 +70,11 @@ export default function NewReservationPage() {
   const courtRef = useRef<HTMLFieldSetElement>(null);
   const durationRef = useRef<HTMLFieldSetElement>(null);
 
+  const rawDay = params.get("day") + ":00:00:00-07:00";
+  const serverOffset = new Date().getTimezoneOffset() / 60;
+  const offset = 7 - serverOffset;
+  const offsetDay = subHours(rawDay as unknown as Date, offset);
+
   return (
     <>
       <Header />
@@ -78,7 +83,7 @@ export default function NewReservationPage() {
           <div className="newRes_group">
             <div className="newRes_stack">
               <p className="newRes_label">What day?</p>
-              <p>{dateToHeader(params.get("day") as unknown as Date)}</p>
+              <p>{dateToHeader(offsetDay)}</p>
             </div>
             <div className="newRes_stack">
               <p className="newRes_label">What time are you starting?</p>

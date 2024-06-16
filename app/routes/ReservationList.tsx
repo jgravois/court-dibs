@@ -26,17 +26,13 @@ export interface Rez {
 }
 
 export const dateToHeader = (date: Date) => {
-  const serverOffset = new Date().getTimezoneOffset() / 60;
-  const offset = 7 - serverOffset;
-  const offsetDate = subHours(date, offset);
-
-  const prefix = isToday(offsetDate)
+  const prefix = isToday(date)
     ? "Today - "
-    : isTomorrow(offsetDate)
+    : isTomorrow(date)
     ? "Tomorrow - "
     : "";
 
-  return prefix + format(offsetDate, "iiii, MMMM dd");
+  return prefix + format(date, "iiii, MMMM dd");
 };
 
 const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
