@@ -26,11 +26,12 @@ export interface Rez {
 }
 
 export const dateToHeader = (date: Date) => {
-  const prefix = isToday(date)
-    ? "Today - "
-    : isTomorrow(date)
-    ? "Tomorrow - "
-    : "";
+  const prefix = "";
+  // isToday(date)
+  //   ? "Today - "
+  //   : isTomorrow(date)
+  //   ? "Tomorrow - "
+  //   : "";
   return prefix + format(date, "iiii, MMMM dd");
 };
 
@@ -217,16 +218,10 @@ export const ReservationList = ({
 }) => {
   const availableDays = [...Array(7).keys()].map((num) => {
     const serverOffset = new Date().getTimezoneOffset() / 60;
-    // const offset = 7 - serverOffset;
-
-    // const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
-
     const date = addDays(
       subHours(addHours(startOfToday(), 7), serverOffset),
       num,
     );
-
-    // const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
 
     return {
       date,
