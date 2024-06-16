@@ -86,8 +86,8 @@ export async function createReservation({
       userId,
       court,
       start: {
-        gte: startOfDay(offsetStart),
-        lte: addDays(startOfDay(offsetStart), 1)
+        gte: startOfDay(start),
+        lte: addDays(startOfDay(start), 1)
       }
 
     }
