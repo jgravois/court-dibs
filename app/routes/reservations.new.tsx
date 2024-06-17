@@ -1,8 +1,16 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { addHours, addMinutes, subHours, startOfToday } from "date-fns";
-import { useRef } from "react";
+import {
+  addDays,
+  addHours,
+  addMinutes,
+  subHours,
+  startOfToday,
+  compareAsc,
+} from "date-fns";
+import React from "react";
+import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
@@ -65,17 +73,36 @@ export default function NewReservationPage() {
   const [params] = useSearchParams();
   const actionData = useActionData<typeof action>();
 
-  const startTimeRef = useRef<HTMLInputElement>(null);
-  const startDateRef = useRef<HTMLInputElement>(null);
-  const courtRef = useRef<HTMLFieldSetElement>(null);
-  const durationRef = useRef<HTMLFieldSetElement>(null);
+  const startTimeRef = React.useRef<HTMLInputElement>(null);
+  const startDateRef = React.useRef<HTMLInputElement>(null);
+  const courtRef = React.useRef<HTMLFieldSetElement>(null);
+  const durationRef = React.useRef<HTMLFieldSetElement>(null);
+
+  const [tooDark, setTooDark] = React.useState(false);
 
   const rawDay = params.get("day");
   const serverOffset = new Date().getTimezoneOffset() / 60;
   const offset = 7 - serverOffset;
 
-  // console.log(rawDay, new Date(params.get("day") as string), serverOffset);
   const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
+
+  const { dusk } = SunCalc.getTimes(addDays(offsetDay, 1), 33.48, -117.68);
+  console.log(dusk);
+
+  React.useEffect(() => {
+    if (durationRef.current) {
+      const checkbox = durationRef.current.querySelector(
+        "input:checked",
+      ) as HTMLInputElement;
+      const end = addMinutes(
+        addHours(offsetDay, Number(params.get("start")?.split(":")[0] ?? 0)),
+        Number(checkbox.value),
+      );
+      if (compareAsc(end, dusk) === 1) {
+        setTooDark(true);
+      }
+    }
+  }, [dusk, offsetDay, params]);
 
   return (
     <>
@@ -204,6 +231,11 @@ export default function NewReservationPage() {
           {actionData?.errors?.start ? (
             <div className="pt-1 text-red-700" id="title-error">
               {actionData.errors.start}
+            </div>
+          ) : null}
+          {tooDark && !actionData?.errors?.start ? (
+            <div className="pt-1 text-red-700" id="title-error">
+              Are you sure? It will be dark before this reservation concludes.
             </div>
           ) : null}
 

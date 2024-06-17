@@ -67,7 +67,6 @@ export async function createReservation({
     throw new Error('Reservations before 8:00 are not allowed')
   }
 
-  // TODO: warn if after dusk
   if (compareAsc(subHours(end, getCombinedOffset()), addHours(startOfDay(start), 20)) === 1) {
     throw new Error('Reservations must conclude by 20:00')
   }
