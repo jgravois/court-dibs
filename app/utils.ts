@@ -1,5 +1,6 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
+import { addDays, isSameDay, subHours } from "date-fns";
 import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
@@ -25,6 +26,17 @@ export const getOffset = () => {
 
 export const format = (date: Date | string, format: string) =>
   formatInTimeZone(date, "America/Los_Angeles", format);
+
+export const dateToHeader = (date: Date) => {
+  const offset = getOffset();
+  const today = subHours(new Date(), offset);
+  const prefix = isSameDay(subHours(date, offset), today)
+    ? "Today - "
+    : isSameDay(subHours(date, offset), addDays(today, 1))
+      ? "Tomorrow - "
+      : "";
+  return prefix + format(date, "iiii, MMMM dd");
+};
 
 /**
  * This should be used any time the redirect path is user-provided

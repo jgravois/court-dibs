@@ -5,14 +5,13 @@ import {
   addDays,
   addHours,
   areIntervalsOverlapping,
-  format,
   isSameDay,
   startOfDay,
   subHours,
 } from "date-fns";
 import React from "react";
 
-import { getOffset } from "~/utils";
+import { dateToHeader, getOffset } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -23,17 +22,6 @@ export interface Rez {
   court: string;
   openPlay: boolean;
 }
-
-export const dateToHeader = (date: Date) => {
-  const offset = getOffset();
-  const today = subHours(new Date(), offset);
-  const prefix = isSameDay(subHours(date, offset), today)
-    ? "Today - "
-    : isSameDay(subHours(date, offset), addDays(today, 1))
-    ? "Tomorrow - "
-    : "";
-  return prefix + format(date, "iiii, MMMM dd");
-};
 
 const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 

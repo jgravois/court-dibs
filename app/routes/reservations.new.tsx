@@ -14,10 +14,9 @@ import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
-import { getOffset } from "~/utils";
+import { dateToHeader, getOffset } from "~/utils";
 
 import { Header } from "./Header";
-import { dateToHeader } from "./ReservationList";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -81,10 +80,12 @@ export default function NewReservationPage() {
 
   const [tooDark, setTooDark] = React.useState(false);
 
-  const rawDay = params.get("day") as unknown as Date;
-  const day = addHours(rawDay, 0);
-  const offsetDay = subHours(day, getOffset());
+  const offset = getOffset();
+  const rawDate = addHours(params.get("day") as unknown as Date, 0);
+  const day = new Date(rawDate.toISOString().slice(0, 19));
+  day.setHours(0 + offset);
 
+  const offsetDay = subHours(day, offset);
   const { dusk } = SunCalc.getTimes(addDays(offsetDay, 1), 33.48, -117.68);
 
   React.useEffect(() => {
