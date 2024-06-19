@@ -2,7 +2,7 @@ import type { User, Reservation } from "@prisma/client";
 import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subHours } from "date-fns";
 
 import { prisma } from "~/db.server";
-import { getCombinedOffset } from "~/utils";
+import { getOffset } from "~/utils";
 
 export function getReservation({
   id,
@@ -37,7 +37,6 @@ export async function createReservation({
 
   console.log('new res start', start)
   console.log('now', new Date())
-  // const offsetStart = subHours(start, getCombinedOffset())
 
   if (differenceInMinutes(end, start) > 120) {
     throw new Error('Reservations must be two hours or less')
@@ -67,7 +66,7 @@ export async function createReservation({
     throw new Error('Reservations before 8:00 are not allowed')
   }
 
-  if (compareAsc(subHours(end, getCombinedOffset()), addHours(startOfDay(start), 20)) === 1) {
+  if (compareAsc(subHours(end, getOffset()), addHours(startOfDay(start), 20)) === 1) {
     throw new Error('Reservations must conclude by 20:00')
   }
 

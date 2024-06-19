@@ -98,9 +98,7 @@ export default function NewReservationPage() {
         addHours(offsetDay, Number(params.get("start")?.split(":")[0] ?? 0)),
         Number(checkbox.value),
       );
-      if (compareAsc(end, dusk) === 1) {
-        setTooDark(true);
-      }
+      if (compareAsc(end, dusk) === 1) setTooDark(true);
     }
   }, [dusk, offsetDay, params]);
 

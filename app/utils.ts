@@ -18,7 +18,7 @@ export const getClientOffset = (): number =>
   (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
   -1;
 
-export const getCombinedOffset = () => {
+export const getOffset = () => {
   const serverOffset = new Date().getTimezoneOffset() / 60
   return getClientOffset() - serverOffset
 }

@@ -13,7 +13,7 @@ export default function FAQ() {
       <main className="container">
         <p className="faq-q">What is court dibs?</p>
         <p className="faq-a">
-          court dibs is a tool for&nbsp;
+          Court dibs is a tool for&nbsp;
           <a
             className="oldschool-link"
             href="http://myhoa.com/marinersvillage/"
@@ -23,23 +23,24 @@ export default function FAQ() {
           &nbsp;HOA residents to reserve the pickleball, tennis and basketball
           courts
         </p>
-        <p className="faq-q">Is an account required?</p>
+        <p className="faq-q">Are reservations mandatory?</p>
         <p className="faq-a">
-          Logging in is not required to view existing reservations, only to
-          create new ones. Only HOA residents are eligble to create an account.
-        </p>
-        <p className="faq-q">what&apos;s the catch?</p>
-        <p className="faq-a">
-          nothing! court dibs is neighbor-made, free to use, ad-free. none of
-          your personal information will be shared with third parties
-        </p>
-        <p className="faq-q">are reservations mandatory?</p>
-        <p className="faq-a">
-          no! you can use the facilities on a first come first served basis if
+          No! You can use the facilities on a first come first served basis if
           that&apos;s more your style
         </p>
+        <p className="faq-q">Is an account required?</p>
+        <p className="faq-a">
+          No account is required to view court reservations. Only HOA residents
+          are eligible to sign up and create new ones.
+        </p>
+        <p className="faq-q">What&apos;s the catch?</p>
+        <p className="faq-a">
+          Nothing! Court dibs is neighbor-made, free to use, and ad-free. None
+          of your personal information will be shared with third parties
+        </p>
+
         <p className="faq-q">
-          why not just use&nbsp;
+          Why not just use&nbsp;
           <a
             className="oldschool-link"
             href="https://www.signupgenius.com/go/508044AACA72AAAF94-48435985-mariners#/"
@@ -49,34 +50,34 @@ export default function FAQ() {
           ?
         </p>
         <p className="faq-a">
-          here are some things I don&apos;t love about our HOA&apos;s original
-          reservation system
+          Here are some things I don&apos;t love about our HOA&apos;s original
+          reservation system:
         </p>
         <ol className="faq-list">
           <li>
-            you can only reserve the pickleball court (i like to play tennis)
+            You can only reserve the pickleball court (i like to play tennis)
           </li>
-          <li>only 90 minute reservations are allowed</li>
+          <li>Only 90 minute reservations are allowed</li>
           <li>
-            you can&apos;t specify the start time for your reservation, you have
+            You can&apos;t specify the start time for your reservation, you have
             to choose one of seven pre-selected options per day
           </li>
           <li>
-            a lot of scrolling is required to make a new reservation because
+            A lot of scrolling is required to make a new reservation because
             slots in the past and far into the future are all displayed at once
           </li>
           <li>15 minutes is set aside between reservations unnecessarily</li>
           <li>
-            when you reserve a court, your phone number is visible to the entire
+            When you reserve a court, your phone number is visible to the entire
             world
           </li>
         </ol>
         <p className="faq-a" style={{ paddingTop: 20 }}>
-          as far as i can tell, no one else has ever reserved a court using
+          As far as i can tell, no one else has ever reserved a court using
           SignUpGenius. I&apos;m hopeful that court dibs will be a little more
           popular.
         </p>
-        <p className="faq-q">still have a question?</p>
+        <p className="faq-q">Still have a question?</p>
         <p>
           email:&nbsp;
           <a className="oldschool-link" href="mailto:placeholder@mail.com">

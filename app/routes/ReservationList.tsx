@@ -7,14 +7,12 @@ import {
   areIntervalsOverlapping,
   format,
   isSameDay,
-  // isToday,
-  // isTomorrow,
   startOfDay,
   subHours,
 } from "date-fns";
 import React from "react";
 
-import { getCombinedOffset } from "~/utils";
+import { getOffset } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -27,12 +25,13 @@ export interface Rez {
 }
 
 export const dateToHeader = (date: Date) => {
-  const prefix = "";
-  // isToday(date)
-  //   ? "Today - "
-  //   : isTomorrow(date)
-  //   ? "Tomorrow - "
-  //   : "";
+  const offset = getOffset();
+  const today = subHours(new Date(), offset);
+  const prefix = isSameDay(subHours(date, offset), today)
+    ? "Today - "
+    : isSameDay(subHours(date, offset), addDays(today, 1))
+    ? "Tomorrow - "
+    : "";
   return prefix + format(date, "iiii, MMMM dd");
 };
 
@@ -40,15 +39,14 @@ const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const isOverlapping = (r: Rez, date: Date, hour: number) => {
-  return areIntervalsOverlapping(
+const isOverlapping = (r: Rez, date: Date, hour: number) =>
+  areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
       start: addHours(date, hour),
       end: addHours(date, hour + 0.01),
     },
   );
-};
 
 const Guts = ({
   reservations,
@@ -215,23 +213,17 @@ export const ReservationList = ({
   user?: User;
 }) => {
   const availableDays = [...Array(7).keys()].map((num) => {
-    const date1 = addDays(
-      startOfDay(subHours(new Date(), getCombinedOffset())),
-      num,
-    );
+    const offset = getOffset();
+    const rawDate = addDays(startOfDay(subHours(new Date(), offset)), num);
     // 12:00am wherever code is running
-    const date = new Date(date1.toISOString().slice(0, 19));
-    date.setHours(0 + getCombinedOffset());
+    const date = new Date(rawDate.toISOString().slice(0, 19));
+    date.setHours(0 + offset);
 
-    return {
-      date,
-      existingReservations: reservations.filter((r) => {
-        return isSameDay(
-          startOfDay(subHours(r.start, getCombinedOffset())),
-          date,
-        );
-      }),
-    };
+    const existingReservations = reservations.filter((r) =>
+      isSameDay(startOfDay(subHours(r.start, offset)), date),
+    );
+
+    return { date, existingReservations };
   });
 
   return availableDays.map(({ date, existingReservations }) => (
