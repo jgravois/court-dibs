@@ -21,7 +21,7 @@ async function createAndLogin(email: string) {
     throw new Error("All test emails must end in @example.com");
   }
 
-  const user = await createUser(email, uuid());
+  const user = await createUser({ email, stytchId: uuid(), address: 'fake' });
 
   const response = await createUserSession({
     request: new Request("test://test"),
