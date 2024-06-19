@@ -11,6 +11,7 @@ model User {
   id           String        @id @default(cuid())
   email        String        @unique
   stytchId     String        @unique
+  address      String        @default("none")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   reservations Reservation[]

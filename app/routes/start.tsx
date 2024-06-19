@@ -39,6 +39,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const formData = await request.formData();
   const email = formData.get("email");
+  const address = formData.get("street-address");
   const rawCoordinates = formData.get("coordinates") as string;
   const baseUrl = formData.get("baseUrl") as string;
 
@@ -61,7 +62,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return redirect("/magic");
   }
 
-  if (typeof rawCoordinates !== "string" || rawCoordinates.length === 0) {
+  if (
+    typeof address !== "string" ||
+    address.length === 0 ||
+    typeof rawCoordinates !== "string" ||
+    rawCoordinates.length === 0
+  ) {
     return json(
       {
         errors: {
@@ -89,7 +95,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const response = await callStytch(email, baseUrl);
-  if (response.user_id) await createUser(email, response.user_id);
+  if (response.user_id) {
+    await createUser({ email, stytchId: response.user_id, address });
+  }
 
   return redirect("/magic");
 };

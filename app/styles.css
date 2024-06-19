@@ -3,6 +3,7 @@
   --light: #ffffff;
   --mid-light: #eaeaea;
   --dark: #272c37;
+  --mid-dark: #57585b;
   --mid: #6e6a6f;
   --light-pickleball: #b5f1ff;
   --base-pickleball: #14cdf9;
@@ -213,7 +214,7 @@ body {
 }
 
 .nav_link {
-  color: var(--dim-text);
+  color: var(--mid-dark);
   position: relative;
 }
 
