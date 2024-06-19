@@ -16,12 +16,9 @@ export async function getUserByStytchId(stytchId: User["stytchId"]) {
   return prisma.user.findUnique({ where: { stytchId } });
 }
 
-export async function createUser(email: User["email"], stytchId: string) {
+export async function createUser({ email, stytchId, address }: { email: User["email"]; stytchId: string; address: string }) {
   return prisma.user.create({
-    data: {
-      email,
-      stytchId,
-    },
+    data: { email, stytchId, address },
   });
 }
 
