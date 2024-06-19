@@ -33,6 +33,8 @@ COPY --from=deps /myapp/node_modules /myapp/node_modules
 
 ADD prisma .
 RUN npx prisma generate
+
+ENV DATABASE_URL=file:/data/data.db
 RUN npx prisma db push
 ADD . .
 
