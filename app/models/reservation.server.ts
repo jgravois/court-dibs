@@ -1,7 +1,8 @@
 import type { User, Reservation } from "@prisma/client";
-import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday } from "date-fns";
+import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subHours } from "date-fns";
 
 import { prisma } from "~/db.server";
+import { getOffset } from "~/utils";
 
 export function getReservation({
   id,
@@ -32,6 +33,11 @@ export async function createReservation({
 }: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
   userId: User["id"];
 }) {
+  process.env.TZ = 'America/Los_Angeles'
+
+  console.log('new res start', start)
+  console.log('now', new Date())
+
   if (differenceInMinutes(end, start) > 120) {
     throw new Error('Reservations must be two hours or less')
   }
@@ -60,8 +66,7 @@ export async function createReservation({
     throw new Error('Reservations before 8:00 are not allowed')
   }
 
-  // bonus: warn if after dusk
-  if (compareAsc(end, addHours(startOfDay(start), 20)) === 1) {
+  if (compareAsc(subHours(end, getOffset()), addHours(startOfDay(start), 20)) === 1) {
     throw new Error('Reservations must conclude by 20:00')
   }
 

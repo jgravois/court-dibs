@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { validateCoordinates, validateEmail } from "~/utils";
+import { STYTCH_URL_BASE, validateCoordinates, validateEmail } from "~/utils";
 
 import { Header } from "./Header";
 
@@ -16,23 +16,20 @@ const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 const ADDRESS_REQUIRED = "Street address is required";
 
 const callStytch = async (email: string, baseUrl: string) => {
-  const rawResponse = await fetch(
-    "https://test.stytch.com/v1/magic_links/email/login_or_create",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(
-          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-        )}`,
-      },
-
-      body: JSON.stringify({
-        email,
-        login_magic_link_url: baseUrl + "/authenticate",
-      }),
+  const rawResponse = await fetch(STYTCH_URL_BASE + "/email/login_or_create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${btoa(
+        `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+      )}`,
     },
-  );
+
+    body: JSON.stringify({
+      email,
+      login_magic_link_url: baseUrl + "/authenticate",
+    }),
+  });
   return rawResponse.json();
 };
 
@@ -221,7 +218,7 @@ export default function Start() {
               type="text"
               name="baseUrl"
               ref={baseUrlRef}
-              value={window.location.origin}
+              defaultValue={window.location.origin}
               style={{ display: "none" }}
             />
             <input type="hidden" name="redirectTo" value={redirectTo} />

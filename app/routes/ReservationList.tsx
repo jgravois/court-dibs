@@ -5,14 +5,13 @@ import {
   addDays,
   addHours,
   areIntervalsOverlapping,
-  format,
-  isEqual,
-  isToday,
-  isTomorrow,
+  isSameDay,
   startOfDay,
-  startOfToday,
+  subHours,
 } from "date-fns";
 import React from "react";
+
+import { dateToHeader, getOffset } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
 // but start/end are serialized to strings by useLoaderData 🙃
@@ -23,16 +22,6 @@ export interface Rez {
   court: string;
   openPlay: boolean;
 }
-
-export const dateToHeader = (date: Date) => {
-  const prefix = isToday(date)
-    ? "Today - "
-    : isTomorrow(date)
-    ? "Tomorrow - "
-    : "";
-
-  return prefix + format(date, "iiii, MMMM dd");
-};
 
 const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
@@ -212,13 +201,17 @@ export const ReservationList = ({
   user?: User;
 }) => {
   const availableDays = [...Array(7).keys()].map((num) => {
-    const date = addDays(startOfToday(), num);
-    return {
-      date,
-      existingReservations: reservations.filter((r) =>
-        isEqual(startOfDay(r.start), date),
-      ),
-    };
+    const offset = getOffset();
+    const rawDate = addDays(startOfDay(subHours(new Date(), offset)), num);
+    // 12:00am wherever code is running
+    const date = new Date(rawDate.toISOString().slice(0, 19));
+    date.setHours(0 + offset);
+
+    const existingReservations = reservations.filter((r) =>
+      isSameDay(startOfDay(subHours(r.start, offset)), date),
+    );
+
+    return { date, existingReservations };
   });
 
   return availableDays.map(({ date, existingReservations }) => (

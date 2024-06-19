@@ -1,11 +1,42 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
+import { addDays, isSameDay, subHours } from "date-fns";
+import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
 import type { User } from "~/models/user.server";
 
 const DEFAULT_REDIRECT = "/";
+
+export const STYTCH_URL_BASE =
+  process.env.NODE_ENV === "production"
+    ? "https://api.stytch.com/v1/magic_links"
+    : "https://test.stytch.com/v1/magic_links";
+
+// hours
+export const getClientOffset = (): number =>
+  (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
+  -1;
+
+export const getOffset = () => {
+  const serverOffset = new Date().getTimezoneOffset() / 60
+  return getClientOffset() - serverOffset
+}
+
+export const format = (date: Date | string, format: string) =>
+  formatInTimeZone(date, "America/Los_Angeles", format);
+
+export const dateToHeader = (date: Date) => {
+  const offset = getOffset();
+  const today = subHours(new Date(), offset);
+  const prefix = isSameDay(subHours(date, offset), today)
+    ? "Today - "
+    : isSameDay(subHours(date, offset), addDays(today, 1))
+      ? "Tomorrow - "
+      : "";
+  return prefix + format(date, "iiii, MMMM dd");
+};
 
 /**
  * This should be used any time the redirect path is user-provided
@@ -80,15 +111,15 @@ export function validateEmail(email: unknown): email is string {
 const HOA_BOUNDARY = {
   coordinates: [
     [
-      [-117.68496384123713, 33.48204151023167],
-      [-117.68388255720208, 33.48203351752436],
-      [-117.68372236346755, 33.48176629510631],
-      [-117.68265440523655, 33.481751449392135],
-      [-117.68149744912218, 33.48175144451878],
-      [-117.67842443970255, 33.48174668927008],
-      [-117.67732407755909, 33.48353464046207],
-      [-117.68435950172221, 33.48353464046207],
-      [-117.68496384123713, 33.48204151023167],
+      [-117.684963, 33.482041],
+      [-117.683882, 33.482033],
+      [-117.683722, 33.481766],
+      [-117.682654, 33.481751],
+      [-117.681497, 33.481751],
+      [-117.678424, 33.481746],
+      [-117.677324, 33.483534],
+      [-117.684359, 33.483534],
+      [-117.684963, 33.482041],
     ],
   ],
   type: "Polygon",

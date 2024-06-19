@@ -1,14 +1,22 @@
 import type { ActionFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { addMinutes, startOfToday } from "date-fns";
-import { useRef } from "react";
+import {
+  addDays,
+  addHours,
+  addMinutes,
+  subHours,
+  startOfToday,
+  compareAsc,
+} from "date-fns";
+import React from "react";
+import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
+import { dateToHeader, getOffset } from "~/utils";
 
 import { Header } from "./Header";
-import { dateToHeader } from "./ReservationList";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -43,7 +51,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors: { start: "court is required" } }, { status: 400 });
   }
 
-  const start = new Date(`${startDate}T${startTime}:00`);
+  const start = new Date(`${startDate}T${startTime}:00-07:00`);
+
   try {
     await createReservation({
       start,
@@ -64,10 +73,33 @@ export default function NewReservationPage() {
   const [params] = useSearchParams();
   const actionData = useActionData<typeof action>();
 
-  const startTimeRef = useRef<HTMLInputElement>(null);
-  const startDateRef = useRef<HTMLInputElement>(null);
-  const courtRef = useRef<HTMLFieldSetElement>(null);
-  const durationRef = useRef<HTMLFieldSetElement>(null);
+  const startTimeRef = React.useRef<HTMLInputElement>(null);
+  const startDateRef = React.useRef<HTMLInputElement>(null);
+  const courtRef = React.useRef<HTMLFieldSetElement>(null);
+  const durationRef = React.useRef<HTMLFieldSetElement>(null);
+
+  const [tooDark, setTooDark] = React.useState(false);
+
+  const offset = getOffset();
+  const rawDate = addHours(params.get("day") as unknown as Date, 0);
+  const day = new Date(rawDate.toISOString().slice(0, 19));
+  day.setHours(0 + offset);
+
+  const offsetDay = subHours(day, offset);
+  const { dusk } = SunCalc.getTimes(addDays(offsetDay, 1), 33.48, -117.68);
+
+  React.useEffect(() => {
+    if (durationRef.current) {
+      const checkbox = durationRef.current.querySelector(
+        "input:checked",
+      ) as HTMLInputElement;
+      const end = addMinutes(
+        addHours(offsetDay, Number(params.get("start")?.split(":")[0] ?? 0)),
+        Number(checkbox.value),
+      );
+      if (compareAsc(end, dusk) === 1) setTooDark(true);
+    }
+  }, [dusk, offsetDay, params]);
 
   return (
     <>
@@ -77,7 +109,7 @@ export default function NewReservationPage() {
           <div className="newRes_group">
             <div className="newRes_stack">
               <p className="newRes_label">What day?</p>
-              <p>{dateToHeader(params.get("day") as unknown as Date)}</p>
+              <p>{dateToHeader(day)}</p>
             </div>
             <div className="newRes_stack">
               <p className="newRes_label">What time are you starting?</p>
@@ -196,6 +228,11 @@ export default function NewReservationPage() {
           {actionData?.errors?.start ? (
             <div className="pt-1 text-red-700" id="title-error">
               {actionData.errors.start}
+            </div>
+          ) : null}
+          {tooDark && !actionData?.errors?.start ? (
+            <div className="pt-1 text-red-700" id="title-error">
+              Are you sure? It will be dark before this reservation concludes.
             </div>
           ) : null}
 

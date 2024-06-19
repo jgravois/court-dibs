@@ -6,12 +6,11 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import { format } from "date-fns";
 import invariant from "tiny-invariant";
 
 import { deleteReservation, getReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
-import { useUser } from "~/utils";
+import { format, useUser } from "~/utils";
 
 import { Header } from "./Header";
 
@@ -83,7 +82,7 @@ export default function ReservationDetailsPage() {
             {format(end, "h:mm bbb")}
           </p>
           <p>{openPlay ? "Open play" : null}</p>
-          <p>{courtIcon(court)}</p>
+          {courtIcon(court)}
           {canDelete ? (
             <>
               <hr className="my-4" />

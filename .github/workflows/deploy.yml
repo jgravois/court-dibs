@@ -110,7 +110,6 @@ jobs:
         env:
           PORT: 8811
 
-  # soon
   deploy:
     name: 🚀 Deploy
     runs-on: ubuntu-latest

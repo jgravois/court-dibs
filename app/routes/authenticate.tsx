@@ -3,6 +3,7 @@ import { json } from "@remix-run/node";
 
 import { getUserByStytchId } from "~/models/user.server";
 import { createUserSession, getSession } from "~/session.server";
+import { STYTCH_URL_BASE } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Authenticate" }];
 
@@ -17,20 +18,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const token = params.get("token");
 
   if (token) {
-    const raw = await fetch(
-      "https://test.stytch.com/v1/magic_links/authenticate",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Basic ${btoa(
-            `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-          )}`,
-        },
-
-        body: JSON.stringify({ token, session_duration_minutes: 15 }),
+    const raw = await fetch(STYTCH_URL_BASE + "/authenticate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${btoa(
+          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+        )}`,
       },
-    );
+
+      body: JSON.stringify({ token, session_duration_minutes: 15 }),
+    });
 
     const res = await raw.json();
 
