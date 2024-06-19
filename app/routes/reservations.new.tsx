@@ -14,6 +14,7 @@ import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
+import { getOffset } from "~/utils";
 
 import { Header } from "./Header";
 import { dateToHeader } from "./ReservationList";
@@ -80,14 +81,11 @@ export default function NewReservationPage() {
 
   const [tooDark, setTooDark] = React.useState(false);
 
-  const rawDay = params.get("day");
-  const serverOffset = new Date().getTimezoneOffset() / 60;
-  const offset = 7 - serverOffset;
-
-  const offsetDay = subHours(addHours(rawDay as unknown as Date, 7), offset);
+  const rawDay = params.get("day") as unknown as Date;
+  const day = addHours(rawDay, 0);
+  const offsetDay = subHours(day, getOffset());
 
   const { dusk } = SunCalc.getTimes(addDays(offsetDay, 1), 33.48, -117.68);
-  console.log(dusk);
 
   React.useEffect(() => {
     if (durationRef.current) {
@@ -110,7 +108,7 @@ export default function NewReservationPage() {
           <div className="newRes_group">
             <div className="newRes_stack">
               <p className="newRes_label">What day?</p>
-              <p>{dateToHeader(offsetDay)}</p>
+              <p>{dateToHeader(day)}</p>
             </div>
             <div className="newRes_stack">
               <p className="newRes_label">What time are you starting?</p>
