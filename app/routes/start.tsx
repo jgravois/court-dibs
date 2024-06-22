@@ -8,7 +8,7 @@ import invariant from "tiny-invariant";
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { STYTCH_URL_BASE, validateCoordinates, validateEmail } from "~/utils";
 
-import { Header } from "./header";
+import { Header } from "~/routes/header";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";

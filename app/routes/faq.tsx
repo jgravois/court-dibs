@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 
-import { Header } from "./header";
+import { Header } from "~/routes/header";
 
 export const meta: MetaFunction = () => [
   { title: "Frequently asked questions" },
@@ -88,7 +88,7 @@ export default function FAQ() {
         <p>
           email:&nbsp;
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
-            courtdibs@gmail.com
+            courtdibs.sjc@gmail.com
           </a>
         </p>
         <p>

@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 
-import { Header } from "./header";
+import { Header } from "~/routes/header";
 
 export const meta: MetaFunction = () => [{ title: "Magic" }];
 
