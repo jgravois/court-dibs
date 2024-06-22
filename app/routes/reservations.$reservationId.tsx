@@ -9,10 +9,9 @@ import {
 import invariant from "tiny-invariant";
 
 import { deleteReservation, getReservation } from "~/models/reservation.server";
+import { Header } from "~/routes/header";
 import { requireUserId } from "~/session.server";
 import { format, useUser } from "~/utils";
-
-import { Header } from "~/routes/header";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);

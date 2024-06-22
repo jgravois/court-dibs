@@ -13,10 +13,9 @@ import React from "react";
 import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
+import { Header } from "~/routes/header";
 import { requireUserId } from "~/session.server";
 import { dateToHeader, formatTime, getOffset } from "~/utils";
-
-import { Header } from "~/routes/header";
 
 const anotherTimeFormattingFunc = (val: string | null) => {
   if (!val) return;
