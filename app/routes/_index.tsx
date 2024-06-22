@@ -6,8 +6,8 @@ import { getReservations } from "~/models/reservation.server";
 import { getSession } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
-import { Header } from "./Header";
-import { ReservationList, Rez } from "./ReservationList";
+import { Header } from "./header";
+import { ReservationList, Rez } from "./reservation-list";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
 

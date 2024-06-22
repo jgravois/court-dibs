@@ -38,6 +38,13 @@ export const dateToHeader = (date: Date) => {
   return prefix + format(date, "iiii, MMMM dd");
 };
 
+export const formatTime = (rawHour: number, isHalf = false): string => {
+  const hour = rawHour - (rawHour > 12 ? 12 : 0)
+  const min = isHalf ? "30" : "00"
+  const suffix = rawHour >= 12 ? 'pm' : 'am'
+  return `${hour}:${min} ${suffix}`
+}
+
 /**
  * This should be used any time the redirect path is user-provided
  * (Like the query string on our login/signup pages). This avoids

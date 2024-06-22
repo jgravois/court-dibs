@@ -346,7 +346,7 @@ body {
 }
 
 .schedule_content .schedule_button___anon {
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .schedule_content___pickleball .schedule_button.schedule_button___private {

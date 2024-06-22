@@ -12,7 +12,7 @@ import { deleteReservation, getReservation } from "~/models/reservation.server";
 import { requireUserId } from "~/session.server";
 import { format, useUser } from "~/utils";
 
-import { Header } from "./Header";
+import { Header } from "./header";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
