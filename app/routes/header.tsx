@@ -57,7 +57,7 @@ export function Header({
             </>
           ) : (
             <Link to="/start" className="header_link header_link___button">
-              Sign up or sign in
+              Sign up or log in
             </Link>
           )}
         </div>

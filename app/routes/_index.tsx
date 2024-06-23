@@ -3,11 +3,10 @@ import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
 import { getReservations } from "~/models/reservation.server";
+import { Header } from "~/routes/header";
+import { ReservationList, Rez } from "~/routes/reservation-list";
 import { getSession } from "~/session.server";
 import { useOptionalUser } from "~/utils";
-
-import { Header } from "./Header";
-import { ReservationList, Rez } from "./ReservationList";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
 

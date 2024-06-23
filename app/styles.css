@@ -284,7 +284,8 @@ body {
   gap: 10px;
 }
 
-.schedule_content {
+/* hide when empty */
+.schedule_content:has(.schedule_row) {
   border-radius: 10px;
   box-shadow: var(--neutral-shadow);
   display: flex;
@@ -346,7 +347,7 @@ body {
 }
 
 .schedule_content .schedule_button___anon {
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .schedule_content___pickleball .schedule_button.schedule_button___private {

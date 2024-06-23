@@ -13,10 +13,15 @@ import React from "react";
 import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
+import { Header } from "~/routes/header";
 import { requireUserId } from "~/session.server";
-import { dateToHeader, getOffset } from "~/utils";
+import { dateToHeader, formatTime, getOffset } from "~/utils";
 
-import { Header } from "./Header";
+const anotherTimeFormattingFunc = (val: string | null) => {
+  if (!val) return;
+  const [h, m] = val.split(":");
+  return formatTime(Number(h), m == "30");
+};
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -113,7 +118,7 @@ export default function NewReservationPage() {
             </div>
             <div className="newRes_stack">
               <p className="newRes_label">What time are you starting?</p>
-              <p>{params.get("start")}</p>
+              <p>{anotherTimeFormattingFunc(params.get("start"))}</p>
             </div>
           </div>
           <div className="newRes_group">

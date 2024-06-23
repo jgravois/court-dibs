@@ -6,9 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
+import { Header } from "~/routes/header";
 import { STYTCH_URL_BASE, validateCoordinates, validateEmail } from "~/utils";
-
-import { Header } from "./Header";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";

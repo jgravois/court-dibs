@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 
-import { Header } from "./Header";
+import { Header } from "~/routes/header";
 
 export const meta: MetaFunction = () => [
   { title: "Frequently asked questions" },
@@ -25,8 +25,8 @@ export default function FAQ() {
         </p>
         <p className="faq-q">Are reservations mandatory?</p>
         <p className="faq-a">
-          No! You can use the facilities on a first come first served basis if
-          that&apos;s more your style
+          No! You can still use the facilities on a first come first served
+          basis if that&apos;s more your style
         </p>
         <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
@@ -35,8 +35,15 @@ export default function FAQ() {
         </p>
         <p className="faq-q">What&apos;s the catch?</p>
         <p className="faq-a">
-          Nothing! Court dibs is neighbor-made, free to use, and ad-free. None
-          of your personal information will be shared with third parties
+          Nothing! Court dibs is&nbsp;
+          <a
+            className="oldschool-link"
+            href="https://github.com/jgravois/court-dibs"
+          >
+            neighbor-made
+          </a>
+          , free to use, and ad-free. None of your personal information will be
+          shared with third parties
         </p>
 
         <p className="faq-q">
@@ -81,7 +88,7 @@ export default function FAQ() {
         <p>
           email:&nbsp;
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
-            courtdibs@gmail.com
+            courtdibs.sjc@gmail.com
           </a>
         </p>
         <p>
