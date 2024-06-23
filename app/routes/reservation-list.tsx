@@ -124,7 +124,7 @@ const TimeSlots = ({
               className={cn("schedule_button", {
                 schedule_button___private: !!onHourPrivate,
                 schedule_button___open: !!onHourOpenPlay,
-                schedule_button___anon: !isLoggedIn || isPast,
+                schedule_button___anon: !isLoggedIn,
               })}
               onClick={handleOnHourClick}
             >
@@ -134,7 +134,7 @@ const TimeSlots = ({
               className={cn("schedule_button", {
                 schedule_button___private: !!halfHourPrivate,
                 schedule_button___open: !!halfHourOpenPlay,
-                schedule_button___anon: !isLoggedIn || isPast,
+                schedule_button___anon: !isLoggedIn,
               })}
               onClick={handleHalfHourClick}
             >
