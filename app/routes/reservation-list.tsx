@@ -61,7 +61,7 @@ const TimeSlots = ({
       })}
     >
       {rezTimes.map((num) => {
-        const isPast = num <= offsetNow.getHours() && isToday;
+        const isPast = num <= offsetNow.getHours() + 1 && isToday;
 
         const onHourPrivate = reservations.find(
           (r) => isOverlapping(r, date, num) && !r.openPlay,
@@ -82,6 +82,10 @@ const TimeSlots = ({
         const onHourIsReserved = onHourPrivate || onHourOpenPlay;
         const halfHourIsReserved = halfHourPrivate || halfHourOpenPlay;
 
+        if (isPast && !onHourIsReserved && !halfHourIsReserved) {
+          return null;
+        }
+
         const handleOnHourClick = () =>
           !isLoggedIn
             ? // only show reservation details to logged in users
@@ -91,16 +95,13 @@ const TimeSlots = ({
             ? navigate(
                 `/reservations/${onHourPrivate?.id ?? onHourOpenPlay?.id}`,
               )
-            : // next available reservation is on the hour
-            !isPast
-            ? navigate(
+            : navigate(
                 `/reservations/new?day=${date
                   .toISOString()
                   .slice(0, 10)}&start=${
                   String(num).padStart(2, "0") + ":00"
                 }&court=${court}`,
-              )
-            : undefined;
+              );
 
         const handleHalfHourClick = () =>
           !isLoggedIn
@@ -109,15 +110,13 @@ const TimeSlots = ({
             ? navigate(
                 `/reservations/${halfHourPrivate?.id ?? halfHourOpenPlay?.id}`,
               )
-            : !isPast
-            ? navigate(
+            : navigate(
                 `/reservations/new?day=${date
                   .toISOString()
                   .slice(0, 10)}&start=${
                   String(num).padStart(2, "0") + ":30"
                 }&court=${court}`,
-              )
-            : undefined;
+              );
 
         return (
           <div className="schedule_row" key={num}>

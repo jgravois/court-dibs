@@ -284,7 +284,8 @@ body {
   gap: 10px;
 }
 
-.schedule_content {
+/* hide when empty */
+.schedule_content:has(.schedule_row) {
   border-radius: 10px;
   box-shadow: var(--neutral-shadow);
   display: flex;
