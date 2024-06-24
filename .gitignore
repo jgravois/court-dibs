@@ -6,13 +6,12 @@ node_modules
 
 /cypress/screenshots
 /cypress/videos
-/prisma/data.db
-/prisma/data.db-journal
+/prisma/sqlite.db
+/prisma/sqlite.db-journal
+/prisma/sqlite.db-backup
+/prisma/sqlite.db-empty
 
-/prisma/data.db-backup
-/staging-wireguard.conf
-/wireguard-key
-/wireguard-key-cert.pub
+wireguard*
 
 notes
 coverage/

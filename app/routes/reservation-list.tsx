@@ -182,10 +182,7 @@ export const ReservationList = ({
         <div className="schedule">
           <h3 className="schedule_header">
             <div className="schedule_icon">
-              <img
-                alt="pickleball paddle"
-                src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/pickleball.svg?v=1714921535243"
-              />
+              <img alt="pickleball paddle" src="/assets/pickleball.svg" />
             </div>
             <div>Pickleball</div>
           </h3>
@@ -199,10 +196,7 @@ export const ReservationList = ({
         <div className="schedule schedule___basketball">
           <h3 className="schedule_header">
             <div className="schedule_icon">
-              <img
-                alt="basketball"
-                src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/basketball.svg?v=1714921534845"
-              />
+              <img alt="basketball" src="/assets/basketball.svg" />
             </div>
             <div>Basketball</div>
           </h3>
@@ -218,10 +212,7 @@ export const ReservationList = ({
         <div className="schedule schedule___tennis">
           <h3 className="schedule_header">
             <div className="schedule_icon">
-              <img
-                alt="tennis racquet"
-                src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/tennis.svg?v=1714921535054"
-              />
+              <img alt="tennis racquet" src="/assets/tennis.svg" />
             </div>
             <div>Tennis</div>
           </h3>

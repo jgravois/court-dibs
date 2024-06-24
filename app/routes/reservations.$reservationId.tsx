@@ -40,24 +40,15 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 const courtIcon = (val: string) =>
   val === "pb" ? (
     <div className="existingRes_courtIcon">
-      <img
-        alt="pball"
-        src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/pickleball-solid.svg?v=1714837585684"
-      />
+      <img alt="pball" src="/assets/pickleball-solid.svg" />
     </div>
   ) : val === "10s" ? (
     <div className="existingRes_courtIcon">
-      <img
-        alt="tennis racquet"
-        src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/tennis-ball-solid.svg?v=1714837585529"
-      />
+      <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
     </div>
   ) : (
     <div className="existingRes_courtIcon">
-      <img
-        alt="bball"
-        src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/basketball-solid.svg?v=1714837585367"
-      />
+      <img alt="bball" src="/assets/basketball-solid.svg" />
     </div>
   );
 
@@ -80,7 +71,7 @@ export default function ReservationDetailsPage() {
             &nbsp;-&nbsp;
             {format(end, "h:mm bbb")}
           </p>
-          <p>{openPlay ? "Open play" : null}</p>
+          <p>{openPlay ? "Neighbors welcome" : null}</p>
           {courtIcon(court)}
           {canDelete ? (
             <>

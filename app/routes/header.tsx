@@ -20,22 +20,13 @@ export function Header({
           <h2 className="h2">Call dibs on one of our sportsball courts</h2>
           <div className="header_illustration">
             <div className="header_icon header_icon___pickleball">
-              <img
-                alt="pball"
-                src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/pickleball-solid.svg?v=1714837585684"
-              />
+              <img alt="pball" src="/assets/pickleball-solid.svg" />
             </div>
             <div className="header_icon header_icon___tennis">
-              <img
-                alt="tennis racquet"
-                src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/tennis-ball-solid.svg?v=1714837585529"
-              />
+              <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
             </div>
             <div className="header_icon header_icon___basketball">
-              <img
-                alt="bball"
-                src="https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/basketball-solid.svg?v=1714837585367"
-              />
+              <img alt="bball" src="/assets/basketball-solid.svg" />
             </div>
           </div>
           <Link to="/faq" className="h2" style={{ paddingTop: 10 }}>

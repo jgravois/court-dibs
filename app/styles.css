@@ -65,7 +65,7 @@ body {
 /* header */
 
 .header {
-  background-image: url("https://cdn.glitch.global/5f00a93b-ae9c-4d9a-b9cf-472487408ff8/basketball-sunset.jpg?v=1714828327902");
+  background-image: url("/assets/basketball-sunset.jpg");
   background-repeat: no-repeat;
   background-position: 50% 70%;
   background-clip: border-box;
