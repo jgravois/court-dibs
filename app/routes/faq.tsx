@@ -104,11 +104,21 @@ export default function FAQ() {
           <a className="oldschool-link" href="https://github.com/mel-thomas">
             @mel-thomas
           </a>
-          &nbsp;🎨. icons courtesy of&nbsp;
+          &nbsp;🎨
+        </p>
+        <p className="faq-a">
+          {" "}
+          icons courtesy of&nbsp;
           <a className="oldschool-link" href="https://fontawesome.com/">
             font awesome
           </a>
-          .
+          , image courtesy of&nbsp;
+          <a
+            className="oldschool-link"
+            href="https://unsplash.com/photos/silhouette-photo-of-basketball-system-57rD2oDZquc"
+          >
+            @nicholasjio/unsplash
+          </a>
         </p>
       </main>
     </>

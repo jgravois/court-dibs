@@ -148,6 +148,16 @@ export default function NewReservationPage() {
                   />
                   <span className="newRes_checkmark"></span>
                 </label>
+                <label htmlFor="duration90" className="newRes_radio">
+                  90 minutes
+                  <input
+                    type="radio"
+                    id="duration90"
+                    name="duration"
+                    value="90"
+                  />
+                  <span className="newRes_checkmark"></span>
+                </label>
                 <label htmlFor="duration120" className="newRes_radio">
                   2 hours
                   <input
