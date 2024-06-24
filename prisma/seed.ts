@@ -4,8 +4,6 @@ import { addHours, addMinutes, startOfTomorrow } from "date-fns";
 const prisma = new PrismaClient();
 
 async function seed() {
-  const email = "jagravois" + "@g" + "mail.com";
-
   // cleanup the existing database
   // no worries if records dont exist yet
   await prisma.user.deleteMany().catch(() => {
@@ -15,8 +13,8 @@ async function seed() {
 
   const user = await prisma.user.create({
     data: {
-      email,
-      stytchId: "user-test-56e85954-ddf4-49eb-be5e-3901b0267f62",
+      email: "seed@example.com",
+      stytchId: "user-test-[fake-guid]",
     },
   });
 

@@ -24,7 +24,7 @@ passwords are not stored by the app. login links are sent via email.
 
 i'm not a DBA, so locally i use TablePlus
 
-Database path: .../court-dibs/prisma/data.db
+Database path: .../court-dibs/prisma/sqlite.db
 
 # more info
 

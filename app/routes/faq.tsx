@@ -30,8 +30,8 @@ export default function FAQ() {
         </p>
         <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
-          No account is required to view court reservations. Only HOA residents
-          are eligible to sign up and create new ones.
+          No account is required to view court reservations. HOA residents are
+          eligible to sign up and create new ones.
         </p>
         <p className="faq-q">What&apos;s the catch?</p>
         <p className="faq-a">
@@ -42,8 +42,8 @@ export default function FAQ() {
           >
             neighbor-made
           </a>
-          , free to use, and ad-free. None of your personal information will be
-          shared with third parties
+          , free to use, and ad-free. Your your personal information will never
+          be shared with third parties
         </p>
 
         <p className="faq-q">
@@ -84,18 +84,31 @@ export default function FAQ() {
           SignUpGenius. I&apos;m hopeful that court dibs will be a little more
           popular.
         </p>
-        <p className="faq-q">Still have a question?</p>
-        <p>
-          email:&nbsp;
+        <p className="faq-q">Still have a question? feedback?</p>
+        <p className="faq-a">
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
             courtdibs.sjc@gmail.com
           </a>
-        </p>
-        <p>
-          call/text:&nbsp;
+          &nbsp;/&nbsp;
           <a className="oldschool-link" href="tel:+19093074532">
             (909)307-4532
           </a>
+        </p>
+        <p className="faq-q">Credits</p>
+        <p className="faq-a">
+          this website was created by&nbsp;
+          <a className="oldschool-link" href="https://github.com/jgravois">
+            @jgravois
+          </a>
+          &nbsp;w/ a design assist from&nbsp;
+          <a className="oldschool-link" href="https://github.com/mel-thomas">
+            @mel-thomas
+          </a>
+          &nbsp;🎨. icons courtesy of&nbsp;
+          <a className="oldschool-link" href="https://fontawesome.com/">
+            font awesome
+          </a>
+          .
         </p>
       </main>
     </>
