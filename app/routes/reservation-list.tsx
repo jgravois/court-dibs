@@ -61,7 +61,8 @@ const TimeSlots = ({
       })}
     >
       {rezTimes.map((num) => {
-        const isPast = num <= offsetNow.getHours() + 1 && isToday;
+        const isPast = num <= offsetNow.getHours() && isToday;
+        const isJustPast = num === offsetNow.getHours() && isToday;
 
         const onHourPrivate = reservations.find(
           (r) => isOverlapping(r, date, num) && !r.openPlay,
@@ -82,7 +83,10 @@ const TimeSlots = ({
         const onHourIsReserved = onHourPrivate || onHourOpenPlay;
         const halfHourIsReserved = halfHourPrivate || halfHourOpenPlay;
 
-        if (isPast && !onHourIsReserved && !halfHourIsReserved) {
+        if (
+          isPast &&
+          !(isJustPast && (onHourIsReserved || halfHourIsReserved))
+        ) {
           return null;
         }
 
