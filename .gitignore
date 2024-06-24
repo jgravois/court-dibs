@@ -11,9 +11,9 @@ node_modules
 /prisma/sqlite.db-backup
 /prisma/sqlite.db-empty
 
-/staging-wireguard.conf
-/wireguard-key
-/wireguard-key-cert.pub
+*wireguard.conf
+*wireguard-key
+*wireguard-key-cert.pub
 
 notes
 coverage/
