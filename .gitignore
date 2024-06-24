@@ -9,6 +9,7 @@ node_modules
 /prisma/sqlite.db
 /prisma/sqlite.db-journal
 /prisma/sqlite.db-backup
+/prisma/sqlite.db-empty
 
 /staging-wireguard.conf
 /wireguard-key

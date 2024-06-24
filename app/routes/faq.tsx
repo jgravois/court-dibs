@@ -100,7 +100,7 @@ export default function FAQ() {
           <a className="oldschool-link" href="https://github.com/jgravois">
             @jgravois
           </a>
-          &nbsp;w/ a design assist from&nbsp;
+          &nbsp;with some design help from&nbsp;
           <a className="oldschool-link" href="https://github.com/mel-thomas">
             @mel-thomas
           </a>
