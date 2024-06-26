@@ -350,34 +350,38 @@ body {
   cursor: not-allowed;
 }
 
-.schedule_content___pickleball .schedule_button.schedule_button___private {
+.schedule_content___pickleball .schedule_button.schedule_button___open {
   background-color: var(--light-pickleball);
-  color: var(--dark-pickleball);
+  border: 2px var(--dark-pickleball) dashed;
 }
 
-.schedule_content___pickleball .schedule_button.schedule_button___open {
+.schedule_content___pickleball .schedule_button.schedule_button___private {
   background-color: var(--dark-pickleball);
   color: var(--light-pickleball);
 }
 
-.schedule_content___tennis .schedule_button.schedule_button___private {
+.schedule_content___tennis .schedule_button.schedule_button___open {
   background-color: var(--light-tennis);
-  color: var(--dark-tennis);
+  border: 2px var(--dark-tennis) dashed;
 }
 
-.schedule_content___tennis .schedule_button.schedule_button___open {
+.schedule_content___tennis .schedule_button.schedule_button___private {
   background-color: var(--dark-tennis);
   color: var(--light-tennis);
 }
 
-.schedule_content___basketball .schedule_button.schedule_button___private {
+.schedule_content___basketball .schedule_button.schedule_button___open {
   background-color: var(--light-basketball);
-  color: var(--dark-basketball);
+  border: 2px var(--dark-basketball) dashed;
 }
 
-.schedule_content___basketball .schedule_button.schedule_button___open {
+.schedule_content___basketball .schedule_button.schedule_button___private {
   background-color: var(--dark-basketball);
   color: var(--light-basketball);
+}
+
+.schedule_button.schedule_button___open {
+  color: #000;
 }
 
 .schedule_content___pickleball .schedule_button.schedule_button___private:hover,
