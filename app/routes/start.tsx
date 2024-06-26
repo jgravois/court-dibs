@@ -14,7 +14,7 @@ const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 
 const ADDRESS_REQUIRED = "Street address is required";
 
-const callStytch = async (email: string, baseUrl: string) => {
+const callStytch = async (email: string) => {
   const rawResponse = await fetch(STYTCH_URL_BASE + "/email/login_or_create", {
     method: "POST",
     headers: {
@@ -24,10 +24,7 @@ const callStytch = async (email: string, baseUrl: string) => {
       )}`,
     },
 
-    body: JSON.stringify({
-      email,
-      login_magic_link_url: baseUrl + "/authenticate",
-    }),
+    body: JSON.stringify({ email }),
   });
   return rawResponse.json();
 };
@@ -40,7 +37,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = formData.get("email");
   const address = formData.get("street-address");
   const rawCoordinates = formData.get("coordinates") as string;
-  const baseUrl = formData.get("baseUrl") as string;
 
   if (!validateEmail(email)) {
     return json(
@@ -57,7 +53,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
-    await callStytch(email, baseUrl);
+    await callStytch(email);
     return redirect("/magic");
   }
 
@@ -93,7 +89,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const response = await callStytch(email, baseUrl);
+  const response = await callStytch(email);
   if (response.user_id) {
     await createUser({ email, stytchId: response.user_id, address });
   }
@@ -110,7 +106,6 @@ export default function Start() {
   const emailRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const coordinatesRef = useRef<HTMLInputElement>(null);
-  const baseUrlRef = useRef<HTMLInputElement>(null);
   const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [showAddress, setShowAddress] = useState(false);
 
@@ -219,13 +214,6 @@ export default function Start() {
               type="text"
               name="coordinates"
               ref={coordinatesRef}
-              style={{ display: "none" }}
-            />
-            <input
-              type="text"
-              name="baseUrl"
-              ref={baseUrlRef}
-              defaultValue={window.location.origin}
               style={{ display: "none" }}
             />
             <input type="hidden" name="redirectTo" value={redirectTo} />
