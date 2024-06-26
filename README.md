@@ -1,9 +1,27 @@
+## what is this?
+
+> view it live: https://courtdibs.com
+
+Court dibs is a simple app for making court reservations. A login is not required to view the upcoming calendar.
+
+### features
+
+- geofenced signup
+- one click, passwordless login
+- dynamic dusk calculation
+- fast page loads, instant transitions
+
 ## setup
 
 ```sh
 npm install
 npm run setup
+cp .env.example .env
 ```
+
+1. signup for [Stytch](https://stytch.com/dashboard/start-now)
+1. create a test project
+1. plug the [API keys](https://stytch.com/docs/guides/dashboard/api-keys) into the `.env` file you just created.
 
 ## development
 
@@ -14,18 +32,14 @@ open http://localhost:3000
 
 This starts the app in development mode, rebuilding assets on file changes.
 
-### background
+If you plan on running the app somewhere other than http://localhost:3000, you'll need to supply your own Google Maps API Key.
 
-This is a simple app for making court reservations. A login is required to manage them, but not to view existing ones.
+### Connecting to your local database
 
-passwords are not stored by the app. login links are sent via email.
-
-### Connecting to your database
-
-i'm not a DBA, so locally i use TablePlus
+i'm no SQL nerd. locally i use [TablePlus](https://tableplus.com/)
 
 Database path: .../court-dibs/prisma/sqlite.db
 
-# more info
+# credits
 
 https://remix.run/resources/indie-stack#quickstart
