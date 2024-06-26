@@ -93,18 +93,25 @@ export default function NewReservationPage() {
   const offsetDay = subHours(day, offset);
   const { dusk } = SunCalc.getTimes(addDays(offsetDay, 1), 33.48, -117.68);
 
-  React.useEffect(() => {
-    if (durationRef.current) {
-      const checkbox = durationRef.current.querySelector(
-        "input:checked",
-      ) as HTMLInputElement;
-      const end = addMinutes(
-        addHours(offsetDay, Number(params.get("start")?.split(":")[0] ?? 0)),
-        Number(checkbox.value),
-      );
-      if (compareAsc(end, dusk) === 1) setTooDark(true);
-    }
-  }, [dusk, offsetDay, params]);
+  const duskCheck = () => {
+    const duration =
+      (durationRef.current?.querySelector("input:checked") as HTMLInputElement)
+        ?.value ?? 30;
+
+    const end = addMinutes(
+      addHours(offsetDay, Number(params.get("start")?.split(":")[0] ?? 0)),
+      Number(duration) ?? 0,
+    );
+    setTooDark(compareAsc(end, dusk) === 1);
+  };
+
+  React.useEffect(duskCheck, [dusk, offsetDay, params]);
+
+  const errMessage = actionData?.errors?.start
+    ? actionData.errors.start
+    : tooDark
+    ? "Are you sure? It will be dark before this reservation concludes."
+    : undefined;
 
   return (
     <>
@@ -122,7 +129,7 @@ export default function NewReservationPage() {
             </div>
           </div>
           <div className="newRes_group">
-            <fieldset ref={durationRef}>
+            <fieldset ref={durationRef} onChange={duskCheck}>
               <legend className="newRes_label">
                 How long are you playing?
               </legend>
@@ -170,10 +177,7 @@ export default function NewReservationPage() {
                 </label>
               </div>
             </fieldset>
-            <fieldset
-              ref={courtRef}
-              // onChange={(e) => console.log(e.target.value)}
-            >
+            <fieldset ref={courtRef}>
               <legend className="newRes_label">Which court?</legend>
               <div>
                 <label htmlFor="court_bball" className="newRes_radio">
@@ -239,18 +243,11 @@ export default function NewReservationPage() {
               defaultValue={params.get("start") ?? "08:00"}
             />
           </div>
-
-          {actionData?.errors?.start ? (
+          {errMessage ? (
             <div className="pt-1 text-red-700" id="title-error">
-              {actionData.errors.start}
+              {errMessage}
             </div>
           ) : null}
-          {tooDark && !actionData?.errors?.start ? (
-            <div className="pt-1 text-red-700" id="title-error">
-              Are you sure? It will be dark before this reservation concludes.
-            </div>
-          ) : null}
-
           <div className="newRes_group newRes_group___small">
             <button type="submit" className="newRes_button">
               Reserve
