@@ -9,7 +9,7 @@ export default function Magic() {
     <>
       <Header hideLoginLinks />
       <main className="container">
-        <p className="magicLink_message">Check your inbox for a magic link.</p>
+        <p className="magicLink_message">Check your inbox for a magic link</p>
       </main>
     </>
   );
