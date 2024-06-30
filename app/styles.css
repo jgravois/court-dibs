@@ -206,6 +206,17 @@ body {
   .header_link___button {
     font-size: var(--small-font-size);
   }
+
+  .header_rightGroup {
+    align-items: flex-end;
+    flex-direction: column;
+    font-size: 15px;
+    padding-top: 10px;
+  }
+
+  .header_link___learnMore {
+    padding-right: 14px; /* to appear aligned with button */
+  }
 }
 
 /* nav */
