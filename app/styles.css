@@ -146,6 +146,13 @@ body {
   text-align: right;
 }
 
+.header_rightGroup {
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .header_user {
   color: var(--dim-text);
   font-weight: normal;
@@ -154,6 +161,14 @@ body {
 .header_link {
   color: var(--light);
   text-decoration: none;
+}
+
+.header_link___learnMore {
+  color: var(--light);
+}
+
+.header_link___learnMore:hover {
+  text-decoration: underline;
 }
 
 .header_link___button {
