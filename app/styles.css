@@ -196,10 +196,13 @@ body {
 /* nav */
 
 .nav {
+  background-color: var(--light);
   border-bottom: 2px solid var(--mid-light);
   font-size: var(--small-font-size);
   margin: 0 auto;
+  position: sticky;
   text-transform: uppercase;
+  top: 0;
   width: 100%;
 }
 
