@@ -10,6 +10,7 @@ import {
   subHours,
 } from "date-fns";
 import React from "react";
+import { Tooltip } from "react-tooltip";
 
 import { dateToHeader, formatTime, getOffset } from "~/utils";
 
@@ -125,6 +126,12 @@ const TimeSlots = ({
         return (
           <div className="schedule_row" key={num}>
             <button
+              data-tooltip-id={
+                onHourIsReserved && !isLoggedIn ? "taken-tooltip" : undefined
+              }
+              data-tooltip-content={
+                onHourPrivate ? "Private reservation" : "Neighbors welcome"
+              }
               className={cn("schedule_button", {
                 schedule_button___private: !!onHourPrivate,
                 schedule_button___open: !!onHourOpenPlay,
@@ -141,6 +148,12 @@ const TimeSlots = ({
                 schedule_button___anon: !isLoggedIn,
               })}
               onClick={handleHalfHourClick}
+              data-tooltip-id={
+                halfHourIsReserved && !isLoggedIn ? "taken-tooltip" : undefined
+              }
+              data-tooltip-content={
+                halfHourPrivate ? "Private reservation" : "Neighbors welcome"
+              }
             >
               {formatTime(num, true)}
             </button>
@@ -227,6 +240,10 @@ export const ReservationList = ({
             date={date}
           />
         </div>
+        <Tooltip
+          id="taken-tooltip"
+          openEvents={{ mouseover: true, focus: true, click: true }}
+        />
       </main>
     </React.Fragment>
   ));

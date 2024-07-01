@@ -3,11 +3,7 @@ import { Form, Link } from "@remix-run/react";
 
 import { useOptionalUser } from "~/utils";
 
-export function Header({
-  hideLoginLinks = false,
-}: {
-  hideLoginLinks?: boolean;
-}) {
+export function Header() {
   const user: User | undefined = useOptionalUser();
 
   return (
@@ -17,7 +13,7 @@ export function Header({
           <Link to="/" className="h1">
             Court dibs
           </Link>
-          <h2 className="h2">Call dibs on one of our sportsball courts </h2>
+          <h2 className="h2">Call dibs on one of our sportsball courts</h2>
           <div className="header_illustration">
             <div className="header_icon header_icon___pickleball">
               <img alt="pball" src="/assets/pickleball-solid.svg" />
@@ -31,33 +27,22 @@ export function Header({
           </div>
         </div>
         <div className="header_right">
-          {hideLoginLinks ? null : user ? (
-            <>
-              <p className="header_user">{user.email}</p>
-              <div className="header_rightGroup">
-                <Form action="/logout" method="post">
-                  <button
-                    type="submit"
-                    className="header_link header_link___button"
-                  >
-                    Sign out
-                  </button>
-                </Form>
-                <Link className="header_link___learnMore" to="/faq">
-                  Learn more
-                </Link>
-              </div>
-            </>
-          ) : (
-            <div className="header_rightGroup">
+          <div className="header_rightGroup">
+            {user ? (
+              <Form action="/logout" method="post">
+                <button type="submit" className="header_user">
+                  {user.email}
+                </button>
+              </Form>
+            ) : (
               <Link to="/start" className="header_link header_link___button">
                 Sign up or log in
               </Link>
-              <Link className="header_link___learnMore" to="/faq">
-                Learn more
-              </Link>
-            </div>
-          )}
+            )}
+            <Link className="header_link___learnMore" to="/faq">
+              Learn more
+            </Link>
+          </div>
         </div>
       </div>
     </header>

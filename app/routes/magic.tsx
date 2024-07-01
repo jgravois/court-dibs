@@ -7,9 +7,11 @@ export const meta: MetaFunction = () => [{ title: "Magic" }];
 export default function Magic() {
   return (
     <>
-      <Header hideLoginLinks />
+      <Header />
       <main className="container">
-        <p className="magicLink_message">Check your inbox for a magic link</p>
+        <p className="magicLink_message">
+          Check your inbox for a magic link to finish signing in
+        </p>
       </main>
     </>
   );
