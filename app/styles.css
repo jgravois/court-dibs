@@ -147,7 +147,8 @@ body {
 }
 
 .header_rightGroup {
-  align-items: center;
+  align-items: flex-end;
+  flex-direction: column;
   gap: 10px;
   display: flex;
   justify-content: flex-end;
@@ -208,8 +209,6 @@ body {
   }
 
   .header_rightGroup {
-    align-items: flex-end;
-    flex-direction: column;
     font-size: 15px;
     padding-top: 10px;
   }

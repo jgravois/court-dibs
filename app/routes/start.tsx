@@ -153,7 +153,7 @@ export default function Start() {
 
   return (
     <>
-      <Header hideLoginLinks />
+      <Header />
       <div className="container">
         <div className="signUp_form">
           <p>Sign up or log in to your account, no password needed!</p>
