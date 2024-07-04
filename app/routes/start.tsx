@@ -7,7 +7,7 @@ import invariant from "tiny-invariant";
 
 import { createUser, getUserByEmail } from "~/models/user.server";
 import { Header } from "~/routes/header";
-import { STYTCH_URL_BASE, validateCoordinates, validateEmail } from "~/utils";
+import { STYTCH_BASE, validateCoordinates, validateEmail } from "~/utils";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
@@ -15,17 +15,20 @@ const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 const ADDRESS_REQUIRED = "Street address is required";
 
 const callStytch = async (email: string) => {
-  const rawResponse = await fetch(STYTCH_URL_BASE + "/email/login_or_create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Basic ${btoa(
-        `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-      )}`,
-    },
+  const rawResponse = await fetch(
+    STYTCH_BASE + "/magic_links/email/login_or_create",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${btoa(
+          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+        )}`,
+      },
 
-    body: JSON.stringify({ email }),
-  });
+      body: JSON.stringify({ email }),
+    },
+  );
   return rawResponse.json();
 };
 
