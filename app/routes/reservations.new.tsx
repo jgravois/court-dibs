@@ -1,4 +1,4 @@
-import type { ActionFunctionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import {
@@ -14,13 +14,36 @@ import * as SunCalc from "suncalc";
 
 import { createReservation } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
-import { requireUserId } from "~/session.server";
+import {
+  getSession,
+  requireUserId,
+  requireValidStytchToken,
+  sessionStorage,
+} from "~/session.server";
 import { dateToHeader, formatTime, getOffset } from "~/utils";
 
 const anotherTimeFormattingFunc = (val: string | null) => {
   if (!val) return;
   const [h, m] = val.split(":");
   return formatTime(Number(h), m == "30");
+};
+
+// if an anonymous or stale user gets here, fail fast
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const session = await getSession(request);
+  const userId = await requireUserId(request);
+  // we ask stytch to validate the user token at most once every 12 hours
+  const lastValidated = await requireValidStytchToken(request);
+  session.set("last_validated", lastValidated);
+
+  return json(
+    { userId },
+    {
+      headers: {
+        "Set-Cookie": await sessionStorage.commitSession(session),
+      },
+    },
+  );
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {

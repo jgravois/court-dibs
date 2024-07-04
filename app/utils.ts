@@ -9,10 +9,8 @@ import type { User } from "~/models/user.server";
 
 const DEFAULT_REDIRECT = "/";
 
-export const STYTCH_URL_BASE =
-  process.env.NODE_ENV === "production"
-    ? "https://api.stytch.com/v1/magic_links"
-    : "https://test.stytch.com/v1/magic_links";
+const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? 'api' : 'test'
+export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`
 
 // hours
 export const getClientOffset = (): number =>

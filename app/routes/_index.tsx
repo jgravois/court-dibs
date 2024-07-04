@@ -1,24 +1,16 @@
 import type { User } from "@prisma/client";
-import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
 import { getReservations } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
 import { ReservationList, Rez } from "~/routes/reservation-list";
-import { getSession } from "~/session.server";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async () => {
   const reservations = await getReservations();
-
-  // next step is to verify that the token in the cookie is still valid
-  // with stytch when the application loads with stored credentials
-  const session = await getSession(request);
-  const token = session.get("stytch_session");
-  // confirmation that we can stash an arbitrary value and retrieve it.
-  token;
 
   return json({ reservations });
 };
