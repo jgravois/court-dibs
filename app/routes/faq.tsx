@@ -25,13 +25,13 @@ export default function FAQ() {
         </p>
         <p className="faq-q">Are reservations mandatory?</p>
         <p className="faq-a">
-          No! You can still use the facilities on a first come first served
-          basis if that&apos;s more your style
+          No! You can still use the facilities on a &apos;first come, first
+          served&apos; basis if that&apos;s more your style
         </p>
         <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
-          No account is required to view court reservations. HOA residents are
-          eligible to sign up and create new ones.
+          No account is required to view court reservations. Only HOA residents
+          are eligible to sign up and create new ones.
         </p>
         <p className="faq-q">What&apos;s the catch?</p>
         <p className="faq-a">
@@ -42,8 +42,8 @@ export default function FAQ() {
           >
             neighbor-made
           </a>
-          , free to use, and ad-free. Your your personal information will never
-          be shared with third parties
+          , free to use, and ad-free. Your personal information will never be
+          shared with third parties.
         </p>
 
         <p className="faq-q">
