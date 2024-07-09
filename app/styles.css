@@ -370,12 +370,11 @@ body {
   align-items: center;
   box-shadow: unset;
   display: flex;
-  cursor: default;
   justify-content: space-between;
 }
 
 .schedule_content .schedule_button___anon {
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .schedule_content___pickleball .schedule_button.schedule_button___open {
