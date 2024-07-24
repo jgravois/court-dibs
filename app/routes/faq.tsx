@@ -70,8 +70,8 @@ export default function FAQ() {
             to choose one of seven pre-selected options per day
           </li>
           <li>
-            A lot of scrolling is required to make a new reservation because
-            slots in the past and far into the future are all displayed at once
+            A lot of scrolling is required to make a new reservation. Slots in
+            the past and far into the future are all displayed at once
           </li>
           <li>15 minutes is set aside between reservations unnecessarily</li>
           <li>

@@ -1,10 +1,18 @@
-import type { User } from "@prisma/client";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useFetcher } from "@remix-run/react";
+import { ChangeEventHandler } from "react";
 
+import type { User } from "~/models/user.server";
 import { useOptionalUser } from "~/utils";
 
 export function Header() {
   const user: User | undefined = useOptionalUser();
+  const fetcher = useFetcher();
+
+  const submit: ChangeEventHandler = (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form = (event.target as any).form;
+    fetcher.submit(form, { method: "POST" });
+  };
 
   return (
     <header className="header">
@@ -14,17 +22,40 @@ export function Header() {
             Court dibs
           </Link>
           <h2 className="h2">Call dibs on one of our sportsball courts</h2>
-          <div className="header_illustration">
-            <div className="header_icon header_icon___pickleball">
-              <img alt="pball" src="/assets/pickleball-solid.svg" />
+          <fetcher.Form method="post" action="/some/route">
+            <div className="header_illustration">
+              <div className="header_icon header_icon___pickleball">
+                <img alt="pball" src="/assets/pickleball-solid.svg" />
+              </div>
+              <input
+                id="hidePb"
+                name="hidePb"
+                type="checkbox"
+                defaultChecked={user?.courtViz?.hidePb}
+                onChange={submit}
+              />
+              <div className="header_icon header_icon___tennis">
+                <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
+              </div>
+              <input
+                id="hide10s"
+                name="hide10s"
+                type="checkbox"
+                defaultChecked={user?.courtViz?.hide10s}
+                onChange={submit}
+              />
+              <div className="header_icon header_icon___basketball">
+                <img alt="bball" src="/assets/basketball-solid.svg" />
+              </div>
+              <input
+                id="hideBball"
+                name="hideBball"
+                type="checkbox"
+                defaultChecked={user?.courtViz?.hideBball}
+                onChange={submit}
+              />
             </div>
-            <div className="header_icon header_icon___tennis">
-              <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
-            </div>
-            <div className="header_icon header_icon___basketball">
-              <img alt="bball" src="/assets/basketball-solid.svg" />
-            </div>
-          </div>
+          </fetcher.Form>
         </div>
         <div className="header_right">
           <div className="header_rightGroup">

@@ -1,4 +1,3 @@
-import type { User } from "@prisma/client";
 import { useNavigate } from "@remix-run/react";
 import cn from "classnames";
 import {
@@ -12,6 +11,7 @@ import {
 import React from "react";
 import { Tooltip } from "react-tooltip";
 
+import type { User } from "~/models/user.server";
 import { dateToHeader, formatTime, getOffset } from "~/utils";
 
 // it would be nicer to use Reservation from @prisma/client
@@ -196,50 +196,60 @@ export const ReservationList = ({
         </div>
       </nav>
       <main className="main">
-        <div className="schedule">
-          <h3 className="schedule_header">
-            <div className="schedule_icon">
-              <img alt="pickleball paddle" src="/assets/pickleball.svg" />
-            </div>
-            <div>Pickleball</div>
-          </h3>
-          <TimeSlots
-            reservations={existingReservations.filter((r) => r.court === "pb")}
-            isLoggedIn={!!user}
-            court="pb"
-            date={date}
-          />
-        </div>
-        <div className="schedule schedule___basketball">
-          <h3 className="schedule_header">
-            <div className="schedule_icon">
-              <img alt="basketball" src="/assets/basketball.svg" />
-            </div>
-            <div>Basketball</div>
-          </h3>
-          <TimeSlots
-            reservations={existingReservations.filter(
-              (r) => r.court === "bball",
-            )}
-            isLoggedIn={!!user}
-            court="bball"
-            date={date}
-          />
-        </div>
-        <div className="schedule schedule___tennis">
-          <h3 className="schedule_header">
-            <div className="schedule_icon">
-              <img alt="tennis racquet" src="/assets/tennis.svg" />
-            </div>
-            <div>Tennis</div>
-          </h3>
-          <TimeSlots
-            reservations={existingReservations.filter((r) => r.court === "10s")}
-            isLoggedIn={!!user}
-            court="10s"
-            date={date}
-          />
-        </div>
+        {user?.courtViz?.hidePb ? null : (
+          <div className="schedule">
+            <h3 className="schedule_header">
+              <div className="schedule_icon">
+                <img alt="pickleball paddle" src="/assets/pickleball.svg" />
+              </div>
+              <div>Pickleball</div>
+            </h3>
+            <TimeSlots
+              reservations={existingReservations.filter(
+                (r) => r.court === "pb",
+              )}
+              isLoggedIn={!!user}
+              court="pb"
+              date={date}
+            />
+          </div>
+        )}
+        {user?.courtViz?.hide10s ? null : (
+          <div className="schedule schedule___tennis">
+            <h3 className="schedule_header">
+              <div className="schedule_icon">
+                <img alt="tennis racquet" src="/assets/tennis.svg" />
+              </div>
+              <div>Tennis</div>
+            </h3>
+            <TimeSlots
+              reservations={existingReservations.filter(
+                (r) => r.court === "10s",
+              )}
+              isLoggedIn={!!user}
+              court="10s"
+              date={date}
+            />
+          </div>
+        )}
+        {user?.courtViz?.hideBball ? null : (
+          <div className="schedule schedule___basketball">
+            <h3 className="schedule_header">
+              <div className="schedule_icon">
+                <img alt="basketball" src="/assets/basketball.svg" />
+              </div>
+              <div>Basketball</div>
+            </h3>
+            <TimeSlots
+              reservations={existingReservations.filter(
+                (r) => r.court === "bball",
+              )}
+              isLoggedIn={!!user}
+              court="bball"
+              date={date}
+            />
+          </div>
+        )}
         <Tooltip
           id="taken-tooltip"
           openEvents={{ mouseover: true, focus: true, click: true }}
