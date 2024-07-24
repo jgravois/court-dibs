@@ -1,21 +1,27 @@
-import type { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
-export type User = Prisma.UserGetPayload<{
-  include: { courtViz: true };
-}>;
+const courtViz: Prisma.UserInclude = {
+  courtViz: true,
+}
+
+const UserWithCourtViz = Prisma.validator<Prisma.UserArgs>()({
+  include: courtViz,
+})
+
+export type User = Prisma.UserGetPayload<typeof UserWithCourtViz>
 
 export async function getUserById(id: User["id"]) {
-  return prisma.user.findUnique({ where: { id }, include: { courtViz: true } });
+  return prisma.user.findUnique({ where: { id }, include: courtViz });
 }
 
 export async function getUserByEmail(email: User["email"]) {
-  return prisma.user.findUnique({ where: { email }, include: { courtViz: true } });
+  return prisma.user.findUnique({ where: { email }, include: courtViz });
 }
 
 export async function getUserByStytchId(stytchId: User["stytchId"]) {
-  return prisma.user.findUnique({ where: { stytchId }, include: { courtViz: true } });
+  return prisma.user.findUnique({ where: { stytchId }, include: courtViz });
 }
 
 export async function createUser({ email, stytchId, address }: { email: User["email"]; stytchId: string; address: string }) {

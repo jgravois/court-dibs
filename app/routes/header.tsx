@@ -31,7 +31,7 @@ export function Header() {
                 id="hidePb"
                 name="hidePb"
                 type="checkbox"
-                defaultChecked={user?.courtViz?.hidePb}
+                defaultChecked={!user?.courtViz?.hidePb}
                 onChange={submit}
               />
               <div className="header_icon header_icon___tennis">
@@ -41,7 +41,7 @@ export function Header() {
                 id="hide10s"
                 name="hide10s"
                 type="checkbox"
-                defaultChecked={user?.courtViz?.hide10s}
+                defaultChecked={!user?.courtViz?.hide10s}
                 onChange={submit}
               />
               <div className="header_icon header_icon___basketball">
@@ -51,7 +51,7 @@ export function Header() {
                 id="hideBball"
                 name="hideBball"
                 type="checkbox"
-                defaultChecked={user?.courtViz?.hideBball}
+                defaultChecked={!user?.courtViz?.hideBball}
                 onChange={submit}
               />
             </div>

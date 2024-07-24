@@ -12,9 +12,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const opts = {
       userId,
-      hidePb: formData.get("hidePb") === "on",
-      hide10s: formData.get("hide10s") === "on",
-      hideBball: formData.get("hideBball") === "on",
+      hidePb: formData.get("hidePb") !== "on",
+      hide10s: formData.get("hide10s") !== "on",
+      hideBball: formData.get("hideBball") !== "on",
     };
 
     const user = await getUserById(userId);
