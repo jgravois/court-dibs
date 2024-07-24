@@ -27,33 +27,39 @@ export function Header() {
               <div className="header_icon header_icon___pickleball">
                 <img alt="pball" src="/assets/pickleball-solid.svg" />
               </div>
-              <input
-                id="hidePb"
-                name="hidePb"
-                type="checkbox"
-                defaultChecked={!user?.courtViz?.hidePb}
-                onChange={submit}
-              />
+              {user ? (
+                <input
+                  id="hidePb"
+                  name="hidePb"
+                  type="checkbox"
+                  defaultChecked={!user.courtViz?.hidePb}
+                  onChange={submit}
+                />
+              ) : null}
               <div className="header_icon header_icon___tennis">
                 <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
               </div>
-              <input
-                id="hide10s"
-                name="hide10s"
-                type="checkbox"
-                defaultChecked={!user?.courtViz?.hide10s}
-                onChange={submit}
-              />
+              {user ? (
+                <input
+                  id="hide10s"
+                  name="hide10s"
+                  type="checkbox"
+                  defaultChecked={!user.courtViz?.hide10s}
+                  onChange={submit}
+                />
+              ) : null}
               <div className="header_icon header_icon___basketball">
                 <img alt="bball" src="/assets/basketball-solid.svg" />
               </div>
-              <input
-                id="hideBball"
-                name="hideBball"
-                type="checkbox"
-                defaultChecked={!user?.courtViz?.hideBball}
-                onChange={submit}
-              />
+              {user ? (
+                <input
+                  id="hideBball"
+                  name="hideBball"
+                  type="checkbox"
+                  defaultChecked={!user.courtViz?.hideBball}
+                  onChange={submit}
+                />
+              ) : null}
             </div>
           </fetcher.Form>
         </div>
