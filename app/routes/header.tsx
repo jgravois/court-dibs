@@ -24,42 +24,70 @@ export function Header() {
           <h2 className="h2">Call dibs on one of our sportsball courts</h2>
           <fetcher.Form method="post" action="/some/route">
             <div className="header_illustration">
-              <div className="header_icon header_icon___pickleball">
-                <img alt="pball" src="/assets/pickleball-solid.svg" />
-              </div>
               {user ? (
-                <input
-                  id="hidePb"
-                  name="hidePb"
-                  type="checkbox"
-                  defaultChecked={!user.courtViz?.hidePb}
-                  onChange={submit}
-                />
-              ) : null}
-              <div className="header_icon header_icon___tennis">
-                <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
-              </div>
+                <label className="checkbox_wrapper">
+                  <div className="header_icon header_icon___pickleball">
+                    <img alt="pball" src="/assets/pickleball-solid.svg" />
+                  </div>
+                  <input
+                    className="checkbox_input"
+                    id="hidePb"
+                    name="hidePb"
+                    type="checkbox"
+                    defaultChecked={!user.courtViz?.hidePb}
+                    onChange={submit}
+                  />
+                </label>
+              ) : (
+                <div className="header_icon header_icon___pickleball">
+                  <img alt="pball" src="/assets/pickleball-solid.svg" />
+                </div>
+              )}
+
               {user ? (
-                <input
-                  id="hide10s"
-                  name="hide10s"
-                  type="checkbox"
-                  defaultChecked={!user.courtViz?.hide10s}
-                  onChange={submit}
-                />
-              ) : null}
-              <div className="header_icon header_icon___basketball">
-                <img alt="bball" src="/assets/basketball-solid.svg" />
-              </div>
+                <label className="checkbox_wrapper">
+                  <div className="header_icon header_icon___tennis">
+                    <img
+                      alt="tennis racquet"
+                      src="/assets/tennis-ball-solid.svg"
+                    />
+                  </div>
+                  <input
+                    className="checkbox_input"
+                    id="hide10s"
+                    name="hide10s"
+                    type="checkbox"
+                    defaultChecked={!user.courtViz?.hide10s}
+                    onChange={submit}
+                  />
+                </label>
+              ) : (
+                <div className="header_icon header_icon___tennis">
+                  <img
+                    alt="tennis racquet"
+                    src="/assets/tennis-ball-solid.svg"
+                  />
+                </div>
+              )}
               {user ? (
-                <input
-                  id="hideBball"
-                  name="hideBball"
-                  type="checkbox"
-                  defaultChecked={!user.courtViz?.hideBball}
-                  onChange={submit}
-                />
-              ) : null}
+                <label className="checkbox_wrapper">
+                  <div className="header_icon header_icon___basketball">
+                    <img alt="bball" src="/assets/basketball-solid.svg" />
+                  </div>
+                  <input
+                    className="checkbox_input"
+                    id="hideBball"
+                    name="hideBball"
+                    type="checkbox"
+                    defaultChecked={!user.courtViz?.hideBball}
+                    onChange={submit}
+                  />
+                </label>
+              ) : (
+                <div className="header_icon header_icon___basketball">
+                  <img alt="bball" src="/assets/basketball-solid.svg" />
+                </div>
+              )}
             </div>
           </fetcher.Form>
         </div>
