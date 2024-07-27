@@ -113,31 +113,6 @@ body {
   margin-top: 20px;
 }
 
-.header_icon {
-  border-radius: 10px;
-  box-shadow: var(--neutral-dark-shadow);
-  height: 60px;
-  width: 60px;
-}
-
-.header_icon.header_icon___pickleball {
-  background-color: var(--base-pickleball);
-}
-
-.header_icon.header_icon___tennis {
-  background-color: var(--base-tennis);
-}
-
-.header_icon.header_icon___basketball {
-  background-color: var(--base-basketball);
-}
-
-.header_icon img {
-  filter: invert(98%) sepia(78%) saturate(95%) hue-rotate(196deg)
-    brightness(118%) contrast(100%);
-  margin: 16px;
-}
-
 .header_right {
   display: flex;
   flex-direction: column;
@@ -220,6 +195,45 @@ body {
 
 /* header checkbox */
 
+.header_icon {
+  background-color: var(--dim-text) !important;
+  border-radius: 10px;
+  box-shadow: var(--neutral-dark-shadow);
+  display: flex;
+  height: 80px;
+  padding: 5px;
+  width: 80px;
+}
+
+.header_icon.header_icon___pickleball {
+  background-color: var(--base-pickleball);
+}
+
+.header_icon.header_icon___tennis {
+  background-color: var(--base-tennis);
+}
+
+.header_icon.header_icon___basketball {
+  background-color: var(--base-basketball);
+}
+
+.header_icon img {
+  filter: invert(98%) sepia(78%) saturate(95%) hue-rotate(196deg)
+    brightness(118%) contrast(100%);
+  margin: 16px;
+}
+
+.header_checkmark {
+  position: relative;
+}
+
+.header_checkmark img {
+  display: none;
+  height: 20px;
+  position: absolute;
+  width: 20px;
+}
+
 .checkbox_input {
   clip: rect(0 0 0 0);
   clip-path: inset(100%);
@@ -228,6 +242,17 @@ body {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+
+  &:checked + .header_checkmark img {
+    display: block;
+    height: 20px;
+    position: absolute;
+    width: 20px;
+  }
+
+  &:checked + .header_icon.header_icon___check {
+    height: 50px;
+  }
 }
 
 /* nav */

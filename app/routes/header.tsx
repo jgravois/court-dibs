@@ -26,9 +26,6 @@ export function Header() {
             <div className="header_illustration">
               {user ? (
                 <label className="checkbox_wrapper">
-                  <div className="header_icon header_icon___pickleball">
-                    <img alt="pball" src="/assets/pickleball-solid.svg" />
-                  </div>
                   <input
                     className="checkbox_input"
                     id="hidePb"
@@ -37,6 +34,12 @@ export function Header() {
                     defaultChecked={!user.courtViz?.hidePb}
                     onChange={submit}
                   />
+                  <div className="header_checkmark">
+                    <img alt="check" src="https://svgshare.com/i/18ir.svg" />
+                  </div>
+                  <div className="header_icon header_icon___check header_icon___pickleball">
+                    <img alt="pball" src="/assets/pickleball-solid.svg" />
+                  </div>
                 </label>
               ) : (
                 <div className="header_icon header_icon___pickleball">
@@ -46,12 +49,6 @@ export function Header() {
 
               {user ? (
                 <label className="checkbox_wrapper">
-                  <div className="header_icon header_icon___tennis">
-                    <img
-                      alt="tennis racquet"
-                      src="/assets/tennis-ball-solid.svg"
-                    />
-                  </div>
                   <input
                     className="checkbox_input"
                     id="hide10s"
@@ -60,6 +57,15 @@ export function Header() {
                     defaultChecked={!user.courtViz?.hide10s}
                     onChange={submit}
                   />
+                  <div className="header_checkmark">
+                    <img alt="check" src="https://svgshare.com/i/18ir.svg" />
+                  </div>
+                  <div className="header_icon header_icon___check header_icon___tennis">
+                    <img
+                      alt="tennis racquet"
+                      src="/assets/tennis-ball-solid.svg"
+                    />
+                  </div>
                 </label>
               ) : (
                 <div className="header_icon header_icon___tennis">
@@ -71,9 +77,6 @@ export function Header() {
               )}
               {user ? (
                 <label className="checkbox_wrapper">
-                  <div className="header_icon header_icon___basketball">
-                    <img alt="bball" src="/assets/basketball-solid.svg" />
-                  </div>
                   <input
                     className="checkbox_input"
                     id="hideBball"
@@ -82,6 +85,12 @@ export function Header() {
                     defaultChecked={!user.courtViz?.hideBball}
                     onChange={submit}
                   />
+                  <div className="header_checkmark">
+                    <img alt="check" src="https://svgshare.com/i/18ir.svg" />
+                  </div>
+                  <div className="header_icon header_icon___check header_icon___basketball">
+                    <img alt="bball" src="/assets/basketball-solid.svg" />
+                  </div>
                 </label>
               ) : (
                 <div className="header_icon header_icon___basketball">
