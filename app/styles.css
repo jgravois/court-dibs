@@ -113,31 +113,6 @@ body {
   margin-top: 20px;
 }
 
-.header_icon {
-  border-radius: 10px;
-  box-shadow: var(--neutral-dark-shadow);
-  height: 60px;
-  width: 60px;
-}
-
-.header_icon.header_icon___pickleball {
-  background-color: var(--base-pickleball);
-}
-
-.header_icon.header_icon___tennis {
-  background-color: var(--base-tennis);
-}
-
-.header_icon.header_icon___basketball {
-  background-color: var(--base-basketball);
-}
-
-.header_icon img {
-  filter: invert(98%) sepia(78%) saturate(95%) hue-rotate(196deg)
-    brightness(118%) contrast(100%);
-  margin: 16px;
-}
-
 .header_right {
   display: flex;
   flex-direction: column;
@@ -216,6 +191,86 @@ body {
   .header_link___learnMore {
     padding-right: 14px; /* to appear aligned with button */
   }
+}
+
+/* header checkbox */
+
+.header_icon {
+  border-radius: 10px;
+  box-shadow: var(--neutral-dark-shadow);
+  cursor: pointer;
+  display: flex;
+  height: 100px;
+  padding: 15px;
+  width: 100px;
+}
+
+.header_icon img {
+  filter: invert(98%) sepia(78%) saturate(95%) hue-rotate(196deg)
+    brightness(118%) contrast(100%);
+  margin: 16px;
+}
+
+.checkbox_wrapper {
+  position: relative;
+}
+
+.header_checkmark {
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.352);
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  height: 22px;
+  justify-content: center;
+  left: 5px;
+  padding: 3px;
+  position: absolute;
+  top: 5px;
+  width: 22px;
+  z-index: 2;
+}
+
+.header_checkmark img {
+  border-radius: 5px;
+  cursor: pointer;
+  display: none;
+  position: relative;
+}
+
+.checkbox_input {
+  clip: rect(0 0 0 0);
+  clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+
+  &:checked + .header_checkmark img {
+    display: block;
+    position: absolute;
+  }
+
+  &:not(:checked) ~ .header_icon {
+    opacity: 0.5;
+  }
+
+  &:checked ~ .header_icon {
+    opacity: 1;
+  }
+}
+
+.header_icon.header_icon___pickleball {
+  background-color: var(--base-pickleball);
+}
+
+.header_icon.header_icon___tennis {
+  background-color: var(--base-tennis);
+}
+
+.header_icon.header_icon___basketball {
+  background-color: var(--base-basketball);
 }
 
 /* nav */
