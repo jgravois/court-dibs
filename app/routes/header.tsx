@@ -35,7 +35,7 @@ export function Header() {
                     onChange={submit}
                   />
                   <div className="header_checkmark">
-                    <img alt="check" src="https://svgshare.com/i/18ir.svg" />
+                    <img alt="check" src="/assets/check-solid.svg" />
                   </div>
                   <div className="header_icon header_icon___check header_icon___pickleball">
                     <img alt="pball" src="/assets/pickleball-solid.svg" />
@@ -58,7 +58,7 @@ export function Header() {
                     onChange={submit}
                   />
                   <div className="header_checkmark">
-                    <img alt="check" src="https://svgshare.com/i/18ir.svg" />
+                    <img alt="check" src="/assets/check-solid.svg" />
                   </div>
                   <div className="header_icon header_icon___check header_icon___tennis">
                     <img
@@ -86,7 +86,7 @@ export function Header() {
                     onChange={submit}
                   />
                   <div className="header_checkmark">
-                    <img alt="check" src="https://svgshare.com/i/18ir.svg" />
+                    <img alt="check" src="/assets/check-solid.svg" />
                   </div>
                   <div className="header_icon header_icon___check header_icon___basketball">
                     <img alt="bball" src="/assets/basketball-solid.svg" />
