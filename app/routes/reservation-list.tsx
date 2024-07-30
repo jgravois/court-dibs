@@ -185,6 +185,13 @@ export const ReservationList = ({
 
     return { date, existingReservations };
   });
+  // TODO: account for timezone offset
+  // .filter(({ date }) => {
+  //   const offsetNow = subHours(new Date(), getOffset());
+  //   const isToday = offsetNow.getDate() === date.getDate();
+  //   const isPast = isToday && offsetNow.getHours() >= 20;
+  //   return !isPast;
+  // });
 
   return availableDays.map(({ date, existingReservations }) => (
     <React.Fragment key={date.toISOString()}>
