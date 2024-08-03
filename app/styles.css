@@ -159,40 +159,6 @@ body {
   background-color: rgba(255, 255, 255, 0.323);
 }
 
-/* mobile header */
-
-@media screen and (max-width: 700px) {
-  .header {
-    min-height: 300px;
-  }
-
-  .h1 {
-    font-size: 34px;
-  }
-
-  .header_icon {
-    height: 40px;
-    width: 40px;
-  }
-
-  .header_icon img {
-    margin: 10px;
-  }
-
-  .header_link___button {
-    font-size: var(--small-font-size);
-  }
-
-  .header_rightGroup {
-    font-size: 15px;
-    padding-top: 10px;
-  }
-
-  .header_link___learnMore {
-    padding-right: 14px; /* to appear aligned with button */
-  }
-}
-
 /* header checkbox */
 
 .header_icon {
@@ -271,6 +237,47 @@ body {
 
 .header_icon.header_icon___basketball {
   background-color: var(--base-basketball);
+}
+
+/* mobile header */
+
+@media screen and (max-width: 700px) {
+  .header {
+    min-height: 300px;
+  }
+
+  .h1 {
+    font-size: 34px;
+  }
+
+  .header_icon {
+    height: 60px;
+    padding: 5px;
+    width: 60px;
+  }
+
+  .header_icon img {
+    margin: 10px;
+  }
+
+  .header_link___button {
+    font-size: var(--small-font-size);
+  }
+
+  .header_rightGroup {
+    font-size: 15px;
+    padding-top: 10px;
+  }
+
+  .header_link___learnMore {
+    padding-right: 14px; /* to appear aligned with button */
+  }
+
+  .header_checkmark {
+    height: 12px;
+    top: 5px;
+    width: 12px;
+  }
 }
 
 /* nav */
