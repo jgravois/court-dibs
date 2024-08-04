@@ -37,9 +37,9 @@ const isOverlapping = (r: Rez, date: Date, hour: number) =>
   );
 
 const newRezUrl = (date: Date, num: number, court: string, isHalf: boolean) =>
-  `/reservations/new?day=${date.toISOString().slice(0, 10)}&start=${
-    String(num).padStart(2, "0") + (isHalf ? "3" : "0") + "0:00"
-  }&court=${court}`;
+  `/reservations/new?day=${date.toISOString().slice(0, 10)}&start=${String(
+    num,
+  ).padStart(2, "0")}:${isHalf ? "30" : "00"}&court=${court}`;
 
 const TimeSlots = ({
   reservations,

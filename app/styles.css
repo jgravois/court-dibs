@@ -124,7 +124,6 @@ body {
 .header_rightGroup {
   align-items: center;
   flex-direction: row;
-  flex-wrap: nowrap;
   gap: 10px;
   display: flex;
   justify-content: flex-end;
@@ -142,6 +141,7 @@ body {
 
 .header_link___learnMore {
   color: var(--light);
+  text-wrap: nowrap;
 }
 
 .header_link___learnMore:hover {
