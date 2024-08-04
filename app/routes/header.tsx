@@ -102,10 +102,16 @@ export function Header() {
         </div>
         <div className="header_right">
           <div className="header_rightGroup">
+            <Link className="header_link___learnMore" to="/faq">
+              Learn more
+            </Link>
             {user ? (
               <Form action="/logout" method="post">
-                <button type="submit" className="header_user">
-                  {user.email}
+                <button
+                  type="submit"
+                  className="header_link header_link___button"
+                >
+                  Log out
                 </button>
               </Form>
             ) : (
@@ -113,9 +119,6 @@ export function Header() {
                 Sign up or log in
               </Link>
             )}
-            <Link className="header_link___learnMore" to="/faq">
-              Learn more
-            </Link>
           </div>
         </div>
       </div>

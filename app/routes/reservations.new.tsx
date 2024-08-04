@@ -140,17 +140,13 @@ export default function NewReservationPage() {
     <>
       <Header />
       <div className="container">
+        <h1>
+          {dateToHeader(day)} @ {anotherTimeFormattingFunc(params.get("start"))}
+        </h1>
+        <br />
+        <hr />
+        <br />
         <Form className="newRes_form" method="post">
-          <div className="newRes_group">
-            <div className="newRes_stack">
-              <p className="newRes_label">What day?</p>
-              <p>{dateToHeader(day)}</p>
-            </div>
-            <div className="newRes_stack">
-              <p className="newRes_label">What time are you starting?</p>
-              <p>{anotherTimeFormattingFunc(params.get("start"))}</p>
-            </div>
-          </div>
           <div className="newRes_group">
             <fieldset ref={durationRef} onChange={duskCheck}>
               <legend className="newRes_label">

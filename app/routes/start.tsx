@@ -100,7 +100,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect("/magic");
 };
 
-export const meta: MetaFunction = () => [{ title: "Sign up or login" }];
+export const meta: MetaFunction = () => [{ title: "Court dibs - login" }];
 
 export default function Start() {
   const [searchParams] = useSearchParams();

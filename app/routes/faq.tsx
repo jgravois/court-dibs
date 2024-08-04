@@ -2,9 +2,7 @@ import type { MetaFunction } from "@remix-run/node";
 
 import { Header } from "~/routes/header";
 
-export const meta: MetaFunction = () => [
-  { title: "Frequently asked questions" },
-];
+export const meta: MetaFunction = () => [{ title: "Court dibs - faq" }];
 
 export default function FAQ() {
   return (

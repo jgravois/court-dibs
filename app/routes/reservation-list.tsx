@@ -1,4 +1,4 @@
-import { useNavigate } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
 import cn from "classnames";
 import {
   addDays,
@@ -9,7 +9,6 @@ import {
   subHours,
 } from "date-fns";
 import React from "react";
-import { Tooltip } from "react-tooltip";
 
 import type { User } from "~/models/user.server";
 import { dateToHeader, formatTime, getOffset } from "~/utils";
@@ -36,6 +35,11 @@ const isOverlapping = (r: Rez, date: Date, hour: number) =>
       end: addHours(date, hour + 0.01),
     },
   );
+
+const newRezUrl = (date: Date, num: number, court: string, isHalf: boolean) =>
+  `/reservations/new?day=${date.toISOString().slice(0, 10)}&start=${
+    String(num).padStart(2, "0") + (isHalf ? "3" : "0") + "0:00"
+  }&court=${court}`;
 
 const TimeSlots = ({
   reservations,
@@ -91,53 +95,26 @@ const TimeSlots = ({
           return null;
         }
 
-        const handleOnHourClick = () =>
-          !isLoggedIn
-            ? // only show reservation details to logged in users
-              undefined
-            : // if court is already reserved, show details
-            onHourIsReserved
-            ? navigate(
-                `/reservations/${onHourPrivate?.id ?? onHourOpenPlay?.id}`,
-              )
-            : navigate(
-                `/reservations/new?day=${date
-                  .toISOString()
-                  .slice(0, 10)}&start=${
-                  String(num).padStart(2, "0") + ":00"
-                }&court=${court}`,
-              );
+        const onHourUrl = onHourIsReserved
+          ? `/reservations/${onHourPrivate?.id ?? onHourOpenPlay?.id}`
+          : isLoggedIn
+          ? newRezUrl(date, num, court, false)
+          : "/start";
 
-        const handleHalfHourClick = () =>
-          !isLoggedIn
-            ? undefined
-            : halfHourIsReserved
-            ? navigate(
-                `/reservations/${halfHourPrivate?.id ?? halfHourOpenPlay?.id}`,
-              )
-            : navigate(
-                `/reservations/new?day=${date
-                  .toISOString()
-                  .slice(0, 10)}&start=${
-                  String(num).padStart(2, "0") + ":30"
-                }&court=${court}`,
-              );
+        const onHalfHourUrl = halfHourIsReserved
+          ? `/reservations/${halfHourPrivate?.id ?? halfHourOpenPlay?.id}`
+          : isLoggedIn
+          ? newRezUrl(date, num, court, true)
+          : "/start";
 
         return (
           <div className="schedule_row" key={num}>
             <button
-              data-tooltip-id={
-                onHourIsReserved && !isLoggedIn ? "taken-tooltip" : undefined
-              }
-              data-tooltip-content={
-                onHourPrivate ? "Private reservation" : "Neighbors welcome"
-              }
               className={cn("schedule_button", {
                 schedule_button___private: !!onHourPrivate,
                 schedule_button___open: !!onHourOpenPlay,
-                schedule_button___anon: !isLoggedIn,
               })}
-              onClick={handleOnHourClick}
+              onClick={() => navigate(onHourUrl)}
             >
               {formatTime(num, false)}
             </button>
@@ -145,15 +122,8 @@ const TimeSlots = ({
               className={cn("schedule_button", {
                 schedule_button___private: !!halfHourPrivate,
                 schedule_button___open: !!halfHourOpenPlay,
-                schedule_button___anon: !isLoggedIn,
               })}
-              onClick={handleHalfHourClick}
-              data-tooltip-id={
-                halfHourIsReserved && !isLoggedIn ? "taken-tooltip" : undefined
-              }
-              data-tooltip-content={
-                halfHourPrivate ? "Private reservation" : "Neighbors welcome"
-              }
+              onClick={() => navigate(onHalfHourUrl)}
             >
               {formatTime(num, true)}
             </button>
@@ -171,38 +141,39 @@ export const ReservationList = ({
   reservations: Rez[];
   user?: User;
 }) => {
-  const availableDays = [...Array(7).keys()].map((num) => {
-    const offset = getOffset();
-    const rawDate = addDays(startOfDay(subHours(new Date(), offset)), num);
-    // 12:00am wherever code is running
-    const date = new Date(rawDate.toISOString().slice(0, 19));
+  const availableDays = [...Array(7).keys()]
+    .map((num) => {
+      const offset = getOffset();
+      const rawDate = addDays(startOfDay(subHours(new Date(), offset)), num);
+      // 12:00am wherever code is running
+      const date = new Date(rawDate.toISOString().slice(0, 19));
 
-    date.setHours(0 + offset);
+      date.setHours(0 + offset);
 
-    const existingReservations = reservations.filter((r) =>
-      isSameDay(startOfDay(subHours(r.start, offset)), date),
-    );
+      const existingReservations = reservations.filter((r) =>
+        isSameDay(startOfDay(subHours(r.start, offset)), date),
+      );
 
-    return { date, existingReservations };
-  });
-  // TODO: account for timezone offset
-  // .filter(({ date }) => {
-  //   const offsetNow = subHours(new Date(), getOffset());
-  //   const isToday = offsetNow.getDate() === date.getDate();
-  //   const isPast = isToday && offsetNow.getHours() >= 20;
-  //   return !isPast;
-  // });
+      return { date, existingReservations };
+    })
+    .filter(({ date }) => {
+      // omit today from list after 8pm (PT)
+      const offsetNow = subHours(new Date(), getOffset());
+      const isToday = offsetNow.getDate() === date.getDate();
+      const isPast = isToday && offsetNow.getHours() >= 20;
+      return !isPast;
+    });
 
-  return availableDays.map(({ date, existingReservations }) => (
+  return availableDays.map(({ date, existingReservations }, idx) => (
     <React.Fragment key={date.toISOString()}>
-      <nav className="nav">
+      <nav className="nav" id={"day-" + idx}>
         <div className="nav_content">
-          <a href="/" className="nav_link">
-            {dateToHeader(date)}&nbsp;
-          </a>
+          <Link className="nav_link" to={"/#day-" + idx}>
+            {dateToHeader(date)}
+          </Link>
         </div>
       </nav>
-      <main className="main">
+      <div className="main">
         {user?.courtViz?.hidePb ? null : (
           <div className="schedule">
             <h3 className="schedule_header">
@@ -257,11 +228,7 @@ export const ReservationList = ({
             />
           </div>
         )}
-        <Tooltip
-          id="taken-tooltip"
-          openEvents={{ mouseover: true, focus: true, click: true }}
-        />
-      </main>
+      </div>
     </React.Fragment>
   ));
 };

@@ -22,12 +22,12 @@ export default function Index() {
   return (
     <>
       <Header />
-      <div className="wrapper">
+      <main className="wrapper">
         <ReservationList
           reservations={data.reservations as Rez[]}
           user={user}
         />
-      </div>
+      </main>
     </>
   );
 }

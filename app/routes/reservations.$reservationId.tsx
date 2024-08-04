@@ -10,11 +10,12 @@ import invariant from "tiny-invariant";
 
 import { deleteReservation, getReservation } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
-import { requireUserId } from "~/session.server";
-import { format, useUser } from "~/utils";
+import { maybeUserId, requireUserId } from "~/session.server";
+import { format, useOptionalUser } from "~/utils";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
-  const userId = await requireUserId(request);
+  const userId = await maybeUserId(request);
+
   invariant(params.reservationId, "reservationId not found");
 
   const reservation = await getReservation({
@@ -39,25 +40,35 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 
 const courtIcon = (val: string) =>
   val === "pb" ? (
-    <div className="existingRes_courtIcon">
-      <img alt="pball" src="/assets/pickleball-solid.svg" />
+    <div className="existingRes_courtType">
+      <div className="existingRes_courtIcon">
+        <img alt="pball" src="/assets/pickleball-solid.svg" />
+      </div>
+      &nbsp;Pickleball
     </div>
   ) : val === "10s" ? (
-    <div className="existingRes_courtIcon">
-      <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
+    <div className="existingRes_courtType">
+      <div className="existingRes_courtIcon">
+        <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
+      </div>
+      &nbsp;Tennis
     </div>
   ) : (
-    <div className="existingRes_courtIcon">
-      <img alt="bball" src="/assets/basketball-solid.svg" />
+    <div className="existingRes_courtType">
+      <div className="existingRes_courtIcon">
+        <img alt="bball" src="/assets/basketball-solid.svg" />
+      </div>
+      &nbsp;Basketball
     </div>
   );
 
 export default function ReservationDetailsPage() {
   const data = useLoaderData<typeof loader>();
-  const currUser = useUser();
+  const currUser = useOptionalUser();
 
   const { start, end, user, court, openPlay } = data.reservation;
-  const canDelete = currUser.id === user.id;
+  const isAnon = !currUser;
+  const canDelete = user && currUser?.id === user.id;
 
   return (
     <>
@@ -65,14 +76,14 @@ export default function ReservationDetailsPage() {
       <div className="container">
         <div className="existingRes_stack">
           <p className="existingRes_label">{format(start, "iiii, MMMM dd")}</p>
-          <p>{user.email}</p>
+          {isAnon ? null : <p>{user.email}</p>}
           <p>
             {format(start, "h:mm bbb")}
             &nbsp;-&nbsp;
             {format(end, "h:mm bbb")}
           </p>
-          <p>{openPlay ? "Neighbors welcome" : null}</p>
           {courtIcon(court)}
+          <p>{openPlay ? "Neighbors welcome" : "Private reservation"}</p>
           {canDelete ? (
             <>
               <hr className="my-4" />
