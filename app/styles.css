@@ -168,7 +168,7 @@ body {
   cursor: pointer;
   display: flex;
   height: 80px;
-  padding: 15px;
+  padding: 20px;
   width: 80px;
 }
 
@@ -187,13 +187,13 @@ body {
   border-radius: 5px;
   cursor: pointer;
   display: flex;
-  height: 22px;
+  height: 18px;
   justify-content: center;
   left: 5px;
   padding: 3px;
   position: absolute;
   top: 5px;
-  width: 22px;
+  width: 18px;
   z-index: 2;
 }
 
