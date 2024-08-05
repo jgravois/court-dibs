@@ -1,10 +1,18 @@
-import type { User } from "@prisma/client";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link, useFetcher } from "@remix-run/react";
+import { ChangeEventHandler } from "react";
 
+import type { User } from "~/models/user.server";
 import { useOptionalUser } from "~/utils";
 
 export function Header() {
   const user: User | undefined = useOptionalUser();
+  const fetcher = useFetcher();
+
+  const submit: ChangeEventHandler = (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const form = (event.target as any).form;
+    fetcher.submit(form, { method: "POST" });
+  };
 
   return (
     <header className="header">
@@ -14,24 +22,96 @@ export function Header() {
             Court dibs
           </Link>
           <h2 className="h2">Call dibs on one of our sportsball courts</h2>
-          <div className="header_illustration">
-            <div className="header_icon header_icon___pickleball">
-              <img alt="pball" src="/assets/pickleball-solid.svg" />
+          <fetcher.Form method="post" action="/some/route">
+            <div className="header_illustration">
+              {user ? (
+                <label className="checkbox_wrapper">
+                  <input
+                    className="checkbox_input"
+                    id="hidePb"
+                    name="hidePb"
+                    type="checkbox"
+                    defaultChecked={!user.courtViz?.hidePb}
+                    onChange={submit}
+                  />
+                  <div className="header_checkmark">
+                    <img alt="check" src="/assets/check-solid.svg" />
+                  </div>
+                  <div className="header_icon header_icon___check header_icon___pickleball">
+                    <img alt="pball" src="/assets/pickleball-solid.svg" />
+                  </div>
+                </label>
+              ) : (
+                <div className="header_icon header_icon___pickleball">
+                  <img alt="pball" src="/assets/pickleball-solid.svg" />
+                </div>
+              )}
+
+              {user ? (
+                <label className="checkbox_wrapper">
+                  <input
+                    className="checkbox_input"
+                    id="hide10s"
+                    name="hide10s"
+                    type="checkbox"
+                    defaultChecked={!user.courtViz?.hide10s}
+                    onChange={submit}
+                  />
+                  <div className="header_checkmark">
+                    <img alt="check" src="/assets/check-solid.svg" />
+                  </div>
+                  <div className="header_icon header_icon___check header_icon___tennis">
+                    <img
+                      alt="tennis racquet"
+                      src="/assets/tennis-ball-solid.svg"
+                    />
+                  </div>
+                </label>
+              ) : (
+                <div className="header_icon header_icon___tennis">
+                  <img
+                    alt="tennis racquet"
+                    src="/assets/tennis-ball-solid.svg"
+                  />
+                </div>
+              )}
+              {user ? (
+                <label className="checkbox_wrapper">
+                  <input
+                    className="checkbox_input"
+                    id="hideBball"
+                    name="hideBball"
+                    type="checkbox"
+                    defaultChecked={!user.courtViz?.hideBball}
+                    onChange={submit}
+                  />
+                  <div className="header_checkmark">
+                    <img alt="check" src="/assets/check-solid.svg" />
+                  </div>
+                  <div className="header_icon header_icon___check header_icon___basketball">
+                    <img alt="bball" src="/assets/basketball-solid.svg" />
+                  </div>
+                </label>
+              ) : (
+                <div className="header_icon header_icon___basketball">
+                  <img alt="bball" src="/assets/basketball-solid.svg" />
+                </div>
+              )}
             </div>
-            <div className="header_icon header_icon___tennis">
-              <img alt="tennis racquet" src="/assets/tennis-ball-solid.svg" />
-            </div>
-            <div className="header_icon header_icon___basketball">
-              <img alt="bball" src="/assets/basketball-solid.svg" />
-            </div>
-          </div>
+          </fetcher.Form>
         </div>
         <div className="header_right">
           <div className="header_rightGroup">
+            <Link className="header_link___learnMore" to="/faq">
+              Learn more
+            </Link>
             {user ? (
               <Form action="/logout" method="post">
-                <button type="submit" className="header_user">
-                  {user.email}
+                <button
+                  type="submit"
+                  className="header_link header_link___button"
+                >
+                  Log out
                 </button>
               </Form>
             ) : (
@@ -39,9 +119,6 @@ export function Header() {
                 Sign up or log in
               </Link>
             )}
-            <Link className="header_link___learnMore" to="/faq">
-              Learn more
-            </Link>
           </div>
         </div>
       </div>

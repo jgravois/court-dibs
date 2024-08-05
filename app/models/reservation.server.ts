@@ -1,4 +1,4 @@
-import type { User, Reservation } from "@prisma/client";
+import { type User, Prisma } from "@prisma/client";
 import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subHours } from "date-fns";
 
 import { prisma } from "~/db.server";
@@ -8,19 +8,24 @@ export function getReservation({
   id,
   userId,
 }: Pick<Reservation, "id"> & {
-  userId: User["id"];
+  userId: User["id"] | undefined;
 }) {
-  userId;
   return prisma.reservation.findFirst({
-    select: { id: true, start: true, end: true, court: true, user: true, openPlay: true },
+    select: { id: true, start: true, end: true, court: true, user: !!userId, openPlay: true },
     where: { id },
   });
 }
 
+const reservationSelect = Prisma.validator<Prisma.ReservationArgs>()({
+  select: { id: true, start: true, end: true, court: true, openPlay: true },
+})
+
+export type Reservation = Prisma.ReservationGetPayload<typeof reservationSelect>
+
 // since we allow anonymous requests, we dont return PII
 export function getReservations() {
   return prisma.reservation.findMany({
-    select: { id: true, start: true, end: true, court: true, openPlay: true },
+    select: { ...reservationSelect.select }
   });
 }
 
@@ -30,13 +35,10 @@ export async function createReservation({
   court,
   openPlay,
   userId,
-}: Pick<Reservation, "start" | "end" | "court" | "openPlay"> & {
+}: Omit<Reservation, 'id'> & {
   userId: User["id"];
 }) {
   process.env.TZ = 'America/Los_Angeles'
-
-  console.log('new res start', start)
-  console.log('now', new Date())
 
   if (differenceInMinutes(end, start) > 120) {
     throw new Error('Reservations must be two hours or less')
