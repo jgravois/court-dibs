@@ -4,7 +4,7 @@ import { json, useLoaderData } from "@remix-run/react";
 
 import { getReservations } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
-import { ReservationList, Rez } from "~/routes/reservation-list";
+import { ReservationList } from "~/routes/reservation-list";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
@@ -23,10 +23,7 @@ export default function Index() {
     <>
       <Header />
       <main className="wrapper">
-        <ReservationList
-          reservations={data.reservations as Rez[]}
-          user={user}
-        />
+        <ReservationList reservations={data.reservations} user={user} />
       </main>
     </>
   );

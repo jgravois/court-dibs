@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "@remix-run/react";
+import { SerializeFrom } from "@remix-run/node";
+import { Link } from "@remix-run/react";
 import cn from "classnames";
 import {
   addDays,
@@ -10,24 +11,19 @@ import {
 } from "date-fns";
 import React from "react";
 
+import type { Reservation } from "~/models/reservation.server";
 import type { User } from "~/models/user.server";
 import { dateToHeader, formatTime, getOffset } from "~/utils";
-
-// it would be nicer to use Reservation from @prisma/client
-// but start/end are serialized to strings by useLoaderData 🙃
-export interface Rez {
-  id: string;
-  start: string;
-  end: string;
-  court: string;
-  openPlay: boolean;
-}
 
 const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const isOverlapping = (r: Rez, date: Date, hour: number) =>
+const isOverlapping = (
+  r: SerializeFrom<Reservation>,
+  date: Date,
+  hour: number,
+) =>
   areIntervalsOverlapping(
     { start: r.start, end: r.end },
     {
@@ -47,13 +43,11 @@ const TimeSlots = ({
   court,
   date,
 }: {
-  reservations: Rez[];
+  reservations: SerializeFrom<Reservation>[];
   isLoggedIn?: boolean;
   court: CourtType;
   date: Date;
 }) => {
-  const navigate = useNavigate();
-
   const offsetNow = subHours(new Date(), getOffset());
   const isToday = offsetNow.getDate() === date.getDate();
 
@@ -109,24 +103,24 @@ const TimeSlots = ({
 
         return (
           <div className="schedule_row" key={num}>
-            <button
+            <Link
+              to={onHourUrl}
               className={cn("schedule_button", {
                 schedule_button___private: !!onHourPrivate,
                 schedule_button___open: !!onHourOpenPlay,
               })}
-              onClick={() => navigate(onHourUrl)}
             >
               {formatTime(num, false)}
-            </button>
-            <button
+            </Link>
+            <Link
+              to={onHalfHourUrl}
               className={cn("schedule_button", {
                 schedule_button___private: !!halfHourPrivate,
                 schedule_button___open: !!halfHourOpenPlay,
               })}
-              onClick={() => navigate(onHalfHourUrl)}
             >
               {formatTime(num, true)}
-            </button>
+            </Link>
           </div>
         );
       })}
@@ -138,7 +132,7 @@ export const ReservationList = ({
   reservations,
   user,
 }: {
-  reservations: Rez[];
+  reservations: SerializeFrom<Reservation>[];
   user?: User;
 }) => {
   const availableDays = [...Array(7).keys()]
