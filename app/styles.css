@@ -261,12 +261,14 @@ body {
   }
 
   .header_rightGroup {
+    align-items: flex-end;
+    flex-direction: column-reverse;
     font-size: 15px;
     padding-top: 10px;
   }
 
   .header_link___learnMore {
-    padding-right: 14px; /* to appear aligned with button */
+    padding-right: 4px; /* to appear aligned with button */
   }
 
   .header_checkmark {
