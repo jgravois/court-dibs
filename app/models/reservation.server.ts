@@ -35,7 +35,7 @@ export async function createReservation({
   court,
   openPlay,
   userId,
-}: Reservation & {
+}: Omit<Reservation, 'id'> & {
   userId: User["id"];
 }) {
   process.env.TZ = 'America/Los_Angeles'
