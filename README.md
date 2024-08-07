@@ -23,8 +23,11 @@ cp .env.example .env
 1. create a test project
 1. plug the [API keys](https://stytch.com/docs/guides/dashboard/api-keys) into the `.env` file you just created.
 
-## development
+## testing
 
+to take the app for a test drive, you can log into the [staging](https://court-dibs-59c4-staging.fly.dev) environment as [courtdibs@maildrop.cc](https://maildrop.cc/inbox/?mailbox=courtdibs)
+
+## development
 ```sh
 npm run dev
 open http://localhost:3000
