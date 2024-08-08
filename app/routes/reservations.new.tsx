@@ -103,6 +103,8 @@ export default function NewReservationPage() {
   const date = params.get("day") ?? new Date().toISOString().slice(0, 10);
   const midnightLocal = new Date(`${date}T00:00:00`);
 
+  const startTime = params.get("start") ?? "08:00";
+
   const updateDuration: React.FormEventHandler<HTMLFieldSetElement> = (
     event,
   ) => {
@@ -230,13 +232,13 @@ export default function NewReservationPage() {
               name="startTime"
               type="text"
               ref={startTimeRef}
-              defaultValue={params.get("start") ?? "08:00"}
+              defaultValue={startTime}
             />
           </div>
           <DuskCalculator
-            day={midnightLocal}
+            date={date}
             duration={duration}
-            start={params.get("start") ?? "08:00"}
+            startTime={startTime}
           />
           {actionData?.errors?.start ? (
             <div className="pt-1 text-red-700">{actionData.errors.start}</div>
