@@ -19,6 +19,7 @@ export const DuskCalculator = ({
   const end = addMinutes(start, Number(duration));
   const { dusk } = SunCalc.getTimes(start, ...LAT_LONG);
 
+  // workaround https://github.com/mourner/suncalc/issues/11
   const tooDark =
     end.getHours() * 60 + end.getMinutes() >
     dusk.getHours() * 60 + dusk.getMinutes();

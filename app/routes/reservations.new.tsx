@@ -4,7 +4,7 @@ import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { addMinutes, format } from "date-fns";
 import React from "react";
 
-import { DuskCalculator } from "~/components/dusk-calculator";
+import { DuskCalculator } from "~/components/DuskCalculator";
 import { createReservation } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
 import {
