@@ -1,7 +1,7 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { addMinutes } from "date-fns";
+import { addMinutes, format } from "date-fns";
 import React from "react";
 
 import { DuskCalculator } from "~/components/dusk-calculator";
@@ -13,7 +13,7 @@ import {
   requireValidStytchToken,
   sessionStorage,
 } from "~/session.server";
-import { dateToHeader, formatTime } from "~/utils";
+import { formatTime } from "~/utils";
 
 const anotherTimeFormattingFunc = (val: string | null) => {
   if (!val) return;
@@ -115,7 +115,7 @@ export default function NewReservationPage() {
       <Header />
       <div className="container">
         <h1>
-          {dateToHeader(midnightLocal)}&nbsp;@&nbsp;
+          {format(midnightLocal, "iiii, MMMM dd")}&nbsp;@&nbsp;
           {anotherTimeFormattingFunc(params.get("start"))}
         </h1>
         <br />
