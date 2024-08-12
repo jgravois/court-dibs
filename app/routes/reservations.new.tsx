@@ -1,17 +1,10 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import {
-  addDays,
-  addHours,
-  addMinutes,
-  subHours,
-  startOfToday,
-  compareAsc,
-} from "date-fns";
+import { addMinutes, format } from "date-fns";
 import React from "react";
-import * as SunCalc from "suncalc";
 
+import { DuskCalculator } from "~/components/DuskCalculator";
 import { createReservation } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
 import {
@@ -20,7 +13,7 @@ import {
   requireValidStytchToken,
   sessionStorage,
 } from "~/session.server";
-import { dateToHeader, formatTime, getOffset } from "~/utils";
+import { formatTime } from "~/utils";
 
 const anotherTimeFormattingFunc = (val: string | null) => {
   if (!val) return;
@@ -57,7 +50,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const openPlay = formData.get("openPlay");
 
   if (typeof startTime !== "string" || startTime === "") {
-    return json({ errors: { start: "start is required" } }, { status: 400 });
+    return json(
+      { errors: { start: "start time is required" } },
+      { status: 400 },
+    );
   }
 
   if (typeof startDate !== "string" || startTime.length < 1) {
@@ -65,10 +61,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       { errors: { start: "start date is required" } },
       { status: 400 },
     );
-  }
-
-  if (typeof duration !== "string" || duration === "") {
-    return json({ errors: { start: "duration is required" } }, { status: 400 });
   }
 
   if (typeof duration !== "string" || duration === "") {
@@ -106,49 +98,34 @@ export default function NewReservationPage() {
   const courtRef = React.useRef<HTMLFieldSetElement>(null);
   const durationRef = React.useRef<HTMLFieldSetElement>(null);
 
-  const [tooDark, setTooDark] = React.useState(false);
+  const [duration, setDuration] = React.useState("60");
 
-  const offset = getOffset();
-  const rawDate = addHours(params.get("day") as unknown as Date, 0);
-  const day = new Date(rawDate.toISOString().slice(0, 19));
-  day.setHours(0 + offset);
+  const date = params.get("day") ?? new Date().toISOString().slice(0, 10);
+  const midnightLocal = new Date(`${date}T00:00:00`);
 
-  const offsetDay = subHours(day, offset);
-  const { dusk } = SunCalc.getTimes(addDays(offsetDay, 1), 33.48, -117.68);
+  const startTime = params.get("start") ?? "08:00";
 
-  const duskCheck = () => {
-    const duration =
-      (durationRef.current?.querySelector("input:checked") as HTMLInputElement)
-        ?.value ?? 30;
-
-    const end = addMinutes(
-      addHours(offsetDay, Number(params.get("start")?.split(":")[0] ?? 0)),
-      Number(duration) ?? 0,
-    );
-    setTooDark(compareAsc(end, dusk) === 1);
+  const updateDuration: React.FormEventHandler<HTMLFieldSetElement> = (
+    event,
+  ) => {
+    const target = event.target as HTMLInputElement;
+    setDuration(target.value);
   };
-
-  React.useEffect(duskCheck, [dusk, offsetDay, params]);
-
-  const errMessage = actionData?.errors?.start
-    ? actionData.errors.start
-    : tooDark
-    ? "Are you sure? It will be dark before this reservation concludes."
-    : undefined;
 
   return (
     <>
       <Header />
       <div className="container">
         <h1>
-          {dateToHeader(day)} @ {anotherTimeFormattingFunc(params.get("start"))}
+          {format(midnightLocal, "iiii, MMMM dd")}&nbsp;@&nbsp;
+          {anotherTimeFormattingFunc(params.get("start"))}
         </h1>
         <br />
         <hr />
         <br />
         <Form className="newRes_form" method="post">
           <div className="newRes_group">
-            <fieldset ref={durationRef} onChange={duskCheck}>
+            <fieldset ref={durationRef} onChange={updateDuration}>
               <legend className="newRes_label">
                 How long are you playing?
               </legend>
@@ -238,9 +215,7 @@ export default function NewReservationPage() {
           <div className="newRes_group">
             <fieldset>
               <label className="newRes_checkbox" htmlFor="openPlay">
-                <div className="newRes_bold">
-                  Are neighbors welcome to join?
-                </div>
+                <div className="newRes_bold">Neighbors are welcome to join</div>
                 <input type="checkbox" id="openPlay" name="openPlay" />
                 <span className="newRes_box"></span>
               </label>
@@ -251,21 +226,22 @@ export default function NewReservationPage() {
               name="startDate"
               ref={startDateRef}
               type="text"
-              defaultValue={
-                params.get("day") ?? startOfToday().toISOString().slice(0, 10)
-              }
+              defaultValue={date}
             />
             <input
               name="startTime"
               type="text"
               ref={startTimeRef}
-              defaultValue={params.get("start") ?? "08:00"}
+              defaultValue={startTime}
             />
           </div>
-          {errMessage ? (
-            <div className="pt-1 text-red-700" id="title-error">
-              {errMessage}
-            </div>
+          <DuskCalculator
+            date={date}
+            duration={duration}
+            startTime={startTime}
+          />
+          {actionData?.errors?.start ? (
+            <div className="pt-1 text-red-700">{actionData.errors.start}</div>
           ) : null}
           <div className="newRes_group newRes_group___small">
             <button type="submit" className="newRes_button">

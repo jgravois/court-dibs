@@ -2,9 +2,9 @@ import type { User } from "@prisma/client";
 import type { MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
+import { ReservationList } from "~/components/ReservationList";
 import { getReservations } from "~/models/reservation.server";
 import { Header } from "~/routes/header";
-import { ReservationList } from "~/routes/reservation-list";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
