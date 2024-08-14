@@ -21,7 +21,7 @@ export default function Index() {
 
   return (
     <>
-      <Header user={user} />
+      <Header exposePrefs />
       <main className="wrapper">
         <ReservationList reservations={data.reservations} user={user} />
       </main>

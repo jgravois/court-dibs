@@ -30,8 +30,7 @@ export function getReservations() {
 }
 
 export const getReservationCount = async () => {
-  const num = await prisma.reservation.aggregate({ _count: true });
-  return num._count
+  return (await prisma.reservation.aggregate({ _count: true }))._count;
 }
 
 
