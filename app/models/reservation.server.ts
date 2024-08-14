@@ -29,6 +29,11 @@ export function getReservations() {
   });
 }
 
+export const getReservationCount = async () => {
+  return (await prisma.reservation.aggregate({ _count: true }))._count;
+}
+
+
 export async function createReservation({
   start,
   end,
@@ -52,33 +57,22 @@ export async function createReservation({
     throw new Error('You\'re livin in the past dude')
   }
 
-  const closestHour = new Date()
-  closestHour.setHours(closestHour.getHours() + 1);
-  closestHour.setMinutes(0, 0, 0); // Resets also seconds and milliseconds
-
-  if (compareAsc(start, closestHour) === -1) {
-    throw new Error('Reservations cannot be made until the top of the hour')
-  }
-
   if (compareAsc(addDays(startOfToday(), 7), start) === -1) {
     throw new Error('Reservations more than seven days away are not allowed')
   }
 
   if (start.getHours() < 8) {
-    throw new Error('Reservations before 8:00 are not allowed')
+    throw new Error('Reservations cannot commence before 8:00 am')
   }
 
   if (compareAsc(subHours(end, getOffset()), addHours(startOfDay(start), 20)) === 1) {
-    throw new Error('Reservations must conclude by 20:00')
+    throw new Error('Reservations must conclude by 8:00 pm')
   }
 
   const overlaps = await prisma.reservation.findFirst({
     where: {
       AND: { court },
-      OR: {
-        end: { gt: start },
-        start: { lt: end }
-      }
+      OR: { end: { gt: start }, start: { lt: end } }
     }
   })
 
@@ -88,11 +82,7 @@ export async function createReservation({
     where: {
       userId,
       court,
-      start: {
-        gte: startOfDay(start),
-        lte: addDays(startOfDay(start), 1)
-      }
-
+      start: { gte: startOfDay(start), lte: addDays(startOfDay(start), 1) }
     }
   })
 
@@ -104,11 +94,7 @@ export async function createReservation({
       end,
       court,
       openPlay,
-      user: {
-        connect: {
-          id: userId,
-        },
-      },
+      user: { connect: { id: userId } },
     },
   });
 }

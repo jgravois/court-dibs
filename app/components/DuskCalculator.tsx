@@ -1,7 +1,7 @@
 import { addMinutes } from "date-fns";
 import * as SunCalc from "suncalc";
 
-const LAT_LONG = [-117.68, 33.48].reverse() as [number, number];
+const LAT_LONG = [-117.7, 33.5].reverse() as [number, number];
 
 // determine whether a America/Los_Angeles reservation
 // concludes before dusk in Orange County

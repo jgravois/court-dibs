@@ -5,8 +5,8 @@ import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
 
+import { Header } from "~/components/Header/Header";
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { Header } from "~/routes/header";
 import { STYTCH_BASE, validateCoordinates, validateEmail } from "~/utils";
 
 const HALF = "AIzaSyBI_vhCo";
