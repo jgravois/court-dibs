@@ -1,6 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
 
-import { Header } from "~/routes/header";
+import { Header } from "~/components/Header/Header";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs - faq" }];
 
@@ -43,9 +43,8 @@ export default function FAQ() {
           , free to use, and ad-free. Your personal information will never be
           shared with third parties.
         </p>
-
         <p className="faq-q">
-          Why not just use&nbsp;
+          What was wrong with&nbsp;
           <a
             className="oldschool-link"
             href="https://www.signupgenius.com/go/508044AACA72AAAF94-48435985-mariners#/"
@@ -55,34 +54,29 @@ export default function FAQ() {
           ?
         </p>
         <p className="faq-a">
-          Here are some things I don&apos;t love about our HOA&apos;s original
-          reservation system:
+          Our HOA&apos;s previous reservation system had some rough edges:
         </p>
         <ol className="faq-list">
           <li>
-            You can only reserve the pickleball court (i like to play tennis)
+            You could only reserve the pickleball court (i like to play tennis)
           </li>
-          <li>Only 90 minute reservations are allowed</li>
+          <li>Only 90 minute reservations were allowed</li>
           <li>
-            You can&apos;t specify the start time for your reservation, you have
-            to choose one of seven pre-selected options per day
+            You had to choose between seven pre-selected start times per day
           </li>
           <li>
-            A lot of scrolling is required to make a new reservation. Slots in
-            the past and far into the future are all displayed at once
+            Slots in the past and far into the future were all displayed at
+            once, leading to too much scrolling
           </li>
-          <li>15 minutes is set aside between reservations unnecessarily</li>
+          <li>15 minutes were set aside between reservations unnecessarily</li>
           <li>
-            When you reserve a court, your phone number is visible to the entire
-            world
+            When you reserved a court, your phone number was visible to the
+            entire world
           </li>
         </ol>
-        <p className="faq-a" style={{ paddingTop: 20 }}>
-          As far as i can tell, no one else has ever reserved a court using
-          SignUpGenius. I&apos;m hopeful that court dibs will be a little more
-          popular.
+        <p style={{ paddingTop: 20 }} className="faq-q">
+          Still have a question? feedback?
         </p>
-        <p className="faq-q">Still have a question? feedback?</p>
         <p className="faq-a">
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
             courtdibs.sjc@gmail.com

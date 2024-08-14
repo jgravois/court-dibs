@@ -5,8 +5,8 @@ import { addMinutes, format } from "date-fns";
 import React from "react";
 
 import { DuskCalculator } from "~/components/DuskCalculator";
+import { Header } from "~/components/Header/Header";
 import { createReservation } from "~/models/reservation.server";
-import { Header } from "~/routes/header";
 import {
   getSession,
   requireUserId,

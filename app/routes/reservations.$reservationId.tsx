@@ -8,8 +8,8 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
+import { Header } from "~/components/Header/Header";
 import { deleteReservation, getReservation } from "~/models/reservation.server";
-import { Header } from "~/routes/header";
 import { maybeUserId, requireUserId } from "~/session.server";
 import { format, useOptionalUser } from "~/utils";
 

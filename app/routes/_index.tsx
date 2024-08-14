@@ -2,9 +2,9 @@ import type { User } from "@prisma/client";
 import type { MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
+import { Header } from "~/components/Header";
 import { ReservationList } from "~/components/ReservationList";
 import { getReservations } from "~/models/reservation.server";
-import { Header } from "~/routes/header";
 import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs" }];
@@ -21,7 +21,7 @@ export default function Index() {
 
   return (
     <>
-      <Header />
+      <Header user={user} />
       <main className="wrapper">
         <ReservationList reservations={data.reservations} user={user} />
       </main>
