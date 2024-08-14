@@ -1,8 +1,13 @@
 import type { MetaFunction } from "@remix-run/node";
+import { json, useLoaderData } from "@remix-run/react";
 
 import { Header } from "~/components/Header/Header";
+import { getReservationCount } from "~/models/reservation.server";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs - faq" }];
+
+export const loader = async () =>
+  json({ rezCount: await getReservationCount() });
 
 export default function FAQ() {
   return (
@@ -18,7 +23,7 @@ export default function FAQ() {
           >
             Mariners Village
           </a>
-          &nbsp;HOA residents to reserve the pickleball, tennis and basketball
+          &nbsp;residents to reserve the pickleball, tennis and basketball
           courts
         </p>
         <p className="faq-q">Are reservations mandatory?</p>
@@ -53,13 +58,10 @@ export default function FAQ() {
           </a>
           ?
         </p>
-        <p className="faq-a">
-          Our HOA&apos;s previous reservation system had some rough edges:
+        <p className="faq-a" style={{ paddingBottom: 15 }}>
+          Our HOA&apos;s previous reservation system had a few rough edges:
         </p>
         <ol className="faq-list">
-          <li>
-            You could only reserve the pickleball court (i like to play tennis)
-          </li>
           <li>Only 90 minute reservations were allowed</li>
           <li>
             You had to choose between seven pre-selected start times per day
@@ -73,9 +75,10 @@ export default function FAQ() {
             When you reserved a court, your phone number was visible to the
             entire world
           </li>
+          <li>You could not reserve the tennis court</li>
         </ol>
         <p style={{ paddingTop: 20 }} className="faq-q">
-          Still have a question? feedback?
+          Questions/feedback
         </p>
         <p className="faq-a">
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
@@ -87,7 +90,7 @@ export default function FAQ() {
           </a>
         </p>
         <p className="faq-q">Credits</p>
-        <p className="faq-a">
+        <p>
           this website was created by&nbsp;
           <a className="oldschool-link" href="https://github.com/jgravois">
             @jgravois
@@ -99,18 +102,22 @@ export default function FAQ() {
           &nbsp;🎨
         </p>
         <p className="faq-a">
-          {" "}
           icons courtesy of&nbsp;
           <a className="oldschool-link" href="https://fontawesome.com/">
             font awesome
           </a>
-          , image courtesy of&nbsp;
+          , photo courtesy of&nbsp;
           <a
             className="oldschool-link"
             href="https://unsplash.com/photos/silhouette-photo-of-basketball-system-57rD2oDZquc"
           >
             @nicholasjio/unsplash
           </a>
+        </p>
+        <p className="faq-a">
+          So far, dibs has been called on a court&nbsp;
+          <strong>{useLoaderData<typeof loader>().rezCount}</strong>
+          &nbsp;times
         </p>
       </main>
     </>
