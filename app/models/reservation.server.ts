@@ -2,7 +2,6 @@ import { type User, Prisma } from "@prisma/client";
 import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subHours } from "date-fns";
 
 import { prisma } from "~/db.server";
-import { getOffset } from "~/utils";
 
 export function getReservation({
   id,
@@ -53,7 +52,10 @@ export async function createReservation({
     throw new Error('Reservations more than seven days in the future are not allowed')
   }
 
-  if (compareAsc(start, new Date()) === -1) {
+  // reservations can be created in a slot that has already begun, but only in the same hour
+  const isPast = compareAsc(start, new Date().setMinutes(0, 0, 0)) === -1
+
+  if (isPast) {
     throw new Error('You\'re livin in the past dude')
   }
 
@@ -65,7 +67,7 @@ export async function createReservation({
     throw new Error('Reservations cannot commence before 8:00 am')
   }
 
-  if (compareAsc(subHours(end, getOffset()), addHours(startOfDay(start), 20)) === 1) {
+  if (compareAsc(end, addHours(startOfDay(start), 20)) === 1) {
     throw new Error('Reservations must conclude by 8:00 pm')
   }
 

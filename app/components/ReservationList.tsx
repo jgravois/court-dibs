@@ -5,19 +5,29 @@ import {
   addDays,
   addHours,
   areIntervalsOverlapping,
-  isSameDay,
+  format,
   startOfDay,
-  subHours,
+  startOfToday,
 } from "date-fns";
 import React from "react";
 
 import type { Reservation } from "~/models/reservation.server";
 import type { User } from "~/models/user.server";
-import { dateToHeader, formatTime, getOffset } from "~/utils";
+import { changeTimezone, formatTime } from "~/utils";
 
 const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
+
+const maybePrefix = (date: Date) => {
+  const today = changeTimezone(startOfToday());
+  const tomorrow = addDays(today, 1);
+
+  if (date.toDateString() === today.toDateString()) return "today - ";
+  if (date.toDateString() === tomorrow.toDateString()) return "tomorrow - ";
+
+  return "";
+};
 
 const isOverlapping = (
   r: SerializeFrom<Reservation>,
@@ -25,7 +35,10 @@ const isOverlapping = (
   hour: number,
 ) =>
   areIntervalsOverlapping(
-    { start: r.start, end: r.end },
+    {
+      start: changeTimezone(new Date(r.start)),
+      end: changeTimezone(new Date(r.end)),
+    },
     {
       start: addHours(date, hour),
       end: addHours(date, hour + 0.01),
@@ -48,7 +61,7 @@ const TimeSlots = ({
   court: CourtType;
   date: Date;
 }) => {
-  const offsetNow = subHours(new Date(), getOffset());
+  const offsetNow = changeTimezone(new Date());
   const isToday = offsetNow.getDate() === date.getDate();
 
   return (
@@ -60,8 +73,8 @@ const TimeSlots = ({
       })}
     >
       {rezTimes.map((num) => {
-        const isPast = num <= offsetNow.getHours() && isToday;
-        const isJustPast = num === offsetNow.getHours() && isToday;
+        // hide reservation slots that have passed (completely)
+        if (isToday && num < offsetNow.getHours()) return null;
 
         const onHourPrivate = reservations.find(
           (r) => isOverlapping(r, date, num) && !r.openPlay,
@@ -81,13 +94,6 @@ const TimeSlots = ({
 
         const onHourIsReserved = onHourPrivate || onHourOpenPlay;
         const halfHourIsReserved = halfHourPrivate || halfHourOpenPlay;
-
-        if (
-          isPast &&
-          !(isJustPast && (onHourIsReserved || halfHourIsReserved))
-        ) {
-          return null;
-        }
 
         const onHourUrl = onHourIsReserved
           ? `/reservations/${onHourPrivate?.id ?? onHourOpenPlay?.id}`
@@ -135,24 +141,22 @@ export const ReservationList = ({
   reservations: SerializeFrom<Reservation>[];
   user?: User;
 }) => {
+  const midnightLocal = startOfDay(new Date());
+
   const availableDays = [...Array(7).keys()]
     .map((num) => {
-      const offset = getOffset();
-      const rawDate = addDays(startOfDay(subHours(new Date(), offset)), num);
-      // 12:00am wherever code is running
-      const date = new Date(rawDate.toISOString().slice(0, 19));
+      const date = addDays(midnightLocal, num);
 
-      date.setHours(0 + offset);
-
-      const existingReservations = reservations.filter((r) =>
-        isSameDay(startOfDay(subHours(r.start, offset)), date),
-      );
+      const existingReservations = reservations.filter((r) => {
+        const startDate = new Date(r.start).toDateString();
+        return date.toDateString() === startDate;
+      });
 
       return { date, existingReservations };
     })
     .filter(({ date }) => {
       // omit today from list after 8pm (PT)
-      const offsetNow = subHours(new Date(), getOffset());
+      const offsetNow = changeTimezone(new Date());
       const isToday = offsetNow.getDate() === date.getDate();
       const isPast = isToday && offsetNow.getHours() >= 20;
       return !isPast;
@@ -163,7 +167,8 @@ export const ReservationList = ({
       <nav className="nav" id={"day-" + idx}>
         <div className="nav_content">
           <Link className="nav_link" to={"/#day-" + idx}>
-            {dateToHeader(date)}
+            {maybePrefix(date)}
+            {format(date, "iiii, MMMM dd")}
           </Link>
         </div>
       </nav>
