@@ -146,11 +146,13 @@ export const ReservationList = ({
   const availableDays = [...Array(7).keys()]
     .map((num) => {
       const date = addDays(midnightLocal, num);
+      // const dateOC = addDays(changeTimezone(midnightLocal), num);
+      const existingReservations = reservations;
 
-      const existingReservations = reservations.filter((r) => {
-        const startDate = new Date(r.start).toDateString();
-        return date.toDateString() === startDate;
-      });
+      // const existingReservations = reservations.filter((r) => {
+      //   const startDate = new Date(r.start).toDateString();
+      //   return date.toDateString() === startDate;
+      // });
 
       return { date, existingReservations };
     })
@@ -167,6 +169,7 @@ export const ReservationList = ({
       <nav className="nav" id={"day-" + idx}>
         <div className="nav_content">
           <Link className="nav_link" to={"/#day-" + idx}>
+            {/* {maybePrefix(date)} */}
             {format(date, "iiii, MMMM dd")}
           </Link>
         </div>
