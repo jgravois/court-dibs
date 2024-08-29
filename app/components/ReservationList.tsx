@@ -7,7 +7,7 @@ import {
   areIntervalsOverlapping,
   format,
   startOfDay,
-  startOfToday,
+  // startOfToday,
 } from "date-fns";
 import React from "react";
 
@@ -19,15 +19,15 @@ const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-const maybePrefix = (date: Date) => {
-  const today = changeTimezone(startOfToday());
-  const tomorrow = addDays(today, 1);
+// const maybePrefix = (date: Date) => {
+//   const today = changeTimezone(startOfToday());
+//   const tomorrow = addDays(today, 1);
 
-  if (date.toDateString() === today.toDateString()) return "today - ";
-  if (date.toDateString() === tomorrow.toDateString()) return "tomorrow - ";
+//   if (date.toDateString() === today.toDateString()) return "today - ";
+//   if (date.toDateString() === tomorrow.toDateString()) return "tomorrow - ";
 
-  return "";
-};
+//   return "";
+// };
 
 const isOverlapping = (
   r: SerializeFrom<Reservation>,
@@ -167,7 +167,6 @@ export const ReservationList = ({
       <nav className="nav" id={"day-" + idx}>
         <div className="nav_content">
           <Link className="nav_link" to={"/#day-" + idx}>
-            {maybePrefix(date)}
             {format(date, "iiii, MMMM dd")}
           </Link>
         </div>
