@@ -6,8 +6,7 @@ import {
   addHours,
   areIntervalsOverlapping,
   format,
-  startOfDay,
-  // startOfToday,
+  isSameDay,
 } from "date-fns";
 import React from "react";
 
@@ -19,15 +18,17 @@ const rezTimes = [...Array(12).keys()].map((v: number) => v + 8);
 
 type CourtType = "pb" | "bball" | "10s";
 
-// const maybePrefix = (date: Date) => {
-//   const today = changeTimezone(startOfToday());
-//   const tomorrow = addDays(today, 1);
+const maybePrefix = (date: Date) => {
+  const offsetNow = changeTimezone(new Date());
 
-//   if (date.toDateString() === today.toDateString()) return "today - ";
-//   if (date.toDateString() === tomorrow.toDateString()) return "tomorrow - ";
+  const isToday = date.toDateString() === offsetNow.toDateString();
+  const isTomorrow =
+    date.toDateString() === addDays(offsetNow, 1).toDateString();
 
-//   return "";
-// };
+  if (isToday) return "today - ";
+  if (isTomorrow) return "tomorrow - ";
+  return "";
+};
 
 const isOverlapping = (
   r: SerializeFrom<Reservation>,
@@ -45,10 +46,15 @@ const isOverlapping = (
     },
   );
 
-const newRezUrl = (date: Date, num: number, court: string, isHalf: boolean) =>
-  `/reservations/new?day=${date.toISOString().slice(0, 10)}&start=${String(
-    num,
-  ).padStart(2, "0")}:${isHalf ? "30" : "00"}&court=${court}`;
+const newRezUrl = (date: Date, num: number, court: string, isHalf: boolean) => {
+  console.log(date, changeTimezone(new Date()));
+
+  return `/reservations/new?day=${date
+    .toISOString()
+    .slice(0, 10)}&start=${String(num).padStart(2, "0")}:${
+    isHalf ? "30" : "00"
+  }&court=${court}`;
+};
 
 const TimeSlots = ({
   reservations,
@@ -141,25 +147,21 @@ export const ReservationList = ({
   reservations: SerializeFrom<Reservation>[];
   user?: User;
 }) => {
-  const midnightLocal = startOfDay(new Date());
+  const offsetNow = changeTimezone(new Date());
 
   const availableDays = [...Array(7).keys()]
     .map((num) => {
-      const date = addDays(midnightLocal, num);
-      // const dateOC = addDays(changeTimezone(midnightLocal), num);
-      const existingReservations = reservations;
-
-      // const existingReservations = reservations.filter((r) => {
-      //   const startDate = new Date(r.start).toDateString();
-      //   return date.toDateString() === startDate;
-      // });
+      const date = addDays(offsetNow, num);
+      const existingReservations = reservations.filter((r) => {
+        const startDate = new Date(r.start).toDateString();
+        return date.toDateString() === startDate;
+      });
 
       return { date, existingReservations };
     })
     .filter(({ date }) => {
       // omit today from list after 8pm (PT)
-      const offsetNow = changeTimezone(new Date());
-      const isToday = offsetNow.getDate() === date.getDate();
+      const isToday = isSameDay(offsetNow, date);
       const isPast = isToday && offsetNow.getHours() >= 20;
       return !isPast;
     });
@@ -169,7 +171,7 @@ export const ReservationList = ({
       <nav className="nav" id={"day-" + idx}>
         <div className="nav_content">
           <Link className="nav_link" to={"/#day-" + idx}>
-            {/* {maybePrefix(date)} */}
+            {maybePrefix(date)}
             {format(date, "iiii, MMMM dd")}
           </Link>
         </div>
