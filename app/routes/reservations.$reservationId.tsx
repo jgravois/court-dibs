@@ -84,7 +84,6 @@ export default function ReservationDetailsPage() {
             {format(end, "h:mm bbb")}
           </p>
           <p>{openPlay ? "Neighbors welcome" : "Private reservation"}</p>
-          {/* {isAnon ? null : <p>{user.email}</p>} */}
           {isAnon ? null : (
             <p>
               {`${user.email} called dibs ${formatDistanceToNow(createdAt, {
