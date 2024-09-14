@@ -11,19 +11,26 @@ const DEFAULT_REDIRECT = "/";
 const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? 'api' : 'test'
 export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`
 
-// https://stackoverflow.com/questions/15141762/how-to-initialize-a-javascript-date-to-a-particular-time-zone
-export const changeTimezone = (date: Date) => {
+export const anotherTimeFormattingFunc = (val: string | null) => {
+  if (!val) return;
+  const [h, m] = val.split(":");
+  return formatTime(Number(h), m == "30");
+};
+
+export const getTimezoneOffsetMs = (date: Date) => {
   const invdate = new Date(
     date.toLocaleString("en-US", {
       timeZone: "America/Los_Angeles",
     }),
   );
+  return (date.getTime() - invdate.getTime())
+}
 
-  // then invdate will be 05:00 in LA and the diff is 7 hours
-  const diff = date.getTime() - invdate.getTime();
+// https://stackoverflow.com/questions/15141762/how-to-initialize-a-javascript-date-to-a-particular-time-zone
+export const changeTimezone = (date: Date) => new Date(date.getTime() - getTimezoneOffsetMs(date));
 
-  // so 12:00 in LA is 19:00 UTC
-  return new Date(date.getTime() - diff); // needs to subtract
+export const getTimezoneOffset = (date: Date) => {
+  return getTimezoneOffsetMs(date) / 60 / 60 / 1000
 }
 
 export const format = (date: Date | string, format: string) =>

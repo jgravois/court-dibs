@@ -10,7 +10,7 @@ export function getReservation({
   userId: User["id"] | undefined;
 }) {
   return prisma.reservation.findFirst({
-    select: { id: true, start: true, end: true, court: true, user: !!userId, openPlay: true },
+    select: { id: true, start: true, end: true, court: true, user: !!userId, openPlay: true, createdAt: true },
     where: { id },
   });
 }
