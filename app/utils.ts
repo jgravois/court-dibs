@@ -1,7 +1,6 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
-import { addDays, isSameDay, subHours } from "date-fns";
-import { formatInTimeZone, getTimezoneOffset } from "date-fns-tz";
+import { formatInTimeZone } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
@@ -12,29 +11,30 @@ const DEFAULT_REDIRECT = "/";
 const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? 'api' : 'test'
 export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`
 
-// hours
-export const getClientOffset = (): number =>
-  (getTimezoneOffset("America/Los_Angeles", new Date()) / 60 / 60 / 1000) *
-  -1;
+export const anotherTimeFormattingFunc = (val: string | null) => {
+  if (!val) return;
+  const [h, m] = val.split(":");
+  return formatTime(Number(h), m == "30");
+};
 
-export const getOffset = () => {
-  const serverOffset = new Date().getTimezoneOffset() / 60
-  return getClientOffset() - serverOffset
+export const getTimezoneOffsetMs = (date: Date) => {
+  const invdate = new Date(
+    date.toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+    }),
+  );
+  return (date.getTime() - invdate.getTime())
+}
+
+// https://stackoverflow.com/questions/15141762/how-to-initialize-a-javascript-date-to-a-particular-time-zone
+export const changeTimezone = (date: Date) => new Date(date.getTime() - getTimezoneOffsetMs(date));
+
+export const getTimezoneOffset = (date: Date) => {
+  return getTimezoneOffsetMs(date) / 60 / 60 / 1000
 }
 
 export const format = (date: Date | string, format: string) =>
   formatInTimeZone(date, "America/Los_Angeles", format);
-
-export const dateToHeader = (date: Date) => {
-  const offset = getOffset();
-  const today = subHours(new Date(), offset);
-  const prefix = isSameDay(subHours(date, offset), today)
-    ? "Today - "
-    : isSameDay(subHours(date, offset), addDays(today, 1))
-      ? "Tomorrow - "
-      : "";
-  return prefix + format(date, "iiii, MMMM dd");
-};
 
 export const formatTime = (rawHour: number, isHalf = false): string => {
   const hour = rawHour - (rawHour > 12 ? 12 : 0)

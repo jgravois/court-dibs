@@ -15,3 +15,5 @@ wireguard*
 
 notes
 coverage/
+
+/app/routes/debug.tsx

@@ -6,6 +6,7 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
+import { formatDistanceToNow } from "date-fns";
 import invariant from "tiny-invariant";
 
 import { Header } from "~/components/Header/Header";
@@ -66,7 +67,7 @@ export default function ReservationDetailsPage() {
   const data = useLoaderData<typeof loader>();
   const currUser = useOptionalUser();
 
-  const { start, end, user, court, openPlay } = data.reservation;
+  const { start, end, user, court, openPlay, createdAt } = data.reservation;
   const isAnon = !currUser;
   const canDelete = user && currUser?.id === user.id;
 
@@ -75,15 +76,21 @@ export default function ReservationDetailsPage() {
       <Header />
       <div className="container">
         <div className="existingRes_stack">
-          <p className="existingRes_label">{format(start, "iiii, MMMM dd")}</p>
-          {isAnon ? null : <p>{user.email}</p>}
+          <p className="existingRes_label">{format(start, "iiii, MMMM dd ")}</p>
+          {courtIcon(court)}
           <p>
             {format(start, "h:mm bbb")}
             &nbsp;-&nbsp;
             {format(end, "h:mm bbb")}
           </p>
-          {courtIcon(court)}
           <p>{openPlay ? "Neighbors welcome" : "Private reservation"}</p>
+          {isAnon ? null : (
+            <p>
+              {`${user.email} called dibs ${formatDistanceToNow(createdAt, {
+                addSuffix: true,
+              })}`}
+            </p>
+          )}
           {canDelete ? (
             <>
               <hr className="my-4" />

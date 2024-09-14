@@ -13,13 +13,7 @@ import {
   requireValidStytchToken,
   sessionStorage,
 } from "~/session.server";
-import { formatTime } from "~/utils";
-
-const anotherTimeFormattingFunc = (val: string | null) => {
-  if (!val) return;
-  const [h, m] = val.split(":");
-  return formatTime(Number(h), m == "30");
-};
+import { anotherTimeFormattingFunc } from "~/utils";
 
 // if an anonymous or stale user gets here, fail fast
 export const loader = async ({ request }: LoaderFunctionArgs) => {
