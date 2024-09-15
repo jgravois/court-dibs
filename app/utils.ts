@@ -1,15 +1,30 @@
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
+import { addDays } from "date-fns";
 import { formatInTimeZone } from "date-fns-tz";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
 import type { User } from "~/models/user.server";
 
+export type CourtType = "pb" | "bball" | "10s";
+
 const DEFAULT_REDIRECT = "/";
 
 const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? 'api' : 'test'
 export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`
+
+export const maybePrefix = (date: Date) => {
+  const offsetNow = changeTimezone(new Date());
+
+  const isToday = date.toDateString() === offsetNow.toDateString();
+  const isTomorrow =
+    date.toDateString() === addDays(offsetNow, 1).toDateString();
+
+  if (isToday) return "today - ";
+  if (isTomorrow) return "tomorrow - ";
+  return "";
+};
 
 export const anotherTimeFormattingFunc = (val: string | null) => {
   if (!val) return;
