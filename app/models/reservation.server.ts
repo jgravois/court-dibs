@@ -1,5 +1,5 @@
 import { type User, Prisma } from "@prisma/client";
-import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday } from "date-fns";
+import { addDays, addHours, compareAsc, differenceInMinutes, startOfDay, startOfToday, subDays } from "date-fns";
 
 import { prisma } from "~/db.server";
 
@@ -24,7 +24,12 @@ export type Reservation = Prisma.ReservationGetPayload<typeof reservationSelect>
 // since we allow anonymous requests, we dont return PII
 export function getReservations() {
   return prisma.reservation.findMany({
-    select: { ...reservationSelect.select }
+    select: { ...reservationSelect.select },
+    where: {
+      start: {
+        gt: subDays(startOfToday(), 1)
+      }
+    }
   });
 }
 

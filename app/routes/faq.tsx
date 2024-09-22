@@ -2,12 +2,12 @@ import type { MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
 import { Header } from "~/components/Header/Header";
-// import { getReservationCount } from "~/models/reservation.server";
+import { getReservationCount } from "~/models/reservation.server";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs - faq" }];
 
 export const loader = async () =>
-  json({ rezCount: "several" /*await getReservationCount()*/ });
+  json({ rezCount: await getReservationCount() });
 
 export default function FAQ() {
   return (
