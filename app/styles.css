@@ -165,7 +165,6 @@ body {
 .header_icon {
   border-radius: 10px;
   box-shadow: var(--neutral-dark-shadow);
-  cursor: pointer;
   display: flex;
   height: 80px;
   padding: 20px;
@@ -216,6 +215,10 @@ body {
   &:checked + .header_checkmark img {
     display: block;
     position: absolute;
+  }
+
+  ~ .header_icon {
+    cursor: pointer;
   }
 
   &:not(:checked) ~ .header_icon {
