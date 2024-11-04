@@ -34,6 +34,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  process.env.TZ = "America/Los_Angeles";
+
   const userId = await requireUserId(request);
   const formData = await request.formData();
 
@@ -65,7 +67,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors: { start: "court is required" } }, { status: 400 });
   }
 
-  const start = new Date(`${startDate}T${startTime}:00-07:00`);
+  const split = startDate.split("-").map((val) => Number(val));
+  const startDateObj = new Date(split[0], split[1], split[2]);
+  const pacificOffset = startDateObj.getTimezoneOffset() / 60;
+  const start = new Date(`${startDate}T${startTime}:00-0${pacificOffset}:00`);
 
   try {
     await createReservation({
