@@ -1,7 +1,7 @@
+import { tz, TZDate } from "@date-fns/tz";
 import { useMatches } from "@remix-run/react";
 import { contains } from "@terraformer/spatial";
-import { addDays } from "date-fns";
-import { formatInTimeZone } from "date-fns-tz";
+import { addDays, format as dateFnsFormat } from "date-fns";
 import type { GeoJSON } from "geojson";
 import { useMemo } from "react";
 
@@ -32,6 +32,12 @@ export const anotherTimeFormattingFunc = (val: string | null) => {
   return formatTime(Number(h), m == "30");
 };
 
+// either GMT -7 or -8 depending on the season
+export const getPacificOffset = (rawDate: string) => {
+  const [year, month, day] = rawDate.split("-").map((val) => Number(val));
+  return new TZDate(year, month, day, "America/Los_Angeles").getTimezoneOffset() / 60;
+}
+
 export const getTimezoneOffsetMs = (date: Date) => {
   const invdate = new Date(
     date.toLocaleString("en-US", {
@@ -49,7 +55,7 @@ export const getTimezoneOffset = (date: Date) => {
 }
 
 export const format = (date: Date | string, format: string) =>
-  formatInTimeZone(date, "America/Los_Angeles", format);
+  dateFnsFormat(date, format, { in: tz("America/Los_Angeles") });
 
 export const formatTime = (rawHour: number, isHalf = false): string => {
   const hour = rawHour - (rawHour > 12 ? 12 : 0)

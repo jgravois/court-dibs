@@ -13,7 +13,7 @@ import {
   requireValidStytchToken,
   sessionStorage,
 } from "~/session.server";
-import { anotherTimeFormattingFunc } from "~/utils";
+import { anotherTimeFormattingFunc, getPacificOffset } from "~/utils";
 
 // if an anonymous or stale user gets here, fail fast
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -67,10 +67,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ errors: { start: "court is required" } }, { status: 400 });
   }
 
-  const split = startDate.split("-").map((val) => Number(val));
-  const startDateObj = new Date(split[0], split[1], split[2]);
-  const pacificOffset = startDateObj.getTimezoneOffset() / 60;
-  const start = new Date(`${startDate}T${startTime}:00-0${pacificOffset}:00`);
+  const offset = getPacificOffset(startDate);
+  const start = new Date(`${startDate}T${startTime}:00-0${offset}:00`);
 
   try {
     await createReservation({
