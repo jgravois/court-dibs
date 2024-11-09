@@ -34,8 +34,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  process.env.TZ = "America/Los_Angeles";
-
   const userId = await requireUserId(request);
   const formData = await request.formData();
 
