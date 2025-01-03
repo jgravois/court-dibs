@@ -1,6 +1,8 @@
 import { addMinutes } from "date-fns";
 import * as SunCalc from "suncalc";
 
+import { getPacificOffset } from "~/utils";
+
 const LAT_LONG = [-117.7, 33.5].reverse() as [number, number];
 
 // determine whether a America/Los_Angeles reservation
@@ -15,7 +17,8 @@ export const DuskCalculator = ({
   duration: string;
   startTime: string;
 }) => {
-  const start = new Date(`${date}T${startTime}:00-07:00`);
+  const offset = getPacificOffset(date);
+  const start = new Date(`${date}T${startTime}:00-0${offset}:00`);
   const end = addMinutes(start, Number(duration));
   const { dusk } = SunCalc.getTimes(start, ...LAT_LONG);
 

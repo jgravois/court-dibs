@@ -32,7 +32,7 @@ export const anotherTimeFormattingFunc = (val: string | null) => {
   return formatTime(Number(h), m == "30");
 };
 
-// either GMT -7 or -8 depending on the season
+// 7 or 8 (from GMT) depending on the season
 export const getPacificOffset = (rawDate: string) => {
   const [year, month, day] = rawDate.split("-").map((val) => Number(val));
   return new TZDate(year, month, day, "America/Los_Angeles").getTimezoneOffset() / 60;
