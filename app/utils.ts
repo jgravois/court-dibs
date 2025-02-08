@@ -35,7 +35,9 @@ export const anotherTimeFormattingFunc = (val: string | null) => {
 // 7 or 8 (from GMT) depending on the season
 export const getPacificOffset = (rawDate: string) => {
   const [year, month, day] = rawDate.split("-").map((val) => Number(val));
-  return new TZDate(year, month, day, "America/Los_Angeles").getTimezoneOffset() / 60;
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#monthindex
+  const monthIdx = month - 1
+  return new TZDate(year, monthIdx, day, "America/Los_Angeles").getTimezoneOffset() / 60;
 }
 
 export const getTimezoneOffsetMs = (date: Date) => {
