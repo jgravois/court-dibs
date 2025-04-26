@@ -3,7 +3,7 @@ import invariant from "tiny-invariant";
 
 import type { User } from "~/models/user.server";
 import { getUserById } from "~/models/user.server";
-import { STYTCH_BASE } from "~/utils";
+import { THIRTY_DAYS_IN_MIN, STYTCH_BASE } from "~/utils";
 
 invariant(process.env.SESSION_SECRET, "SESSION_SECRET must be set");
 
@@ -68,7 +68,8 @@ export async function requireValidStytchToken(
   const session_token = session.get("stytch_session");
   const lastValidated = session.get('last_validated')
 
-  const stale = new Date().valueOf() - lastValidated > 1000 * 60 * 60 * 12
+  // we validate stytch tokens at most once a minute
+  const stale = new Date().valueOf() - lastValidated > 1000 * 60
   if (!stale) return lastValidated
 
   const rawResponse = await fetch(
@@ -84,7 +85,7 @@ export async function requireValidStytchToken(
 
       body: JSON.stringify({
         session_token,
-        session_duration_minutes: 43200
+        session_duration_minutes: THIRTY_DAYS_IN_MIN
       }),
     },
   );
