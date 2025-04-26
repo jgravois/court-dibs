@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 
 import { getUserByStytchId } from "~/models/user.server";
 import { createUserSession } from "~/session.server";
-import { STYTCH_BASE } from "~/utils";
+import { STYTCH_BASE, THIRTY_DAYS_IN_MIN } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Authenticate" }];
 
@@ -25,8 +25,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         )}`,
       },
 
-      // 30 days (5 to 527040 is valid range)
-      body: JSON.stringify({ token, session_duration_minutes: 43200 }),
+      // valid range is 5 minutes to 527040 minutes
+      body: JSON.stringify({
+        token,
+        session_duration_minutes: THIRTY_DAYS_IN_MIN,
+      }),
     });
 
     const res = await raw.json();

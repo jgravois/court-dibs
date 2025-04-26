@@ -11,6 +11,8 @@ export type CourtType = "pb" | "bball" | "10s";
 
 const DEFAULT_REDIRECT = "/";
 
+export const THIRTY_DAYS_IN_MIN = 43200;
+
 const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? 'api' : 'test'
 export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`
 
