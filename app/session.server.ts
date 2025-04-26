@@ -68,7 +68,8 @@ export async function requireValidStytchToken(
   const session_token = session.get("stytch_session");
   const lastValidated = session.get('last_validated')
 
-  const stale = new Date().valueOf() - lastValidated > 1000 * 60 * 60 * 12
+  // we validate stytch tokens at most once a minute
+  const stale = new Date().valueOf() - lastValidated > 1000 * 60
   if (!stale) return lastValidated
 
   const rawResponse = await fetch(

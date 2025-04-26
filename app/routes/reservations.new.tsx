@@ -23,14 +23,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const lastValidated = await requireValidStytchToken(request);
   session.set("last_validated", lastValidated);
 
-  return json(
-    { userId },
-    {
-      headers: {
-        "Set-Cookie": await sessionStorage.commitSession(session),
-      },
-    },
-  );
+  const expires = new Date(lastValidated + 1000 * 60 * 43200);
+  expires;
+  // passing in expires should resolve the bug
+  const cookie = await sessionStorage.commitSession(session /*{ expires }*/);
+
+  return json({ userId }, { headers: { "Set-Cookie": cookie } });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
