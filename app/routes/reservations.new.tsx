@@ -27,8 +27,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const lastValidated = await requireValidStytchToken(request);
   session.set("last_validated", lastValidated);
 
-  // TODO: pass through genuine session expiration (instead of estimating)
+  // before we started setting the maxAge/expiration explicitly
+  // this codepath converted it to 'Session' which invalidates it
+  // everytime the browser itself restarts 🙃
   const expires = new Date(lastValidated + 1000 * 60 * THIRTY_DAYS_IN_MIN);
+  // TODO: pass through genuine session expiration (instead of estimating)
   const cookie = await sessionStorage.commitSession(session, { expires });
 
   return json({ userId }, { headers: { "Set-Cookie": cookie } });
