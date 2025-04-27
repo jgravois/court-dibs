@@ -23,7 +23,7 @@ import {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const session = await getSession(request);
   const userId = await requireUserId(request);
-  // we ask stytch to validate the user token at most once every 12 hours
+  // we ask stytch to validate the user token at most once a minute
   const lastValidated = await requireValidStytchToken(request);
   session.set("last_validated", lastValidated);
 
