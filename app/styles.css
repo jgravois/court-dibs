@@ -705,7 +705,7 @@ input:checked ~ .newRes_box:before {
 }
 
 .faq-list {
-  list-style: unset;
+  list-style: devanagari;
   padding: revert;
 }
 
