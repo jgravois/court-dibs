@@ -15,7 +15,7 @@ export const Header = ({ exposePrefs = false }: { exposePrefs?: boolean }) => {
           <Link to="/" className="h1">
             Court dibs
           </Link>
-          <h2 className="h2">Call dibs on one of our sportsball courts</h2>
+          <h2 className="h2">Call dibs on a Mariners Village sportsball court</h2>
           {exposePrefs && user ? (
             <InteractiveCourtIcons user={user} />
           ) : (

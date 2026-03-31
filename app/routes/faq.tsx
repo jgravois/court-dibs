@@ -16,15 +16,8 @@ export default function FAQ() {
       <main className="container">
         <p className="faq-q">What is court dibs?</p>
         <p className="faq-a">
-          Court dibs is a tool for&nbsp;
-          <a
-            className="oldschool-link"
-            href="http://myhoa.com/marinersvillage/"
-          >
-            Mariners Village
-          </a>
-          &nbsp;residents to reserve the pickleball, tennis and basketball
-          courts
+          Court dibs is a tool for Mariners Village residents to reserve the
+          pickleball, tennis and basketball courts
         </p>
         <p className="faq-q">Are reservations mandatory?</p>
         <p className="faq-a">
@@ -33,20 +26,21 @@ export default function FAQ() {
         </p>
         <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
-          No account is required to view court reservations. Only HOA residents
-          are eligible to sign up and create new ones.
+          No account is required to view upcoming court reservations. Only HOA
+          residents are eligible to sign up for an account and reserve court
+          time.
         </p>
         <p className="faq-q">What&apos;s the catch?</p>
         <p className="faq-a">
-          Nothing! Court dibs is&nbsp;
+          Nothing! Court dibs is free to use, &nbsp;
           <a
             className="oldschool-link"
             href="https://github.com/jgravois/court-dibs"
           >
             neighbor-made
           </a>
-          , free to use, and ad-free. Your personal information will never be
-          shared with third parties.
+          , and ad-free. Your personal information will never be sold or shared
+          with third parties.
         </p>
         <p className="faq-q">
           What was wrong with&nbsp;
@@ -59,23 +53,17 @@ export default function FAQ() {
           ?
         </p>
         <p className="faq-a" style={{ paddingBottom: 15 }}>
-          Our HOA&apos;s previous reservation system had a few rough edges:
+          Our HOA&apos;s old reservation system had a few rough edges:
         </p>
         <ol className="faq-list">
           <li>Only 90 minute reservations were allowed</li>
+          <li>Only seven pre-selected start times per day were available</li>
           <li>
-            You had to choose between seven pre-selected start times per day
-          </li>
-          <li>
-            Slots in the past and far into the future were all displayed at
-            once, leading to too much scrolling
+            Slots in the past and far into the future were all displayed at once
           </li>
           <li>15 minutes were set aside between reservations unnecessarily</li>
-          <li>
-            When you reserved a court, your phone number was visible to the
-            entire world
-          </li>
-          <li>You could not reserve the tennis court</li>
+          <li>Resident phone numbers were visible to the entire world</li>
+          <li>The tennis court was not reservable</li>
         </ol>
         <p style={{ paddingTop: 20 }} className="faq-q">
           Questions/feedback
@@ -83,10 +71,6 @@ export default function FAQ() {
         <p className="faq-a">
           <a className="oldschool-link" href="mailto:placeholder@mail.com">
             courtdibs.sjc@gmail.com
-          </a>
-          &nbsp;/&nbsp;
-          <a className="oldschool-link" href="tel:+19093074532">
-            (909)307-4532
           </a>
         </p>
         <p className="faq-q">Credits</p>
@@ -102,11 +86,10 @@ export default function FAQ() {
           &nbsp;🎨
         </p>
         <p className="faq-a">
-          icons courtesy of&nbsp;
           <a className="oldschool-link" href="https://fontawesome.com/">
             font awesome
           </a>
-          , photo courtesy of&nbsp;
+          &nbsp;icons, photo courtesy of&nbsp;
           <a
             className="oldschool-link"
             href="https://unsplash.com/photos/silhouette-photo-of-basketball-system-57rD2oDZquc"
