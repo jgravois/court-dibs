@@ -69,7 +69,7 @@ export default function FAQ() {
           Questions/feedback
         </p>
         <p className="faq-a">
-          <a className="oldschool-link" href="mailto:placeholder@mail.com">
+          <a className="oldschool-link" href="mailto:courtdibs.sjc@gmail.com">
             courtdibs.sjc@gmail.com
           </a>
         </p>
