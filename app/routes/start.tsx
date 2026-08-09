@@ -24,19 +24,6 @@ import { THIRTY_DAYS_IN_MIN, STYTCH_BASE, validateEmail } from "~/utils";
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 
-// Decode a base64url challenge string into a Uint8Array
-function bufferDecode(value: string) {
-  let base64 = value.replace(/-/g, "+").replace(/_/g, "/");
-  const padLength = (4 - (base64.length % 4)) % 4;
-  base64 = base64.padEnd(base64.length + padLength, "=");
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
-  }
-  return bytes.buffer; // Returns an ArrayBuffer
-}
-
 const callStytch = async (email: string) => {
   const rawResponse = await fetch(
     STYTCH_BASE + "/magic_links/email/login_or_create",
