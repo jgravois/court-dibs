@@ -13,8 +13,8 @@ const DEFAULT_REDIRECT = "/";
 
 export const THIRTY_DAYS_IN_MIN = 43200;
 
-const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? 'api' : 'test'
-export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`
+const STYTCH_SUBDOMAIN = process.env.NODE_ENV === "production" ? "api" : "test";
+export const STYTCH_BASE = `https://${STYTCH_SUBDOMAIN}.stytch.com/v1`;
 
 export const maybePrefix = (date: Date) => {
   const offsetNow = changeTimezone(new Date());
@@ -38,9 +38,12 @@ export const anotherTimeFormattingFunc = (val: string | null) => {
 export const getPacificOffset = (rawDate: string) => {
   const [year, month, day] = rawDate.split("-").map((val) => Number(val));
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/Date#monthindex
-  const monthIdx = month - 1
-  return new TZDate(year, monthIdx, day, "America/Los_Angeles").getTimezoneOffset() / 60;
-}
+  const monthIdx = month - 1;
+  return (
+    new TZDate(year, monthIdx, day, "America/Los_Angeles").getTimezoneOffset() /
+    60
+  );
+};
 
 export const getTimezoneOffsetMs = (date: Date) => {
   const invdate = new Date(
@@ -48,25 +51,26 @@ export const getTimezoneOffsetMs = (date: Date) => {
       timeZone: "America/Los_Angeles",
     }),
   );
-  return (date.getTime() - invdate.getTime())
-}
+  return date.getTime() - invdate.getTime();
+};
 
 // https://stackoverflow.com/questions/15141762/how-to-initialize-a-javascript-date-to-a-particular-time-zone
-export const changeTimezone = (date: Date) => new Date(date.getTime() - getTimezoneOffsetMs(date));
+export const changeTimezone = (date: Date) =>
+  new Date(date.getTime() - getTimezoneOffsetMs(date));
 
 export const getTimezoneOffset = (date: Date) => {
-  return getTimezoneOffsetMs(date) / 60 / 60 / 1000
-}
+  return getTimezoneOffsetMs(date) / 60 / 60 / 1000;
+};
 
 export const format = (date: Date | string, format: string) =>
   dateFnsFormat(date, format, { in: tz("America/Los_Angeles") });
 
 export const formatTime = (rawHour: number, isHalf = false): string => {
-  const hour = rawHour - (rawHour > 12 ? 12 : 0)
-  const min = isHalf ? "30" : "00"
-  const suffix = rawHour >= 12 ? 'pm' : 'am'
-  return `${hour}:${min} ${suffix}`
-}
+  const hour = rawHour - (rawHour > 12 ? 12 : 0);
+  const min = isHalf ? "30" : "00";
+  const suffix = rawHour >= 12 ? "pm" : "am";
+  return `${hour}:${min} ${suffix}`;
+};
 
 /**
  * This should be used any time the redirect path is user-provided
@@ -157,3 +161,21 @@ const HOA_BOUNDARY = {
 
 export const validateCoordinates = (coordinates: [number, number]) =>
   contains(HOA_BOUNDARY as GeoJSON, { type: "Point", coordinates });
+
+export const stytchLoginOrCreate = async (email: string) => {
+  const rawResponse = await fetch(
+    STYTCH_BASE + "/magic_links/email/login_or_create",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${btoa(
+          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+        )}`,
+      },
+
+      body: JSON.stringify({ email }),
+    },
+  );
+  return rawResponse.json();
+};

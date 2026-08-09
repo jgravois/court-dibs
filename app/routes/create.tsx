@@ -16,30 +16,16 @@ import invariant from "tiny-invariant";
 
 import { Header } from "~/components/Header/Header";
 import { createUser } from "~/models/user.server";
-import { STYTCH_BASE, validateCoordinates, validateEmail } from "~/utils";
+import {
+  stytchLoginOrCreate,
+  validateCoordinates,
+  validateEmail,
+} from "~/utils";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 
 const ADDRESS_REQUIRED = "Street address is required";
-
-const callStytch = async (email: string) => {
-  const rawResponse = await fetch(
-    STYTCH_BASE + "/magic_links/email/login_or_create",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(
-          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-        )}`,
-      },
-
-      body: JSON.stringify({ email }),
-    },
-  );
-  return rawResponse.json();
-};
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
@@ -71,7 +57,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   // if new user and no coordinates, error that they are required
   // if new user and coordinates, verify first
   // if valid, call stytch, create user in DB and redirect to same generic landing page
-
   if (
     typeof address !== "string" ||
     address.length === 0 ||
@@ -108,7 +93,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     );
   }
 
-  const response = await callStytch(email);
+  const response = await stytchLoginOrCreate(email);
   if (response.user_id) {
     await createUser({ email, stytchId: response.user_id, address });
   }
@@ -133,9 +118,7 @@ export default function Create() {
   const options = { fields: ["geometry"] };
 
   useEffect(() => {
-    if (emailRef.current && email) {
-      emailRef.current.value = email;
-    }
+    emailRef.current!.value = email;
   }, [email]);
 
   useEffect(() => {
@@ -213,6 +196,7 @@ export default function Create() {
                   ref={addressRef}
                   name="street-address"
                   type="text"
+                  // eslint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus
                   autoComplete="off"
                   required

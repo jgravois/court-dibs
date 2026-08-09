@@ -32,11 +32,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     secret: process.env.STYTCH_SECRET,
   });
 
-  const resp = await client.webauthn.registerStart({
+  const response = await client.webauthn.registerStart({
     user_id: stytchId,
     domain,
   });
-  return json({ publicKey: resp.public_key_credential_creation_options });
+
+  return json({ publicKey: response.public_key_credential_creation_options });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -65,59 +66,58 @@ export const meta: MetaFunction = () => [{ title: "Passkey" }];
 export default function Passkey() {
   const data = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
-  const [hasRun, setHasRun] = React.useState(false);
+  const credentialRef = React.useRef<HTMLInputElement>(null);
   const [duplicateFailure, setDuplicateFailure] = React.useState(false);
 
-  React.useEffect(() => {
-    const doIt = async () => {
-      if (hasRun) return;
+  const createCredential = async () => {
+    try {
+      const credential = await webauthnJson.create({
+        publicKey: JSON.parse(data.publicKey),
+      });
+      credentialRef.current!.value = JSON.stringify(credential);
 
-      try {
-        const credential = await webauthnJson.create({
-          publicKey: JSON.parse(data.publicKey),
-        });
-        const input: HTMLInputElement | null =
-          document.querySelector("#credential");
-
-        if (input) {
-          input.value = JSON.stringify(credential);
-        }
-
-        const form = document.querySelector("#theform") as HTMLFormElement;
-        fetcher.submit(form, { method: "POST" });
-      } catch (e) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if ((e as any).message === DUPLICATE_ATTEMPT) {
-          setDuplicateFailure(true);
-        }
-      } finally {
-        setHasRun(true);
+      const form = document.querySelector("#theform") as HTMLFormElement;
+      fetcher.submit(form, { method: "POST" });
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if ((e as any).message === DUPLICATE_ATTEMPT) {
+        setDuplicateFailure(true);
       }
-    };
-    doIt();
-  });
+    }
+  };
 
-  const body = duplicateFailure ? (
-    <p>A passkey 🫆 already exists.</p>
+  const msg = duplicateFailure ? (
+    <p>A passkey 🫆 has already been created.</p>
   ) : (
-    <>
-      <p>Creating passkey 🫆...</p>
-      <Form method="post" id="theform">
-        <input
-          type="text"
-          id="credential"
-          name="credential"
-          defaultValue=""
-          hidden
-        />
-      </Form>
-    </>
+    <p>
+      Passkeys 🫆 allow you to sign in from a recognized device without having a
+      temporary code delivered to your email inbox.
+    </p>
   );
 
   return (
     <>
       <Header />
-      <main className="container">{body}</main>
+      <main className="container">
+        {msg}
+        <Form method="post" id="theform">
+          <input
+            ref={credentialRef}
+            type="text"
+            id="credential"
+            name="credential"
+            hidden
+          />
+        </Form>
+        {duplicateFailure ? null : (
+          <>
+            <button className="signUp_button" onClick={createCredential}>
+              Create passkey 🫆
+            </button>
+            &nbsp;<a href="/">Cancel</a>
+          </>
+        )}
+      </main>
     </>
   );
 }

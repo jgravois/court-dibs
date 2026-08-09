@@ -18,32 +18,18 @@ import invariant from "tiny-invariant";
 import { Header } from "~/components/Header/Header";
 import { getUserByEmail, getUserByStytchId } from "~/models/user.server";
 import { createUserSession } from "~/session.server";
-import { THIRTY_DAYS_IN_MIN, STYTCH_BASE, validateEmail } from "~/utils";
-
-const callStytch = async (email: string) => {
-  const rawResponse = await fetch(
-    STYTCH_BASE + "/magic_links/email/login_or_create",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(
-          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-        )}`,
-      },
-
-      body: JSON.stringify({ email }),
-    },
-  );
-  return rawResponse.json();
-};
+import {
+  stytchLoginOrCreate,
+  THIRTY_DAYS_IN_MIN,
+  validateEmail,
+} from "~/utils";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   invariant(process.env.STYTCH_PROJECT_ID, "STYTCH_PROJECT_ID must be set");
   invariant(process.env.STYTCH_SECRET, "STYTCH_SECRET must be set");
 
   const url = new URL(request.url);
-  const domain = url.hostname; // e.g., "example.com" (with port stripped)
+  const domain = url.hostname; // make sure to strip port (if present)
 
   const client = new stytch.Client({
     project_id: process.env.STYTCH_PROJECT_ID,
@@ -107,8 +93,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!user) return redirect(`/create?email=${encodeURIComponent(email)}`);
 
   // for existing users, we call stytch to send a magic link to their email
-  await callStytch(email);
-  return redirect("magic");
+  await stytchLoginOrCreate(email);
+  return redirect("/magic");
 };
 
 export const meta: MetaFunction = () => [{ title: "Court dibs - login" }];
@@ -154,7 +140,7 @@ export default function Start() {
 
     // Cleanup cancels the pending request on unmount
     return () => controller.abort();
-  }, []);
+  }, [data.public_key_credential_request_options]);
 
   return (
     <>
