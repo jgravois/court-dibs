@@ -1,5 +1,4 @@
 import * as webauthnJson from "@github/webauthn-json";
-import { Loader } from "@googlemaps/js-api-loader";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -20,9 +19,6 @@ import { Header } from "~/components/Header/Header";
 import { getUserByEmail, getUserByStytchId } from "~/models/user.server";
 import { createUserSession } from "~/session.server";
 import { THIRTY_DAYS_IN_MIN, STYTCH_BASE, validateEmail } from "~/utils";
-
-const HALF = "AIzaSyBI_vhCo";
-const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
 
 const callStytch = async (email: string) => {
   const rawResponse = await fetch(
@@ -123,76 +119,42 @@ export default function Start() {
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
-  const addressRef = useRef<HTMLInputElement>(null);
-  const coordinatesRef = useRef<HTMLInputElement>(null);
-  const magicRef = useRef<HTMLInputElement>(null);
   const credentialRef = useRef<HTMLInputElement>(null);
-  const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
-
-  const options = { fields: ["geometry"] };
-
-  // TODO: figure out how to run this async function once, immediately on page load
-  const autofillPasskey = async () => {
-    // const supported = await isAutofillSupported();
-    // if (!supported) return;
-
-    if (!data.public_key_credential_request_options) return;
-
-    const pkOpts = JSON.parse(data.public_key_credential_request_options);
-
-    try {
-      const credential = await webauthnJson.get({
-        publicKey: {
-          challenge: pkOpts.challenge,
-          rpId: window.location.hostname,
-          userVerification: "preferred",
-          // CRITICAL: Do NOT include allowCredentials here.
-          // Conditional UI relies entirely on "discoverable credentials".
-        },
-        mediation: "conditional", // This activates the form autofill integration
-      });
-
-      credentialRef.current!.value = JSON.stringify(credential);
-      const form = document.querySelector("#theform") as HTMLFormElement;
-      form.submit();
-    } catch (error) {
-      console.error("WebAuthn autofill failed or was aborted:", error);
-    }
-  };
 
   useEffect(() => {
-    const loader = new Loader({
-      apiKey: HALF + OTHER_HALF,
-      version: "weekly",
-    });
+    // we only want to make this call once
+    const controller = new AbortController();
 
-    loader.load().then(async (goo) => {
-      const { Autocomplete } = (await goo.maps.importLibrary(
-        "places",
-      )) as google.maps.PlacesLibrary;
+    if (!data.public_key_credential_request_options) return;
+    const pkOpts = JSON.parse(data.public_key_credential_request_options);
 
-      if (addressRef.current) {
-        autoCompleteRef.current = new Autocomplete(
-          addressRef.current as HTMLInputElement,
-          options,
-        );
-
-        autoCompleteRef.current?.addListener(
-          "place_changed",
-          async function () {
-            if (autoCompleteRef.current && coordinatesRef.current) {
-              const result = await autoCompleteRef.current.getPlace();
-              coordinatesRef.current.value = `${result?.geometry?.location?.lng()},${result?.geometry?.location?.lat()}`;
-            }
+    const fetchCredential = async () => {
+      try {
+        const credential = await webauthnJson.get({
+          publicKey: {
+            challenge: pkOpts.challenge,
+            rpId: window.location.hostname,
+            userVerification: "preferred",
+            // CRITICAL: Do NOT include allowCredentials here.
+            // Conditional UI relies entirely on "discoverable credentials".
           },
-        );
+          mediation: "conditional", // This activates the form autofill integration
+          signal: controller.signal,
+        });
+        credentialRef.current!.value = JSON.stringify(credential);
+        const form = document.querySelector("#theform") as HTMLFormElement;
+        form.submit();
+      } catch (err) {
+        if ((err as Error).name === "AbortError") return; // Ignore intentional aborts
+        console.error(err);
       }
-    });
-
-    return () => {
-      autoCompleteRef.current = null;
     };
-  });
+
+    fetchCredential();
+
+    // Cleanup cancels the pending request on unmount
+    return () => controller.abort();
+  }, []);
 
   return (
     <>
@@ -225,8 +187,6 @@ export default function Start() {
                 ) : null}
               </div>
             </div>
-            <input type="checkbox" onChange={autofillPasskey} />
-            <input type="checkbox" name="magic" ref={magicRef} hidden />
             <input type="text" name="credential" ref={credentialRef} hidden />
             <input type="hidden" name="redirectTo" value={redirectTo} />
             <button type="submit" className="signUp_button">
