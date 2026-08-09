@@ -1,7 +1,16 @@
 import { Loader } from "@googlemaps/js-api-loader";
-import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useSearchParams } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import invariant from "tiny-invariant";
 
@@ -31,6 +40,13 @@ const callStytch = async (email: string) => {
   );
   return rawResponse.json();
 };
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url);
+  const email = url.searchParams.get("email") || "";
+
+  return json({ email });
+}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   invariant(process.env.STYTCH_PROJECT_ID, "STYTCH_PROJECT_ID must be set");
@@ -105,17 +121,22 @@ export const meta: MetaFunction = () => [
 ];
 
 export default function Create() {
+  const { email } = useLoaderData<typeof loader>();
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const coordinatesRef = useRef<HTMLInputElement>(null);
-  const magicRef = useRef<HTMLInputElement>(null);
-  const credentialRef = useRef<HTMLInputElement>(null);
   const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
 
   const options = { fields: ["geometry"] };
+
+  useEffect(() => {
+    if (emailRef.current && email) {
+      emailRef.current.value = email;
+    }
+  }, [email]);
 
   useEffect(() => {
     const loader = new Loader({
@@ -192,6 +213,7 @@ export default function Create() {
                   ref={addressRef}
                   name="street-address"
                   type="text"
+                  autoFocus
                   autoComplete="off"
                   required
                   aria-invalid={actionData?.errors?.address ? true : undefined}
@@ -211,14 +233,6 @@ export default function Create() {
               name="coordinates"
               ref={coordinatesRef}
               style={{ display: "none" }}
-            />
-            <input type="checkbox" name="magic" ref={magicRef} hidden />
-            <input
-              type="text"
-              autoComplete="none"
-              name="credential"
-              ref={credentialRef}
-              hidden
             />
             <input type="hidden" name="redirectTo" value={redirectTo} />
             <button type="submit" className="signUp_button">

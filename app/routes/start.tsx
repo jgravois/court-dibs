@@ -104,7 +104,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const user = await getUserByEmail(email);
-  if (!user) return redirect("/create");
+  if (!user) return redirect(`/create?email=${encodeURIComponent(email)}`);
 
   // for existing users, we call stytch to send a magic link to their email
   await callStytch(email);
