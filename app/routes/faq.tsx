@@ -1,8 +1,10 @@
+import type { User } from "@prisma/client";
 import type { MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
 import { Header } from "~/components/Header/Header";
 import { getReservationCount } from "~/models/reservation.server";
+import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs - faq" }];
 
@@ -10,6 +12,7 @@ export const loader = async () =>
   json({ rezCount: await getReservationCount() });
 
 export default function FAQ() {
+  const user: User | undefined = useOptionalUser();
   return (
     <>
       <Header />
@@ -36,7 +39,7 @@ export default function FAQ() {
         <p className="faq-a">
           Nope. Court dibs doesn&rsquo;t support creating passwords. To log in
           you can have a temporary link delivered to your email inbox or use a{" "}
-          <a href="/passkeys/create">passkey 🫆</a>
+          <a href={user ? "/passkeys/create" : undefined}>passkey 🫆</a>
         </p>
         <p className="faq-q">What&rsquo;s the catch?</p>
         <p className="faq-a">

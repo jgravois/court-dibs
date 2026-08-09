@@ -66,6 +66,7 @@ export default function Passkey() {
   const data = useLoaderData<typeof loader>();
   const fetcher = useFetcher();
   const [hasRun, setHasRun] = React.useState(false);
+  const [duplicateFailure, setDuplicateFailure] = React.useState(false);
 
   React.useEffect(() => {
     const doIt = async () => {
@@ -84,31 +85,39 @@ export default function Passkey() {
 
         const form = document.querySelector("#theform") as HTMLFormElement;
         fetcher.submit(form, { method: "POST" });
-        setHasRun(true);
       } catch (e) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if ((e as any).message === DUPLICATE_ATTEMPT) {
-          // is it possible for a user to hit this in the wild?
+          setDuplicateFailure(true);
         }
+      } finally {
+        setHasRun(true);
       }
     };
     doIt();
   });
 
+  const body = duplicateFailure ? (
+    <p>A passkey 🫆 already exists.</p>
+  ) : (
+    <>
+      <p>Creating passkey 🫆...</p>
+      <Form method="post" id="theform">
+        <input
+          type="text"
+          id="credential"
+          name="credential"
+          defaultValue=""
+          hidden
+        />
+      </Form>
+    </>
+  );
+
   return (
     <>
       <Header />
-      <main className="container">
-        <p>Creating passkey...</p>
-        <Form method="post" id="theform">
-          <input
-            type="text"
-            id="credential"
-            name="credential"
-            defaultValue=""
-          />
-        </Form>
-      </main>
+      <main className="container">{body}</main>
     </>
   );
 }
