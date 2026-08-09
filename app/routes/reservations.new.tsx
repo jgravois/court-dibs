@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   // before we started setting the maxAge/expiration explicitly
   // this codepath converted it to 'Session' which invalidates it
-  // everytime the browser itself restarts 🙃
+  // every time the user quits and reopens the browser 🙃
   const expires = new Date(lastValidated + 1000 * 60 * THIRTY_DAYS_IN_MIN);
   // TODO: pass through genuine session expiration (instead of estimating)
   const cookie = await sessionStorage.commitSession(session, { expires });

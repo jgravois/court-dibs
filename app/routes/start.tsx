@@ -1,13 +1,21 @@
+import * as webauthnJson from "@github/webauthn-json";
 import { Loader } from "@googlemaps/js-api-loader";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef, useState } from "react";
+import stytch from "stytch";
 import invariant from "tiny-invariant";
 
 import { Header } from "~/components/Header/Header";
 import { createUser, getUserByEmail } from "~/models/user.server";
-import { STYTCH_BASE, validateCoordinates, validateEmail } from "~/utils";
+import { createUserSession } from "~/session.server";
+import {
+  THIRTY_DAYS_IN_MIN,
+  STYTCH_BASE,
+  validateCoordinates,
+  validateEmail,
+} from "~/utils";
 
 const HALF = "AIzaSyBI_vhCo";
 const OTHER_HALF = "hiRS0dvt5Yk7sAJ-978T_mUwd8";
@@ -40,24 +48,70 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const email = formData.get("email");
   const address = formData.get("street-address");
   const rawCoordinates = formData.get("coordinates") as string;
+  const magic = formData.get("magic");
+  const credential = formData.get("credential") as string;
+
+  const client = new stytch.Client({
+    project_id: process.env.STYTCH_PROJECT_ID,
+    secret: process.env.STYTCH_SECRET,
+  });
 
   if (!validateEmail(email)) {
     return json(
-      { errors: { email: "Email is invalid", password: null, address: null } },
+      {
+        userExists: false,
+        opts: null,
+        errors: { email: "Email is invalid", password: null, address: null },
+      },
       { status: 400 },
     );
   }
 
   // for existing users, we call stytch
-  // (TODO: redirect to generic landing page instead of signing them in
   // if new user and no coordinates, error that they are required
   // if new user and coordinates, verify first
   // if valid, call stytch, create user in DB and redirect to same generic landing page
-  const existingUser = await getUserByEmail(email);
+  const user = await getUserByEmail(email);
 
-  if (existingUser) {
-    await callStytch(email);
-    return redirect("/magic");
+  if (user) {
+    if (magic === "on") {
+      await callStytch(email);
+      return redirect("/magic");
+    }
+
+    if (credential !== "") {
+      const params = {
+        public_key_credential: formData.get("credential") as string,
+        session_duration_minutes: THIRTY_DAYS_IN_MIN,
+      };
+
+      const response = await client.webauthn.authenticate(params);
+
+      if (response.status_code === 200 && response.user_id) {
+        return createUserSession({
+          redirectTo: "/",
+          remember: true,
+          request,
+          userId: user.id,
+          token: response.session_token,
+          lastValidated: new Date().valueOf(),
+        });
+      }
+    }
+
+    const resp = await client.webauthn.authenticateStart({
+      user_id: user.stytchId,
+      domain: "localhost",
+    });
+
+    return json(
+      {
+        userExists: true,
+        opts: resp.public_key_credential_request_options,
+        errors: { address: null, email: null },
+      },
+      { status: 200 },
+    );
   }
 
   if (
@@ -68,6 +122,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   ) {
     return json(
       {
+        userExists: false,
+        opts: null,
         errors: {
           email: null,
           password: null,
@@ -82,6 +138,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!validateCoordinates(coordinates)) {
     return json(
       {
+        userExists: false,
+        opts: null,
         errors: {
           email: null,
           password: null,
@@ -109,6 +167,8 @@ export default function Start() {
   const emailRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLInputElement>(null);
   const coordinatesRef = useRef<HTMLInputElement>(null);
+  const magicRef = useRef<HTMLInputElement>(null);
+  const credentialRef = useRef<HTMLInputElement>(null);
   const autoCompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const [showAddress, setShowAddress] = useState(false);
 
@@ -159,8 +219,8 @@ export default function Start() {
       <Header />
       <div className="container">
         <div className="signUp_form">
-          <p>Sign up or log in to your account, no password needed!</p>
-          <Form method="post">
+          <p>Sign up or log in to your existing account</p>
+          <Form method="post" id="theform">
             <div>
               <label htmlFor="email" className="signUp_label">
                 Email address
@@ -219,11 +279,56 @@ export default function Start() {
               ref={coordinatesRef}
               style={{ display: "none" }}
             />
+            <input type="checkbox" name="magic" ref={magicRef} hidden />
+            <input
+              type="text"
+              autoComplete="none"
+              name="credential"
+              ref={credentialRef}
+              hidden
+            />
             <input type="hidden" name="redirectTo" value={redirectTo} />
-            <button type="submit" className="signUp_button">
-              Continue
-            </button>
+            {!actionData?.userExists && (
+              <button type="submit" className="signUp_button">
+                Continue
+              </button>
+            )}
           </Form>
+          {actionData?.userExists && (
+            <div style={{ display: "flex", gap: "20px" }}>
+              <button
+                className="signUp_button"
+                onClick={() => {
+                  if (magicRef.current) magicRef.current.checked = true;
+                  const form = document.querySelector(
+                    "#theform",
+                  ) as HTMLFormElement;
+                  form.submit();
+                }}
+              >
+                Email me a magic link
+              </button>
+              <button
+                className="signUp_button"
+                onClick={async () => {
+                  const credential = await webauthnJson.get({
+                    publicKey: JSON.parse(actionData.opts ?? ""),
+                  });
+
+                  if (credentialRef.current) {
+                    credentialRef.current.value = JSON.stringify(credential);
+                  }
+
+                  const form = document.querySelector(
+                    "#theform",
+                  ) as HTMLFormElement;
+                  form.submit();
+                }}
+              >
+                I'll use a passkey 🫆
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

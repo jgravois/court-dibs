@@ -30,6 +30,19 @@ export default function FAQ() {
           residents are eligible to sign up for an account and reserve court
           time.
         </p>
+        <p className="faq-q">
+          <i>Another</i> password?
+        </p>
+        <p className="faq-a">
+          Nope. Court dibs doesn't even support creating passwords. To log in
+          you can use: you can:
+          <ol className="faq-list">
+            <li>a temporary link delivered to your email inbox</li>
+            <li>
+              a <a href="/passkeys/create">passkey 🫆</a>
+            </li>
+          </ol>
+        </p>
         <p className="faq-q">What&apos;s the catch?</p>
         <p className="faq-a">
           Nothing! Court dibs is free to use, &nbsp;
