@@ -21,8 +21,8 @@ export default function FAQ() {
         </p>
         <p className="faq-q">Are reservations mandatory?</p>
         <p className="faq-a">
-          No! You can still use the facilities on a &apos;first come, first
-          served&apos; basis if that&apos;s more your style
+          No! You can still use the facilities on a &lsquo;first come, first
+          served&rsquo; basis if that&rsquo;s more your style
         </p>
         <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
@@ -34,8 +34,8 @@ export default function FAQ() {
           <i>Another</i> password?
         </p>
         <p className="faq-a">
-          Nope. Court dibs doesn't even support creating passwords. To log in
-          you can use: you can:
+          Nope. Court dibs doesn&rsquo;t even support creating passwords. To log
+          in you can use: you can:
           <ol className="faq-list">
             <li>a temporary link delivered to your email inbox</li>
             <li>
@@ -43,7 +43,7 @@ export default function FAQ() {
             </li>
           </ol>
         </p>
-        <p className="faq-q">What&apos;s the catch?</p>
+        <p className="faq-q">What&rsquo;s the catch?</p>
         <p className="faq-a">
           Nothing! Court dibs is free to use, &nbsp;
           <a
@@ -66,7 +66,7 @@ export default function FAQ() {
           ?
         </p>
         <p className="faq-a" style={{ paddingBottom: 15 }}>
-          Our HOA&apos;s old reservation system had a few rough edges:
+          Our HOA&rsquo;s old reservation system had a few rough edges:
         </p>
         <ol className="faq-list">
           <li>Only 90 minute reservations were allowed</li>

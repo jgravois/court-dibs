@@ -325,7 +325,7 @@ export default function Start() {
                   form.submit();
                 }}
               >
-                I'll use a passkey 🫆
+                I&rsquo;ll use a passkey 🫆
               </button>
             </div>
           )}
