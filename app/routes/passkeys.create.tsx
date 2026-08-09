@@ -22,6 +22,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   invariant(process.env.STYTCH_PROJECT_ID, "STYTCH_PROJECT_ID must be set");
   invariant(process.env.STYTCH_SECRET, "STYTCH_SECRET must be set");
 
+  const url = new URL(request.url);
+  const domain = url.host; // e.g., "example.com"
+
   const { stytchId } = await requireUser(request);
 
   const client = new stytch.Client({
@@ -31,7 +34,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const resp = await client.webauthn.registerStart({
     user_id: stytchId,
-    domain: "localhost",
+    domain,
   });
 
   return json({ publicKey: resp.public_key_credential_creation_options });

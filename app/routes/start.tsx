@@ -44,6 +44,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   invariant(process.env.STYTCH_PROJECT_ID, "STYTCH_PROJECT_ID must be set");
   invariant(process.env.STYTCH_SECRET, "STYTCH_SECRET must be set");
 
+  const url = new URL(request.url);
+  const domain = url.host; // e.g., "example.com"
+
   const formData = await request.formData();
   const email = formData.get("email");
   const address = formData.get("street-address");
@@ -101,7 +104,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     const resp = await client.webauthn.authenticateStart({
       user_id: user.stytchId,
-      domain: "localhost",
+      domain,
     });
 
     return json(
