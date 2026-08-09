@@ -45,7 +45,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   invariant(process.env.STYTCH_SECRET, "STYTCH_SECRET must be set");
 
   const url = new URL(request.url);
-  const domain = url.host; // e.g., "example.com"
+  const domain = url.hostname; // e.g., "example.com" (with port stripped)
 
   const formData = await request.formData();
   const email = formData.get("email");
@@ -102,19 +102,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
     }
 
-    const resp = await client.webauthn.authenticateStart({
-      user_id: user.stytchId,
-      domain,
-    });
+    try {
+      const resp = await client.webauthn.authenticateStart({
+        user_id: user.stytchId,
+        domain,
+      });
 
-    return json(
-      {
-        userExists: true,
-        opts: resp.public_key_credential_request_options,
-        errors: { address: null, email: null },
-      },
-      { status: 200 },
-    );
+      return json(
+        {
+          userExists: true,
+          opts: resp.public_key_credential_request_options,
+          errors: { address: null, email: null },
+        },
+        { status: 200 },
+      );
+    } catch (error) {
+      // user hasn't created a passkey for this domain yet
+      return json(
+        {
+          userExists: true,
+          opts: null,
+          errors: { address: null, email: null },
+        },
+        { status: 200 },
+      );
+    }
   }
 
   if (

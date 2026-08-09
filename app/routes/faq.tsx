@@ -34,14 +34,9 @@ export default function FAQ() {
           <i>Another</i> password?
         </p>
         <p className="faq-a">
-          Nope. Court dibs doesn&rsquo;t even support creating passwords. To log
-          in you can use: you can:
-          <ol className="faq-list">
-            <li>a temporary link delivered to your email inbox</li>
-            <li>
-              a <a href="/passkeys/create">passkey 🫆</a>
-            </li>
-          </ol>
+          Nope. Court dibs doesn&rsquo;t support creating passwords. To log in
+          you can have a temporary link delivered to your email inbox or use a{" "}
+          <a href="/passkeys/create">passkey 🫆</a>
         </p>
         <p className="faq-q">What&rsquo;s the catch?</p>
         <p className="faq-a">

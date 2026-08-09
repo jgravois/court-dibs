@@ -23,7 +23,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   invariant(process.env.STYTCH_SECRET, "STYTCH_SECRET must be set");
 
   const url = new URL(request.url);
-  const domain = url.host; // e.g., "example.com"
+  const domain = url.hostname; // e.g., "example.com" (with port stripped)
 
   const { stytchId } = await requireUser(request);
 
@@ -36,7 +36,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     user_id: stytchId,
     domain,
   });
-
   return json({ publicKey: resp.public_key_credential_creation_options });
 };
 
@@ -56,7 +55,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     user_id: stytchId,
     public_key_credential: formData.get("credential") as string,
   };
-
   await client.webauthn.register(params);
 
   return redirect("/");
@@ -90,7 +88,7 @@ export default function Passkey() {
       } catch (e) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if ((e as any).message === DUPLICATE_ATTEMPT) {
-          // etc.
+          // is it possible for a user to hit this in the wild?
         }
       }
     };
