@@ -46,8 +46,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!validateEmail(email)) {
     return json(
       {
-        userExists: false,
-        opts: null,
         errors: { email: "Email is invalid", password: null, address: null },
       },
       { status: 400 },
@@ -65,8 +63,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   ) {
     return json(
       {
-        userExists: false,
-        opts: null,
         errors: {
           email: null,
           password: null,
@@ -81,8 +77,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!validateCoordinates(coordinates)) {
     return json(
       {
-        userExists: false,
-        opts: null,
         errors: {
           email: null,
           password: null,

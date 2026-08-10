@@ -68,6 +68,7 @@ export default function Passkey() {
   const fetcher = useFetcher();
   const credentialRef = React.useRef<HTMLInputElement>(null);
   const [duplicateFailure, setDuplicateFailure] = React.useState(false);
+  const [err, setErr] = React.useState(null);
 
   const createCredential = async () => {
     try {
@@ -91,6 +92,8 @@ export default function Passkey() {
         setDuplicateFailure(true);
       }
       console.error(e);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setErr((e as any).message);
     }
   };
 
@@ -124,6 +127,7 @@ export default function Passkey() {
             &nbsp;<a href="/">Cancel</a>
           </>
         )}
+        <p>{err}</p>
       </main>
     </>
   );
