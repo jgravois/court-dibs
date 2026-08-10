@@ -86,8 +86,8 @@ export async function requireValidStytchToken(request: Request) {
   if (parsed.status_code !== 200) {
     throw await logout(request);
   }
-  const hasPasskey = parsed.user.webauthn_registrations.length > 0;
-  return { lastValidated: new Date().valueOf(), hasPasskey };
+
+  return new Date().valueOf();
 }
 
 export async function requireUser(request: Request) {
