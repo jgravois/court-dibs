@@ -26,7 +26,6 @@
   ],
   "dependencies": {
     "@date-fns/tz": "^1.2.0",
-    "@github/webauthn-json": "^2.1.1",
     "@googlemaps/js-api-loader": "^1.16.6",
     "@prisma/client": "^4.16.2",
     "@remix-run/css-bundle": "^2.8.0",

@@ -1,4 +1,3 @@
-import * as webauthnJson from "@github/webauthn-json";
 import {
   ActionFunctionArgs,
   json,
@@ -35,6 +34,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const response = await client.webauthn.registerStart({
     user_id: stytchId,
     domain,
+    use_base64_url_encoding: true,
   });
 
   return json({ publicKey: response.public_key_credential_creation_options });
@@ -71,9 +71,16 @@ export default function Passkey() {
 
   const createCredential = async () => {
     try {
-      const credential = await webauthnJson.create({
-        publicKey: JSON.parse(data.publicKey),
+      const parsed = JSON.parse(data.publicKey);
+
+      const PKCredential = PublicKeyCredential as PublicKeyCredentialWithJSON;
+      const publicKeyOptions =
+        PKCredential.parseCreationOptionsFromJSON(parsed);
+
+      const credential = await navigator.credentials.create({
+        publicKey: publicKeyOptions,
       });
+
       credentialRef.current!.value = JSON.stringify(credential);
 
       const form = document.querySelector("#theform") as HTMLFormElement;
@@ -83,6 +90,7 @@ export default function Passkey() {
       if ((e as any).message === DUPLICATE_ATTEMPT) {
         setDuplicateFailure(true);
       }
+      console.error(e);
     }
   };
 
@@ -106,7 +114,6 @@ export default function Passkey() {
             type="text"
             id="credential"
             name="credential"
-            hidden
           />
         </Form>
         {duplicateFailure ? null : (

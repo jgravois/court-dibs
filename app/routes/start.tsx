@@ -1,4 +1,3 @@
-import * as webauthnJson from "@github/webauthn-json";
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -112,21 +111,26 @@ export default function Start() {
     const controller = new AbortController();
 
     if (!data.public_key_credential_request_options) return;
-    const pkOpts = JSON.parse(data.public_key_credential_request_options);
+    const rawOptions = JSON.parse(data.public_key_credential_request_options);
 
     const fetchCredential = async () => {
       try {
-        const credential = await webauthnJson.get({
-          publicKey: {
-            challenge: pkOpts.challenge,
-            rpId: window.location.hostname,
-            userVerification: "preferred",
-            // CRITICAL: Do NOT include allowCredentials here.
-            // Conditional UI relies entirely on "discoverable credentials".
-          },
-          mediation: "conditional", // This activates the form autofill integration
+        const PKCredential = PublicKeyCredential as PublicKeyCredentialWithJSON;
+        const publicKeyOptions = PKCredential.parseRequestOptionsFromJSON({
+          ...rawOptions,
+          rpId: window.location.hostname,
+          userVerification: "preferred",
+          // Ensure allowCredentials is not set for conditional UI/autofill
+          allowCredentials: [],
+        });
+
+        // 4. Call native navigator.credentials.get
+        const credential = await navigator.credentials.get({
+          publicKey: publicKeyOptions,
+          mediation: "conditional", // Triggers autofill/passkey dropdown
           signal: controller.signal,
         });
+
         credentialRef.current!.value = JSON.stringify(credential);
         const form = document.querySelector("#theform") as HTMLFormElement;
         form.submit();
