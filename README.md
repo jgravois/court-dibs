@@ -2,12 +2,14 @@
 
 > view it live: https://courtdibs.com
 
-Court dibs is a simple app for making court reservations. A login is not required to view the upcoming calendar.
+Court dibs is a simple app for making court reservations. An account is not required to view the upcoming calendar.
 
 ### features
 
 - geofenced signup
 - one click, passwordless login
+  - magic keys
+  - passkeys
 - dynamic dusk calculation
 - fast page loads, instant transitions
 
@@ -28,6 +30,7 @@ cp .env.example .env
 to take the app for a test drive, you can log into the [staging](https://court-dibs-59c4-staging.fly.dev) environment as [courtdibs@maildrop.cc](https://maildrop.cc/inbox/?mailbox=courtdibs)
 
 ## development
+
 ```sh
 npm run dev
 open http://localhost:3000

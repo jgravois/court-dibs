@@ -17,3 +17,5 @@ notes
 coverage/
 
 /app/routes/debug.tsx
+
+.DS_Store

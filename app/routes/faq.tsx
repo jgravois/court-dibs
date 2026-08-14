@@ -1,8 +1,10 @@
+import type { User } from "@prisma/client";
 import type { MetaFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
 
 import { Header } from "~/components/Header/Header";
 import { getReservationCount } from "~/models/reservation.server";
+import { useOptionalUser } from "~/utils";
 
 export const meta: MetaFunction = () => [{ title: "Court dibs - faq" }];
 
@@ -10,6 +12,7 @@ export const loader = async () =>
   json({ rezCount: await getReservationCount() });
 
 export default function FAQ() {
+  const user: User | undefined = useOptionalUser();
   return (
     <>
       <Header />
@@ -21,8 +24,8 @@ export default function FAQ() {
         </p>
         <p className="faq-q">Are reservations mandatory?</p>
         <p className="faq-a">
-          No! You can still use the facilities on a &apos;first come, first
-          served&apos; basis if that&apos;s more your style
+          No! You can still use the facilities on a &lsquo;first come, first
+          served&rsquo; basis if that&rsquo;s more your style
         </p>
         <p className="faq-q">Is an account required?</p>
         <p className="faq-a">
@@ -30,17 +33,25 @@ export default function FAQ() {
           residents are eligible to sign up for an account and reserve court
           time.
         </p>
-        <p className="faq-q">What&apos;s the catch?</p>
+        <p className="faq-q">
+          Do I have to create <i>another</i> password?
+        </p>
         <p className="faq-a">
-          Nothing! Court dibs is free to use, &nbsp;
+          Nope. Court dibs doesn&rsquo;t support creating passwords. To log in
+          you can either have a temporary link delivered to your email inbox or
+          use a <a href={user ? "/passkeys/create" : undefined}>passkey 🫆</a>
+        </p>
+        <p className="faq-q">What&rsquo;s the catch?</p>
+        <p className="faq-a">
+          Nothing! Court dibs is open source,{" "}
           <a
             className="oldschool-link"
             href="https://github.com/jgravois/court-dibs"
           >
             neighbor-made
-          </a>
-          , and ad-free. Your personal information will never be sold or shared
-          with third parties.
+          </a>{" "}
+          and provided free of charge. Browsing is not tracked and personal
+          information will never be sold or shared with third parties.
         </p>
         <p className="faq-q">
           What was wrong with&nbsp;
@@ -53,7 +64,7 @@ export default function FAQ() {
           ?
         </p>
         <p className="faq-a" style={{ paddingBottom: 15 }}>
-          Our HOA&apos;s old reservation system had a few rough edges:
+          Our HOA&rsquo;s old reservation system had a few rough edges:
         </p>
         <ol className="faq-list">
           <li>Only 90 minute reservations were allowed</li>
@@ -63,7 +74,7 @@ export default function FAQ() {
           </li>
           <li>15 minutes were set aside between reservations unnecessarily</li>
           <li>Resident phone numbers were visible to the entire world</li>
-          <li>The tennis court was not reservable</li>
+          <li>The tennis court could not be reserved</li>
         </ol>
         <p style={{ paddingTop: 20 }} className="faq-q">
           Questions/feedback

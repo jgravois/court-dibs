@@ -43,9 +43,7 @@ export async function getUser(request: Request) {
   throw await logout(request);
 }
 
-export async function maybeUserId(
-  request: Request
-) {
+export async function maybeUserId(request: Request) {
   return await getUserId(request);
 }
 
@@ -61,39 +59,35 @@ export async function requireUserId(
   return userId;
 }
 
-export async function requireValidStytchToken(
-  request: Request
-) {
+export async function requireValidStytchToken(request: Request) {
   const session = await getSession(request);
   const session_token = session.get("stytch_session");
-  const lastValidated = session.get('last_validated')
+  const lastValidated = session.get("last_validated");
 
   // we validate stytch tokens at most once a minute
-  const stale = new Date().valueOf() - lastValidated > 1000 * 60
-  if (!stale) return lastValidated
+  const stale = new Date().valueOf() - lastValidated > 1000 * 60;
+  if (!stale) return lastValidated;
 
-  const rawResponse = await fetch(
-    STYTCH_BASE + "/sessions/authenticate",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(
-          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-        )}`,
-      },
-
-      body: JSON.stringify({
-        session_token,
-        session_duration_minutes: THIRTY_DAYS_IN_MIN
-      }),
+  const rawResponse = await fetch(STYTCH_BASE + "/sessions/authenticate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${btoa(
+        `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+      )}`,
     },
-  );
+
+    body: JSON.stringify({
+      session_token,
+      session_duration_minutes: THIRTY_DAYS_IN_MIN,
+    }),
+  });
   const parsed = await rawResponse.json();
   if (parsed.status_code !== 200) {
-    throw await logout(request)
+    throw await logout(request);
   }
-  return new Date().valueOf()
+
+  return new Date().valueOf();
 }
 
 export async function requireUser(request: Request) {
@@ -142,19 +136,16 @@ export async function logout(request: Request) {
   const session_token = session.get("stytch_session");
 
   // invalidate token
-  await fetch(
-    STYTCH_BASE + "/sessions/revoke",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Basic ${btoa(
-          `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
-        )}`,
-      },
-      body: JSON.stringify({ session_token }),
+  await fetch(STYTCH_BASE + "/sessions/revoke", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${btoa(
+        `${process.env.STYTCH_PROJECT_ID}:${process.env.STYTCH_SECRET}`,
+      )}`,
     },
-  );
+    body: JSON.stringify({ session_token }),
+  });
 
   return redirect("/", {
     headers: {

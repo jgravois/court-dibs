@@ -36,12 +36,12 @@ script_checks = [ ]
 
   [[services.tcp_checks]]
   grace_period = "1s"
-  interval = "15s"
+  interval = "60s"
   restart_limit = 0
   timeout = "2s"
 
   [[services.http_checks]]
-  interval = "20s"
+  interval = "60s"
   grace_period = "5s"
   method = "get"
   path = "/healthcheck"
