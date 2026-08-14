@@ -34,24 +34,24 @@ export default function FAQ() {
           time.
         </p>
         <p className="faq-q">
-          <i>Another</i> password?
+          Do I have to create <i>another</i> password?
         </p>
         <p className="faq-a">
           Nope. Court dibs doesn&rsquo;t support creating passwords. To log in
-          you can have a temporary link delivered to your email inbox or use a{" "}
-          <a href={user ? "/passkeys/create" : undefined}>passkey 🫆</a>
+          you can either have a temporary link delivered to your email inbox or
+          use a <a href={user ? "/passkeys/create" : undefined}>passkey 🫆</a>
         </p>
         <p className="faq-q">What&rsquo;s the catch?</p>
         <p className="faq-a">
-          Nothing! Court dibs is free to use, &nbsp;
+          Nothing! Court dibs is open source,{" "}
           <a
             className="oldschool-link"
             href="https://github.com/jgravois/court-dibs"
           >
             neighbor-made
-          </a>
-          , and ad-free. Your personal information will never be sold or shared
-          with third parties.
+          </a>{" "}
+          and provided free of charge. Browsing is not tracked and personal
+          information will never be sold or shared with third parties.
         </p>
         <p className="faq-q">
           What was wrong with&nbsp;
@@ -74,7 +74,7 @@ export default function FAQ() {
           </li>
           <li>15 minutes were set aside between reservations unnecessarily</li>
           <li>Resident phone numbers were visible to the entire world</li>
-          <li>The tennis court was not reservable</li>
+          <li>The tennis court could not be reserved</li>
         </ol>
         <p style={{ paddingTop: 20 }} className="faq-q">
           Questions/feedback
